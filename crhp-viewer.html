@@ -334,7 +334,8 @@
             height: 42px;
             border-radius: 50%;
             border: 1px solid var(--accent);
-            background: rgba(56, 189, 248, 0.1);
+            /* Change background from 0.1 to transparent */
+            background: transparent; 
             color: var(--accent);
             font-weight: bold;
             font-size: 1.2rem;
@@ -343,6 +344,13 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            /* Add transition so it matches the link button's smoothness */
+            transition: background 0.2s;
+        }
+
+        /* Add this new hover state */
+        .btn-help:hover {
+            background: rgba(56, 189, 248, 0.1);
         }
 
 	        .btn-link {
@@ -1126,4 +1134,5 @@
 </script>
 </body>
 </html>
+
 
