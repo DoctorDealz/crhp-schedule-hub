@@ -982,6 +982,12 @@
         }
     }
 
+    // This is the trigger that actually starts the engine
+    window.addEventListener('DOMContentLoaded', () => {
+        console.log("DOM Ready. Starting initApp...");
+        initApp();
+    });
+
     setInterval(updateNowLine, 30000);
     renderRoster();
 	renderDays();
@@ -990,4 +996,5 @@
 	renderRooms();
 </script>
 </body>
+
 </html>
