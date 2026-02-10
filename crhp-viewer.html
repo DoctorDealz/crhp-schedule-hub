@@ -345,6 +345,33 @@
             flex-shrink: 0;
         }
 
+	        .btn-link {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%; /* Matches the help button shape */
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none; /* Removes underline from <a> tag */
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Icon sizing */
+        .btn-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
     </style>
 </head>
 <body>
@@ -358,6 +385,11 @@
             <button class="btn-ctrl" style="flex:1; background:var(--danger); color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-family: -apple-system, sans-serif; font-size: 13px; line-height: 1.2;" onclick="resetToMaster()">
                 Reset to Master Template
             </button>
+
+        <a href="crhp-scheduler.html" class="btn-link" target="_blank" title="Open Scheduler">
+            <svg viewBox="0 0 24 24"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>
+        </a>
+		
         <button class="btn-help" onclick="toggleHelp()">?</button>
     </div>
     <div class="section-title">1. Team Roster</div>
@@ -1094,3 +1126,4 @@
 </script>
 </body>
 </html>
+
