@@ -249,7 +249,7 @@
         .help-content b { color: var(--accent); }
         .help-content ul { padding-left: 20px; margin: 10px 0; }
         .help-content li { margin-bottom: 8px; }
-		
+
         /* Help Button (Circle) */
         .btn-help {
             width: 42px;
@@ -454,6 +454,10 @@
                 Reset to Master Template
             </button>
 
+            <button class="btn-ctrl" style="background:rgba(239, 68, 68, 0.1); border-color:var(--danger); color:var(--danger); width:100%;" onclick="clearScheduleFresh()">
+                🗑 Clear All (Fresh Start)
+            </button>
+
             <p style="font-size:0.75rem; opacity:0.7; font-style:italic;">Note: Use Export to save your data before clearing the cache.</p>
         </div>
         <button class="btn-ctrl" style="width:100%; margin-top:20px;" onclick="toggleHelp()">Close</button>
@@ -478,7 +482,6 @@
 	
     const MASTER_TEMPLATE = `{"tasks":[{"day":1,"start":"09:00","end":"09:30","name":"Reconciliation Witness","desc":"Jacob gives reconciliation witness.","people":["Jacob (Facilities leader)"],"type":"main","complete":false,"pending":false},{"day":1,"start":"08:30","end":"09:00","name":"Breakfast","desc":"Breakfast and fellowship","people":[],"type":"main","pending":false,"complete":false,"room":""},{"day":1,"start":"08:45","end":"09:00","name":"Pray with witness","desc":"Thomas pray with Jacob in chapel","people":["Jacob (Facilities leader)","Thomas (Formation leader)"],"type":"bg","pending":false,"complete":false,"room":"Chapel"},{"day":1,"start":"08:30","end":"09:30","name":"Sacristan duties","desc":"Jonathan has to pick up priest","people":["Jonathan (Sacristan)"],"type":"bg","complete":false,"pending":false,"room":"Chapel"},{"day":1,"start":"10:00","end":"10:05","name":"Break","desc":"Get up, bathroom, snacks, water","people":["Jacob (Facilities leader)","Jonathan (Sacristan)","Thomas (Formation leader)"],"type":"main","pending":false,"complete":false,"room":"Any"},{"day":1,"start":"22:00","end":"23:59","name":"Now line tester","desc":"","people":[],"type":"main","room":"","pending":false,"complete":false}],"checklist":[{"name":"Test bro","desc":"Yo ","people":["Jacob (Facilities leader)"],"done":false,"pending":false}],"roster":[{"name":"Jacob","role":"Facilities leader"},{"name":"Jonathan","role":"Sacristan"},{"name":"Thomas","role":"Formation leader"}],"rooms":["Chapel","Any"],"totalDays":1}`;
 
-	
     // 1. Initial attempt to load from storage
     let rawTasks = localStorage.getItem('v50_tasks');
     let rawRoster = localStorage.getItem('v50_roster');
@@ -1045,31 +1048,47 @@
     function autoSize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
     function triggerImport() { document.getElementById('importFile').click(); }
     function exportData() {
-		const now = new Date();
+        const now = new Date();
 
-		// --- ADD THESE 3 LINES ---
-		const dateStr = now.toISOString().split('T')[0]; 
-		const timeStr = now.getHours().toString().padStart(2, '0') + '-' + 
-						now.getMinutes().toString().padStart(2, '0');
+        // 1. Generate the date and time strings
+        const dateStr = now.toISOString().split('T')[0]; 
+        const timeStr = now.getHours().toString().padStart(2, '0') + '-' + 
+                        now.getMinutes().toString().padStart(2, '0');
 
-		// Include all data categories in the exported object
-		const dataToExport = {
-			tasks: tasks,
-			checklist: checklist,
-			roster: roster,
-			rooms: rooms,
-			totalDays: totalDays
-		};
-		
-		const blob = new Blob([JSON.stringify(dataToExport)], {type:'application/json'});
-		const a = document.createElement('a');
-		a.href = URL.createObjectURL(blob);
+        // 2. Set the default name with your specific prefix
+        const defaultName = `crhp_schedule_backup_${dateStr}_${timeStr}`;
 
-		// This now uses the variables created above
-		a.download = `schedule_${dateStr}_${timeStr}.json`; 
-		
-		a.click();
-	}
+        // 3. Prompt the user
+        let userFileName = prompt("Enter a name for your export file:", defaultName);
+
+        // 4. Exit if they cancel
+        if (userFileName === null) return;
+
+        // 5. Clean up the name and enforce .json
+        userFileName = userFileName.replace(/\.json$/i, "").trim();
+        const finalFileName = (userFileName || defaultName) + ".json";
+
+        // 6. Package the data
+        const dataToExport = {
+            tasks: tasks,
+            checklist: checklist,
+            roster: roster,
+            rooms: rooms,
+            totalDays: totalDays,
+            exportedAt: now.toLocaleString() // Nice for record keeping!
+        };
+        
+        // 7. Trigger the download
+        const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {type:'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = finalFileName; 
+        
+        document.body.appendChild(a); // Append and remove for better browser compatibility
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+    }
     
 	function importData(e) {
 		const r = new FileReader();
@@ -1157,29 +1176,27 @@
     }
 
     function initApp() {
-        // Check for one of your specific v50 keys
         const hasData = localStorage.getItem('v50_tasks');
+        // NEW: Check if the user explicitly wanted a blank slate
+        const isBlankForced = localStorage.getItem('v50_is_blank');
         
-        if (!hasData || hasData === "null" || hasData === "[]") {
+        // Only load template if data is missing AND we haven't forced a blank start
+        if ((!hasData || hasData === "null" || hasData === "[]") && isBlankForced !== "true") {
             console.log("No v50 data found. Loading master retreat template...");
             
             try {
                 const data = JSON.parse(MASTER_TEMPLATE);
-                
-                // Assign to your global variables
                 tasks = data.tasks || [];
                 checklist = data.checklist || [];
                 roster = data.roster || [];
                 rooms = data.rooms || [];
                 totalDays = data.days || 1;
-                
-                // Save them into the v50 slots immediately
                 saveAll(); 
             } catch (e) {
                 console.error("Master Template Parse Error:", e);
             }
         } else {
-            // Data exists! Load each piece into its variable
+            // Data exists (or user chose to be blank)
             tasks = JSON.parse(localStorage.getItem('v50_tasks')) || [];
             checklist = JSON.parse(localStorage.getItem('v50_checklist')) || [];
             roster = JSON.parse(localStorage.getItem('v50_roster')) || [];
@@ -1187,33 +1204,129 @@
             totalDays = parseInt(localStorage.getItem('v50_days')) || 1;
         }
         
-        // Now that variables are set, draw the UI
         renderAll(); 
     }
 
+    function isModifiedFromMaster() {
+        try {
+            const master = JSON.parse(MASTER_TEMPLATE);
+            
+            // Stringify both to see if the content is exactly the same
+            const currentData = JSON.stringify({
+                tasks: tasks,
+                checklist: checklist,
+                roster: roster,
+                rooms: rooms,
+                days: totalDays
+            });
+            
+            const masterData = JSON.stringify({
+                tasks: master.tasks || [],
+                checklist: master.checklist || [],
+                roster: master.roster || [],
+                rooms: master.rooms || [],
+                days: master.days || 1
+            });
+
+            return currentData !== masterData;
+        } catch (e) {
+            return true; // If master is broken, assume modified to be safe
+        }
+    }
+
     function resetToMaster() {
+        // Check if it's NOT empty AND it's NOT the same as the Master
+        const hasData = tasks.length > 0 || roster.length > 0;
+        const isModified = isModifiedFromMaster();
+
+        if (hasData && isModified) {
+            if (confirm("Before resetting, would you like to download a backup of your edits?")) {
+                exportData(); 
+            }
+        }
+
         if (confirm("Wait! This will delete all names and edits and revert to the master template. Proceed?")) {
             try {
-                // 1. Parse the master string into an object
+                localStorage.removeItem('v50_is_blank');
                 const data = JSON.parse(MASTER_TEMPLATE);
                 
-                // 2. Unpack it into your specific v50 keys
-                localStorage.setItem('v50_tasks', JSON.stringify(data.tasks || []));
-                localStorage.setItem('v50_checklist', JSON.stringify(data.checklist || []));
-                localStorage.setItem('v50_roster', JSON.stringify(data.roster || []));
-                localStorage.setItem('v50_rooms', JSON.stringify(data.rooms || []));
-                localStorage.setItem('v50_days', data.days || 1); // Save total days count
+                tasks = data.tasks || [];
+                checklist = data.checklist || [];
+                roster = data.roster || [];
+                rooms = data.rooms || [];
+                totalDays = data.days || 1;
                 
-                console.log("Master template unpacked and saved successfully.");
-                
-                // 3. Reload to let the app's existing load logic grab the new keys
+                saveAll();
                 location.reload(); 
             } catch (e) {
-                console.error("Error with Master Template:", e);
-                alert("Failed to reset: The Master Template string is not formatted correctly.");
+                console.error("Error:", e);
             }
         }
     }
+
+    function clearScheduleFresh() {
+        const hasData = tasks.length > 0 || roster.length > 0;
+        const isModified = isModifiedFromMaster();
+
+        // Only prompt for backup if there's data AND it's not the default template
+        if (hasData && isModified) {
+            if (confirm("Would you like to download a backup of your edits before wiping everything?")) {
+                exportData();
+            }
+        }
+
+        if (confirm("DANGER: This will delete ALL tasks, roster members, and rooms. Proceed?")) {
+            tasks = [];
+            checklist = [];
+            roster = [];
+            rooms = [];
+            totalDays = 1;
+            localStorage.setItem('v50_is_blank', 'true');
+            saveAll();
+            location.reload(); 
+        }
+    }
+
+    function downloadBackup() {
+        // 1. Create a clean timestamp for the default name (YYYY-MM-DD_HHMM)
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0]; // 2026-02-10
+        const timeStr = now.getHours().toString().padStart(2, '0') + 
+                        now.getMinutes().toString().padStart(2, '0');
+        const defaultName = `crhp_schedule_backup_${dateStr}_${timeStr}`;
+
+        // 2. Prompt the user with the default name already filled in
+        let userFileName = prompt("Enter a name for your backup file:", defaultName);
+
+        // 3. If they hit 'Cancel', stop the process
+        if (userFileName === null) return; 
+
+        // 4. Clean up the name and ensure .json extension
+        userFileName = userFileName.replace(/\.json$/i, "").trim();
+        const finalFileName = (userFileName || defaultName) + ".json";
+
+        const backupData = {
+            tasks: tasks,
+            checklist: checklist,
+            roster: roster,
+            rooms: rooms,
+            days: totalDays,
+            timestamp: now.toLocaleString()
+        };
+        
+        // 5. Create the download link and trigger it
+        const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        
+        link.href = url;
+        link.download = finalFileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
 
     // This is the trigger that actually starts the engine
     window.addEventListener('DOMContentLoaded', () => {
