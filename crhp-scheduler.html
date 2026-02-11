@@ -303,6 +303,109 @@
             fill: currentColor;
         }
 
+                .btn-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0; /* Prevents the circle from squishing */
+        transition: all 0.2s ease;
+        }
+
+        .btn-print {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%; /* Matches the help button shape */
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none; /* Removes underline from <a> tag */
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .btn-print:hover {
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        #custom-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(7, 10, 15, 0.8); /* Darker overlay for better focus */
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(8px); /* Stronger blur for "Glass" look */
+        }
+
+        .modal-box {
+            background: #1e293b; /* Deep slate background */
+            padding: 24px;
+            border-radius: 16px;
+            width: 95%; max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle edge highlight */
+            border-top: 4px solid var(--accent); /* Your signature blue line */
+        }
+
+        /* Modal Typography */
+        .modal-box h3 { 
+            margin: 0 0 12px 0; 
+            color: #f8fafc; /* Crisp white for the title */
+            font-size: 1.4rem;
+        }
+
+        .modal-box p { 
+            color: #cbd5e1; /* Light slate for readable body text */
+            margin-bottom: 24px; 
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        /* Primary Button (Confirm) */
+        .btn-primary { 
+            background: var(--accent); 
+            color: #0f172a; /* Dark text on light blue background for pop */
+            border: none; 
+        }
+        .btn-primary:hover { 
+            background: #7dd3fc; /* Brighter blue on hover */
+            transform: translateY(-1px);
+        }
+
+        /* Secondary Button (Cancel) */
+        .btn-secondary { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            color: #94a3b8; 
+        }
+        .btn-secondary:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: #f1f5f9;
+        }
+
+        /* Special Warning Style (Optional) */
+        .modal-box.warning { border-top-color: #f87171; }
+        .modal-box.warning .btn-primary { background: #f87171; color: white; }
+
     </style>
 </head>
 <body>
@@ -311,6 +414,14 @@
         <button class="btn-ctrl" onclick="exportData()">💾 EXPORT</button>
         <button class="btn-ctrl" onclick="triggerImport()">📂 IMPORT</button>
         <input type="file" id="importFile" style="display:none" onchange="importData(event)" accept=".json">
+
+        <button class="btn-print" onclick="openPrintService()" title="Print / Save PDF">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+        </button>
 
         <a href="crhp-viewer.html" class="btn-link" target="_blank" title="Open Viewer">
             <svg viewBox="0 0 24 24"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>
@@ -402,7 +513,7 @@
 <div id="rosterEditModal" class="modal-overlay">
     <div class="modal-content">
         <button class="modal-cancel-x" onclick="closeRosterModal()">×</button>
-        <h3 style="color:var(--accent); margin-top:0;">Edit Personnel</h3>
+        <h3 style="color:var(--accent); margin-top:0;">Edit Team Member</h3>
         
         <label style="font-size: 0.8rem; color: #94a3b8;">Name</label>
         <input type="text" id="editRosterName" class="modal-input" style="margin-bottom:15px;">
@@ -451,7 +562,7 @@
             <hr style="border:0; border-top:1px solid var(--danger); margin:15px 0; opacity:0.3;">
             <p style="color:var(--danger); font-size:0.75rem; margin-bottom:10px; font-weight:bold; text-transform:uppercase;">Admin Tools</p>
             <button class="btn-ctrl" style="border-color:var(--danger); color:var(--danger); width:100%; margin-bottom:15px;" onclick="resetToMaster()">
-                Reset to Master Template
+                Reset to CRHP Master Template
             </button>
 
             <button class="btn-ctrl" style="background:rgba(239, 68, 68, 0.1); border-color:var(--danger); color:var(--danger); width:100%;" onclick="clearScheduleFresh()">
@@ -882,18 +993,27 @@
         closeRosterModal();
     }
 
-    // Replaces your old delete function to work via the modal
     function triggerRosterDelete() {
         const i = editingRosterIndex;
-        if (confirm(`Are you sure you want to delete ${roster[i].name}?`)) {
-            const key = `${roster[i].name} (${roster[i].role})`;
-            removePersonFromTasks(key);
-            roster.splice(i, 1);
-            saveAll();
-            renderRoster();
-            renderTasks();
-            closeRosterModal();
-        }
+        const personName = roster[i].name;
+
+        showModal(
+            "Delete Team Member?", 
+            `Are you sure you want to delete ${personName}? This will also remove them from all assigned tasks.`,
+            () => {
+                const key = `${roster[i].name} (${roster[i].role})`;
+                removePersonFromTasks(key);
+                roster.splice(i, 1);
+                saveAll();
+                renderRoster();
+                renderTasks();
+                closeRosterModal();
+            },
+            true,
+            "Delete Member",
+            "danger",
+            "Cancel"
+        );
     }
 
     window.addEventListener('click', (e) => {
@@ -936,19 +1056,16 @@
         ).join('');
     }
 
-	function deleteRoom(i) {
-		if(confirm("Delete this room?")) {
-			const deletedRoom = rooms[i];
-			tasks.forEach(t => { if(t.room === deletedRoom) t.room = ""; });
-			rooms.splice(i, 1);
-			saveAll(); renderRooms(); renderTasks();
-		}
-	}
-
     function openQuickRoomEdit() {
         const currentRoom = document.getElementById('editTaskRoom').value;
         if (!currentRoom) {
-            alert("Please select a room to edit, or use the sidebar to manage all rooms.");
+            showModal(
+                "No Room Selected", 
+                "Please select a room from the dropdown first to edit it, or use the Room List at the top to manage all rooms.",
+                null,    // No function to run
+                false,   // No cancel button needed
+                "OK"     // Custom button text
+            );
             return;
         }
         const roomIndex = rooms.indexOf(currentRoom);
@@ -990,24 +1107,26 @@
 
     function saveRoomEdit() {
         const oldName = rooms[editingRoomIndex];
-        const newName = document.getElementById('editRoomName').value.trim();
+        // Fixed ID here to match your HTML: editRoomNameInput
+        const input = document.getElementById('editRoomNameInput');
+        const newName = input ? input.value.trim() : "";
 
-        if (!newName) return;
+        if (!newName || newName === oldName) {
+            closeRoomModal();
+            return;
+        }
 
-        // 1. Update tasks data
         tasks.forEach(t => {
             if (t.room === oldName) t.room = newName;
         });
 
-        // 2. Update the rooms array
         rooms[editingRoomIndex] = newName;
 
-        // 3. Sync the UI
         saveAll();
-        renderRooms(); // This updates the dropdown options
-        renderTasks(); // This updates the labels on the timeline
+        renderRooms();
+        renderTasks();
         
-        // 4. If Task Modal is open, make sure the dropdown selects the NEW name
+        // Sync the task modal dropdown if it's currently open
         const editSelect = document.getElementById('editTaskRoom');
         if (document.getElementById('taskModal').style.display === 'block' && editSelect.value === oldName) {
             editSelect.value = newName;
@@ -1016,20 +1135,33 @@
         closeRoomModal();
     }
 
-    function deleteRoomItem() {
+    function triggerRoomDelete() {
+        // 1. Safety check for the index
+        if (editingRoomIndex === null) return;
+        
         const nameToRemove = rooms[editingRoomIndex];
-        if (confirm(`Remove "${nameToRemove}"? Tasks in this room will be set to "No Room".`)) {
-            // Clear room from tasks
-            tasks.forEach(t => {
-                if (t.room === nameToRemove) t.room = "";
-            });
-            
-            rooms.splice(editingRoomIndex, 1);
-            saveAll();
-            renderRooms();
-            renderTasks();
-            closeRoomModal();
-        }
+
+        showModal(
+            "Delete Room?", 
+            `Are you sure you want to delete "${nameToRemove}"? Any tasks currently in this room will be set to "No Room Assigned".`,
+            () => {
+                // 2. Clear room from tasks
+                tasks.forEach(t => {
+                    if (t.room === nameToRemove) t.room = "";
+                });
+                
+                // 3. Remove from array and sync
+                rooms.splice(editingRoomIndex, 1);
+                saveAll();
+                renderRooms();
+                renderTasks();
+                closeRoomModal();
+            },
+            true,
+            "Delete Room",
+            "danger",
+            "Cancel"
+        );
     }
 
     function renderDays() {
@@ -1047,47 +1179,59 @@
     function setEditMode(m) { editMode = m; document.getElementById('modalTMain').className = `toggle-btn ${m==='main'?'active-main':''}`; document.getElementById('modalTBg').className = `toggle-btn ${m==='bg'?'active-bg':''}`; }
     function autoSize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
     function triggerImport() { document.getElementById('importFile').click(); }
-    function exportData() {
+    
+    function exportData(onComplete = null) {
         const now = new Date();
-
-        // 1. Generate the date and time strings
         const dateStr = now.toISOString().split('T')[0]; 
         const timeStr = now.getHours().toString().padStart(2, '0') + '-' + 
                         now.getMinutes().toString().padStart(2, '0');
-
-        // 2. Set the default name with your specific prefix
         const defaultName = `crhp_schedule_backup_${dateStr}_${timeStr}`;
 
-        // 3. Prompt the user
-        let userFileName = prompt("Enter a name for your export file:", defaultName);
+        showModal(
+            "Export Schedule",
+            "Enter a name for your export file:",
+            (userFileName) => {
+                // If they cancel or close, we should still trigger the callback 
+                // so the next modal (the wipe) can appear.
+                if (userFileName === null || userFileName === false) {
+                    if (onComplete) onComplete();
+                    return;
+                }
 
-        // 4. Exit if they cancel
-        if (userFileName === null) return;
+                userFileName = userFileName.replace(/\.json$/i, "").trim();
+                const finalFileName = (userFileName || defaultName) + ".json";
 
-        // 5. Clean up the name and enforce .json
-        userFileName = userFileName.replace(/\.json$/i, "").trim();
-        const finalFileName = (userFileName || defaultName) + ".json";
+                const dataToExport = {
+                    tasks: tasks,
+                    checklist: checklist,
+                    roster: roster,
+                    rooms: rooms,
+                    totalDays: totalDays,
+                    exportedAt: now.toLocaleString()
+                };
+                
+                const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {type:'application/json'});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = finalFileName; 
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
 
-        // 6. Package the data
-        const dataToExport = {
-            tasks: tasks,
-            checklist: checklist,
-            roster: roster,
-            rooms: rooms,
-            totalDays: totalDays,
-            exportedAt: now.toLocaleString() // Nice for record keeping!
-        };
-        
-        // 7. Trigger the download
-        const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {type:'application/json'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = finalFileName; 
-        
-        document.body.appendChild(a); // Append and remove for better browser compatibility
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(a.href);
+                // KEY: Run the next step only AFTER the download logic finishes
+                if (onComplete) onComplete();
+            },
+            true, "Download", "info", "Cancel", true, defaultName
+        );
+
+        // Make Enter key work for the export input
+        const input = document.getElementById('modal-input-field');
+        if (input) {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') document.getElementById('modal-ok').click();
+            });
+        }
     }
     
 	function importData(e) {
@@ -1117,20 +1261,59 @@
     
     function deleteDay(e, n) { 
         e.stopPropagation(); 
-        if(totalDays === 1) { alert("Cannot delete the only day."); return; } 
-        if(confirm(`Delete Day ${n}?`)){ 
-            tasks = tasks.filter(t=>t.day!==n); 
-            tasks.forEach(t=>{ if(t.day>n) t.day--; }); 
-            totalDays--; 
-            currentDay = 1; 
-            
-            saveAll(); 
-            renderDays(); 
-            renderTasks(); 
-            updateViewToggles(); 
+
+        // Replacement for the alert
+        if (totalDays === 1) { 
+            showModal(
+                "Cannot Delete", 
+                "You must have at least one day in your schedule.",
+                null, 
+                false, 
+                "OK"
+            );
+            return; 
         } 
+
+        // Replacement for the confirm
+        showModal(
+            "Delete Day?", 
+            `Are you sure you want to delete Day ${n}? All tasks assigned to this day will be permanently removed.`,
+            () => { 
+                tasks = tasks.filter(t => t.day !== n); 
+                tasks.forEach(t => { if (t.day > n) t.day--; }); 
+                totalDays--; 
+                currentDay = 1; 
+                
+                saveAll(); 
+                renderDays(); 
+                renderTasks(); 
+                updateViewToggles(); 
+            },
+            true,
+            "Delete Day",
+            "danger",
+            "Cancel"
+        );
     }
-    function deleteCheckItem(i) { if(confirm("Remove checklist item?")) { checklist.splice(i, 1); saveAll(); renderChecklist(); } }
+
+    function deleteCheckItem(i) {
+        // Check for .name here because that's what your addTask function uses
+        const itemName = checklist[i].name || "this item";
+        
+        showModal(
+            "Remove Item?", 
+            `Are you sure you want to remove "${itemName}" from your checklist?`,
+            () => {
+                checklist.splice(i, 1);
+                saveAll();
+                renderChecklist();
+            },
+            true,
+            "Remove",
+            "danger",
+            "Cancel"
+        );
+    }
 
     function renderEditRoster(assigned) {
         document.getElementById('modalRosterGrid').innerHTML = roster.map((p, i) => {
@@ -1149,7 +1332,32 @@
         }).join('');
     }
     
-    function deleteCurrentTask() { if(confirm("Delete this item?")) { const isCheck = document.getElementById('modalHeader').innerText.includes("Checklist"); if(isCheck) checklist.splice(activeTaskIndex, 1); else tasks.splice(activeTaskIndex, 1); saveAll(); isChecklistMode ? renderChecklist() : renderTasks(); closeModal(false); } }
+    function deleteCurrentTask() {
+        const isCheck = document.getElementById('modalHeader').innerText.includes("Checklist");
+        
+        // Both tasks and checklist items use .name based on your addTask function
+        const itemArray = isCheck ? checklist : tasks;
+        const displayName = itemArray[activeTaskIndex].name || (isCheck ? "this item" : "this task");
+
+        showModal(
+            `Delete ${isCheck ? 'Item' : 'Task'}?`,
+            `Are you sure you want to remove "${displayName}"?`,
+            () => {
+                if (isCheck) {
+                    checklist.splice(activeTaskIndex, 1);
+                } else {
+                    tasks.splice(activeTaskIndex, 1);
+                }
+                saveAll();
+                isChecklistMode ? renderChecklist() : renderTasks();
+                closeModal(false);
+            },
+            true,
+            "Delete",
+            "danger",
+            "Cancel"
+        );
+    }
 
     function toggleHelp() {
         const modal = document.getElementById('helpModal');
@@ -1207,6 +1415,54 @@
         renderAll(); 
     }
 
+    function showModal(title, message, onConfirm = null, isConfirm = false, confirmText = "Confirm", type = "info", cancelText = "Cancel", includeInput = false, defaultInputValue = "") {
+        const existing = document.getElementById('custom-modal-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'custom-modal-overlay';
+        
+        overlay.innerHTML = `
+            <div class="modal-box ${type === 'danger' ? 'warning' : ''}">
+                <h3>${title}</h3>
+                <p>${message}</p>
+                ${includeInput ? `
+                    <input type="text" id="modal-input-field" class="modal-input" 
+                        style="width:100%; margin-bottom:20px; background: #0f172a; color: white; border: 1px solid #334155; padding: 10px; border-radius: 6px;" 
+                        value="${defaultInputValue}">
+                ` : ''}
+                <div class="modal-actions">
+                    <button class="modal-btn btn-primary" id="modal-ok">${confirmText}</button>
+                    ${isConfirm ? `<button class="modal-btn btn-secondary" id="modal-cancel">${cancelText}</button>` : ''}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // Focus input if it exists
+        if (includeInput) {
+            const input = document.getElementById('modal-input-field');
+            input.focus();
+            input.select(); // Highlight text for easy overwriting
+        }
+
+        document.getElementById('modal-ok').onclick = () => {
+            let returnValue = true;
+            if (includeInput) {
+                returnValue = document.getElementById('modal-input-field').value;
+            }
+            overlay.remove();
+            if (onConfirm) onConfirm(returnValue);
+        };
+
+        if (isConfirm && document.getElementById('modal-cancel')) {
+            document.getElementById('modal-cancel').onclick = () => overlay.remove();
+        }
+
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+    }
+
     function isModifiedFromMaster() {
         try {
             const master = JSON.parse(MASTER_TEMPLATE);
@@ -1235,97 +1491,217 @@
     }
 
     function resetToMaster() {
-        // Check if it's NOT empty AND it's NOT the same as the Master
         const hasData = tasks.length > 0 || roster.length > 0;
-        const isModified = isModifiedFromMaster();
+        const isModified = typeof isModifiedFromMaster === 'function' ? isModifiedFromMaster() : true;
 
+        // Inner Function: The final "point of no return" step
+        const proceedWithDelete = () => {
+            showModal(
+                "Wait! Final Warning", 
+                "This will delete all names and edits and revert to the CRHP master template. Proceed?",
+                () => {
+                    try {
+                        localStorage.removeItem('v50_is_blank');
+                        const data = JSON.parse(MASTER_TEMPLATE);
+                        
+                        tasks = data.tasks || [];
+                        checklist = data.checklist || [];
+                        roster = data.roster || [];
+                        rooms = data.rooms || [];
+                        totalDays = data.days || 1;
+                        
+                        saveAll();
+                        location.reload(); 
+                    } catch (e) {
+                        console.error("Error:", e);
+                    }
+                },
+                true,
+                "Yes, Reset Everything",
+                "danger",   // Type
+                "Keep My Data"    // False/Cancel label
+            );
+        };
+
+        // Step 1: Check if we should offer a backup first
         if (hasData && isModified) {
-            if (confirm("Before resetting, would you like to download a backup of your edits?")) {
-                exportData(); 
+            showModal(
+                "Backup Edits?", 
+                "Before resetting, would you like to download a backup of your current edits?",
+                () => { 
+                    exportData(() => proceedWithDelete());
+                },
+                true,
+                "Download & Continue",
+                "info",    // Type
+                "No"       // False/Cancel label
+            );
+            
+            // Ensure clicking "No" still leads to the Reset warning
+            const cancelBtn = document.getElementById('modal-cancel');
+            if (cancelBtn) {
+                cancelBtn.onclick = () => {
+                    document.getElementById('custom-modal-overlay').remove();
+                    proceedWithDelete();
+                };
             }
-        }
-
-        if (confirm("Wait! This will delete all names and edits and revert to the master template. Proceed?")) {
-            try {
-                localStorage.removeItem('v50_is_blank');
-                const data = JSON.parse(MASTER_TEMPLATE);
-                
-                tasks = data.tasks || [];
-                checklist = data.checklist || [];
-                roster = data.roster || [];
-                rooms = data.rooms || [];
-                totalDays = data.days || 1;
-                
-                saveAll();
-                location.reload(); 
-            } catch (e) {
-                console.error("Error:", e);
-            }
+        } else {
+            // No edits worth backing up, go straight to reset warning
+            proceedWithDelete();
         }
     }
 
     function clearScheduleFresh() {
         const hasData = tasks.length > 0 || roster.length > 0;
-        const isModified = isModifiedFromMaster();
+        const isModified = typeof isModifiedFromMaster === 'function' ? isModifiedFromMaster() : true;
 
-        // Only prompt for backup if there's data AND it's not the default template
+        const proceedWithWipe = () => {
+            showModal(
+                "Final Warning: Total Wipe", 
+                "DANGER: This will delete ALL tasks, roster members, and rooms. Proceed?",
+                () => {
+                    tasks = []; checklist = []; roster = []; rooms = []; totalDays = 1;
+                    localStorage.setItem('v50_is_blank', 'true');
+                    saveAll();
+                    location.reload(); 
+                },
+                true,
+                "Delete Everything",
+                "danger",
+                "Keep My Data" // Custom Cancel Text
+            );
+        };
+
         if (hasData && isModified) {
-            if (confirm("Would you like to download a backup of your edits before wiping everything?")) {
-                exportData();
-            }
-        }
+            showModal(
+                "Backup Edits?", 
+                "Would you like to download a backup of your edits before wiping everything?",
+                () => { 
+                    exportData(() => proceedWithWipe());
+                },
+                true,
+                "Yes, Download",
+                "info",
+                "No" // <--- Custom Cancel Text here!
+            );
 
-        if (confirm("DANGER: This will delete ALL tasks, roster members, and rooms. Proceed?")) {
-            tasks = [];
-            checklist = [];
-            roster = [];
-            rooms = [];
-            totalDays = 1;
-            localStorage.setItem('v50_is_blank', 'true');
-            saveAll();
-            location.reload(); 
+            // Manually hook the "No" button to proceed to wipe
+            const cancelBtn = document.getElementById('modal-cancel');
+            if(cancelBtn) {
+                cancelBtn.onclick = () => {
+                    document.getElementById('custom-modal-overlay').remove();
+                    proceedWithWipe();
+                };
+            }
+        } else {
+            proceedWithWipe();
         }
     }
 
     function downloadBackup() {
-        // 1. Create a clean timestamp for the default name (YYYY-MM-DD_HHMM)
         const now = new Date();
-        const dateStr = now.toISOString().split('T')[0]; // 2026-02-10
+        const dateStr = now.toISOString().split('T')[0];
         const timeStr = now.getHours().toString().padStart(2, '0') + 
                         now.getMinutes().toString().padStart(2, '0');
         const defaultName = `crhp_schedule_backup_${dateStr}_${timeStr}`;
 
-        // 2. Prompt the user with the default name already filled in
-        let userFileName = prompt("Enter a name for your backup file:", defaultName);
+        showModal(
+            "Download Backup",
+            "Enter a name for your backup file:",
+            (userFileName) => {
+                // This runs when they click 'Download' or press 'Enter'
+                if (userFileName === null || userFileName === false) return;
 
-        // 3. If they hit 'Cancel', stop the process
-        if (userFileName === null) return; 
+                userFileName = userFileName.replace(/\.json$/i, "").trim();
+                const finalFileName = (userFileName || defaultName) + ".json";
 
-        // 4. Clean up the name and ensure .json extension
-        userFileName = userFileName.replace(/\.json$/i, "").trim();
-        const finalFileName = (userFileName || defaultName) + ".json";
+                const backupData = {
+                    tasks: tasks,
+                    checklist: checklist,
+                    roster: roster,
+                    rooms: rooms,
+                    days: totalDays,
+                    timestamp: now.toLocaleString()
+                };
+                
+                const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                
+                link.href = url;
+                link.download = finalFileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            },
+            true,           // isConfirm (show second button)
+            "Download",     // confirmText (on the left)
+            "info",         // type
+            "Cancel",       // cancelText (on the right)
+            true,           // includeInput
+            defaultName     // defaultInputValue
+        );
 
-        const backupData = {
-            tasks: tasks,
-            checklist: checklist,
-            roster: roster,
-            rooms: rooms,
-            days: totalDays,
-            timestamp: now.toLocaleString()
-        };
-        
-        // 5. Create the download link and trigger it
-        const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        
-        link.href = url;
-        link.download = finalFileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        // UX Add-on: Allow pressing "Enter" to trigger the download
+        const modalInput = document.getElementById('modal-input-field');
+        if (modalInput) {
+            modalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('modal-ok').click();
+                }
+            });
+        }
     }
+
+
+    function openPrintService() {
+        const printData = {
+            tasks: (typeof tasks !== 'undefined') ? tasks : [],
+            checklist: (typeof checklist !== 'undefined') ? checklist : [],
+            roster: (typeof roster !== 'undefined') ? roster : [],
+            rooms: (typeof rooms !== 'undefined') ? rooms : [],
+            totalDays: (typeof totalDays !== 'undefined') ? totalDays : 1
+        };
+
+        // 1. Open the window and capture the handle
+        const printWindow = window.open('print-service.html', '_blank');
+        
+        // 2. Bring the new tab to the front
+        if (printWindow) printWindow.focus();
+
+        // 3. The "Handshake"
+        const checkReady = setInterval(() => {
+            // If user closed the window before it loaded, stop checking
+            if (printWindow.closed) {
+                clearInterval(checkReady);
+                return;
+            }
+
+            // Push data to the new window
+            printWindow.postMessage({ 
+                type: 'PRINT_DATA', 
+                payload: printData 
+            }, '*');
+        }, 500);
+
+        // 4. Listen for a "Received" confirmation from the print-service to stop the interval
+        window.addEventListener('message', function(event) {
+            if (event.data === 'DATA_RECEIVED') {
+                clearInterval(checkReady);
+            }
+        });
+
+        // Safety timeout: stop trying after 10 seconds
+        setTimeout(() => clearInterval(checkReady), 10000);
+    }
+
+    // Run this immediately when the Viewer loads
+    window.addEventListener('load', () => {
+        // Clear the print exchange so old data doesn't haunt the print service
+        localStorage.removeItem('crhp_print_exchange');
+        console.log("Print cache cleared for fresh session.");
+    });
 
 
     // This is the trigger that actually starts the engine
