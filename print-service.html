@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CRHP Print Service</title>
+    <style>
+        /* 1. Hide everything by default */
+        #output, .no-print { display: none; }
+
+        /* 2. Force throbber to be visible immediately */
+        #throbber {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(241, 245, 249, 0.8); /* Transparent so they see the page is there */
+            display: none; /* HIDDEN BY DEFAULT */
+            flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+
+        /* 3. When data is ready, swap visibility */
+        .data-ready #output, 
+        .data-ready .no-print { display: block; }
+
+        .data-ready #throbber { display: none !important; }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid #cbd5e1;
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .throbber-text { font-family: sans-serif; color: #334155; font-weight: bold; }
+    </style>
+    <style>
+        :root {
+            --accent: #38bdf8;
+            --main-bg: #f0f9ff;
+            --bg-lane-bg: #fdf4ff;
+            --border: #cbd5e1;
+            --text: #0f172a;
+        }
+
+        body { 
+            font-family: "Segoe UI", Tahoma, sans-serif; 
+            background: #f1f5f9; 
+            color: #334155; 
+            padding: 20px; 
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        @media print {
+            @page {
+                size: letter landscape;
+                margin: 0.4in;
+            }
+            body { padding: 0; background: white; }
+            .no-print { display: none; }
+            .day-page { 
+                width: 100% !important; 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                page-break-after: always; 
+            }
+        }
+
+        .no-print { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
+            max-width: 900px; 
+            margin: 0 auto 30px auto; 
+            border-left: 5px solid var(--accent); 
+        }
+
+        .day-page { 
+            background: white; 
+            width: 10.5in; 
+            min-height: 7.5in; 
+            padding: 0.3in; 
+            margin: 0 auto 40px auto; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+            box-sizing: border-box; 
+        }
+        
+        h1 { margin: 0; color: var(--text); font-size: 22pt; border-bottom: 3px solid var(--text); padding-bottom: 5px; }
+        .day-num { font-size: 16pt; color: #64748b; margin-bottom: 15px; font-weight: bold; }
+
+        /* Schedule Table */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border: 2px solid var(--text);
+        }
+
+        .schedule-table th {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: center;
+            font-size: 10pt;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+
+        .schedule-table td {
+            border: 1px solid var(--border);
+            vertical-align: top;
+            padding: 0; /* Important for full-fill colors */
+        }
+
+        .time-cell {
+            text-align: center; 
+            font-weight: bold; 
+            background: #f8fafc; 
+            padding: 10px !important;
+            font-size: 10pt;
+            color: #475569;
+        }
+
+        .task-container {
+            padding: 8px;
+            min-height: 80px; /* Ensures short tasks expand the row */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .task-title { font-weight: bold; font-size: 10.5pt; color: var(--text); margin-bottom: 2px; }
+        .task-time { font-size: 8.5pt; color: #64748b; font-weight: bold; margin-bottom: 3px; }
+        .task-desc { font-size: 9pt; color: #334155; line-height: 1.25; margin-bottom: 5px; }
+        .task-meta { font-size: 8pt; color: #475569; margin-top: auto; font-style: italic; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 4px; }
+
+        /* Hide throbber when data is rendered */
+        .loaded #throbber {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="throbber">
+        <div class="spinner"></div>
+        <div class="throbber-text">SYNCING SCHEDULE DATA...</div>
+    </div>
+
+    <div class="no-print">
+        <h2 style="margin-top:0">🖨️ CRHP Schedule - Print Service</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <button onclick="window.print()" style="background:#0f172a; color:white; padding:12px 24px; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">PRINT / SAVE PDF</button>
+            
+            <input type="file" id="manualFile" style="display:none" onchange="manualLoad(event)">
+            <button onclick="document.getElementById('manualFile').click()" style="background:white; border:1px solid #cbd5e1; padding:12px 24px; border-radius:6px; cursor:pointer; font-weight:bold;">UPLOAD JSON</button>
+            
+            <button onclick="resetPrintView()" style="background:transparent; border:1px solid #f87171; color:#f87171; padding:12px 24px; border-radius:6px; cursor:pointer; font-weight:bold;">CLEAR PREVIEW</button>
+        </div>
+    </div>
+
+    <div id="output"></div>
+
+<script>
+    // 1. CLEAR PREVIOUS SESSION IMMEDIATELY
+    // This ensures that refreshing the page or a fresh start starts empty.
+    localStorage.removeItem('crhp_print_exchange');
+    console.log("Previous session cleared.");
+
+    // Check for data on load (for refreshes)
+    window.onload = function() {
+        const stored = localStorage.getItem('crhp_print_exchange');
+        if (stored) {
+            // Data exists, render it
+            forceRender(JSON.parse(stored));
+        } else {
+            // No data, show the "Waiting" UI
+            showWaitingState();
+        }
+    };
+
+    // The Handshake Listener
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'PRINT_DATA') {
+            const payload = event.data.payload;
+
+            // Start a timer: If render takes > 200ms, show the throbber
+            const throbberTimer = setTimeout(() => {
+                document.getElementById('throbber').style.display = 'flex';
+            }, 200);
+
+            // Run the render
+            requestAnimationFrame(() => {
+                render(payload);
+                
+                // Clear the timer! If render finished fast, throbber NEVER shows.
+                clearTimeout(throbberTimer); 
+                document.getElementById('throbber').style.display = 'none';
+
+                if (window.opener) window.opener.postMessage('DATA_RECEIVED', '*');
+                localStorage.setItem('crhp_print_exchange', JSON.stringify(payload));
+            });
+        }
+    });
+
+    function forceRender(payload) {
+        // Double requestAnimationFrame forces the browser to paint the 
+        // throbber to the screen BEFORE the heavy render() function blocks the CPU
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    render(payload);
+                    
+                    if (window.opener) {
+                        window.opener.postMessage('DATA_RECEIVED', '*');
+                    }
+                    localStorage.setItem('crhp_print_exchange', JSON.stringify(payload));
+                    
+                    // Reveal the schedule
+                    document.body.classList.add('data-ready');
+                }, 50); 
+            });
+        });
+    }
+
+    function showWaitingState() {
+        document.body.classList.add('data-ready');
+        document.getElementById('output').innerHTML = `
+            <div class="no-print" style="text-align:center; padding:50px; color:#64748b; font-style:italic;">
+                Waiting for data from the Viewer or a manual upload...
+            </div>`;
+    }
+
+    function resetPrintView() {
+        localStorage.removeItem('crhp_print_exchange');
+        location.reload(); 
+    }
+
+    function showWaitingState() {
+        document.body.classList.add('data-ready');
+        document.getElementById('output').innerHTML = `
+            <div class="no-print" style="text-align:center; padding:50px; color:#64748b; font-style:italic;">
+                Waiting for data from the Viewer or a manual upload...
+            </div>`;
+    }
+
+    function resetPrintView() {
+        localStorage.removeItem('crhp_print_exchange');
+        location.reload(); 
+    }
+
+    function manualLoad(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // Show throbber while processing file
+        document.getElementById('throbber').style.display = 'flex';
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setTimeout(() => { // Delay to show throbber
+                try {
+                    const data = JSON.parse(event.target.result);
+                    render(data);
+                    localStorage.setItem('crhp_print_exchange', JSON.stringify(data));
+                } catch(err) {
+                    showError("Invalid JSON file.");
+                    document.getElementById('throbber').style.display = 'none';
+                }
+            }, 50);
+        };
+        reader.readAsText(file);
+    }
+
+    function showError(msg) {
+        document.getElementById('output').innerHTML = `<div class="no-print" style="border-left-color:red">${msg}</div>`;
+    }
+
+    // Helper: Convert HH:MM or minutes to raw minutes
+    function getMinutes(timeVal) {
+        if (typeof timeVal === 'number') return timeVal;
+        if (typeof timeVal === 'string' && timeVal.includes(':')) {
+            const timePart = timeVal.includes(' ') ? timeVal.split(' ')[1] : timeVal;
+            const [h, m] = timePart.split(':').map(Number);
+            return (h * 60) + m;
+        }
+        return 0;
+    }
+
+    // Helper: Display Time (12h format)
+    function getDisplayTime(min) {
+        let h = Math.floor(min / 60);
+        const m = min % 60;
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
+    }
+
+    function render(data) {
+        let html = "";
+        const totalDays = data.totalDays || data.days || 1;
+        const allTasks = data.tasks || [];
+
+        for (let d = 1; d <= totalDays; d++) {
+            const dayTasks = allTasks.filter(t => t.day == d);
+            if (dayTasks.length === 0) continue;
+
+            // Reset assignment tracking
+            dayTasks.forEach(t => t._assigned = false);
+
+            // 1. Determine Time Range (15-min increments)
+            const startMins = Math.min(...dayTasks.map(t => getMinutes(t.start)));
+            const endMins = Math.max(...dayTasks.map(t => getMinutes(t.end)));
+            const timeSlots = [];
+            for (let i = startMins; i < endMins; i += 15) { timeSlots.push(i); }
+
+            // 2. Calculate Max Columns Needed (Peak Concurrency)
+            let maxMain = 1, maxBg = 1;
+            timeSlots.forEach(slot => {
+                const cMain = dayTasks.filter(t => (t.type||t.lane)==='main' && getMinutes(t.start) <= slot && getMinutes(t.end) > slot).length;
+                const cBg = dayTasks.filter(t => (t.type||t.lane)==='bg' && getMinutes(t.start) <= slot && getMinutes(t.end) > slot).length;
+                if (cMain > maxMain) maxMain = cMain;
+                if (cBg > maxBg) maxBg = cBg;
+            });
+
+            // 3. Track Occupied Cells (Format: "lane-col-time")
+            const occupied = new Set();
+
+            html += `<div class="day-page">
+                <h1>CRHP Retreat Schedule</h1>
+                <div class="day-num">Day ${d}</div>
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 90px;">TIME</th>
+                            <th colspan="${maxMain}">MAIN LANE</th>
+                            <th colspan="${maxBg}">BACKGROUND LANE</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+            timeSlots.forEach(slotTime => {
+                html += `<tr><td class="time-cell">${getDisplayTime(slotTime)}</td>`;
+
+                [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
+                    for (let col = 0; col < totalCols; col++) {
+                        const cellKey = `${laneType}-${col}-${slotTime}`;
+                        
+                        // CRITICAL FIX: Use 'continue' instead of 'return'
+                        // If this cell is occupied by a spanning task, skip it and check the next column
+                        if (occupied.has(cellKey)) continue; 
+
+                        // Find a task starting now that fits in this column
+                        const task = dayTasks.find(t => {
+                            if (t._assigned || (t.type||t.lane) !== laneType) return false;
+                            const tStart = getMinutes(t.start);
+                            
+                            // Task starts in this 15-min window
+                            if (slotTime <= tStart && tStart < slotTime + 15) {
+                                const dur = Math.max(1, Math.ceil((getMinutes(t.end) - tStart) / 15));
+                                // Check if the whole vertical column is free
+                                for (let i = 0; i < dur; i++) {
+                                    if (occupied.has(`${laneType}-${col}-${slotTime + (i * 15)}`)) return false;
+                                }
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        if (task) {
+                            task._assigned = true;
+                            const duration = Math.max(1, Math.ceil((getMinutes(task.end) - getMinutes(task.start)) / 15));
+                            
+                            // Mark cells as occupied
+                            for (let i = 0; i < duration; i++) {
+                                occupied.add(`${laneType}-${col}-${slotTime + (i * 15)}`);
+                            }
+
+                            const isBg = (task.type||task.lane) === 'bg';
+                            const borderColor = isBg ? '#a855f7' : '#38bdf8';
+                            const bgColor = isBg ? '#fdf4ff' : '#f0f9ff';
+
+                            html += `<td rowspan="${duration}" style="background: ${bgColor};">
+                                <div class="task-container" style="border-left: 6px solid ${borderColor};">
+                                    <div class="task-title">${task.name}</div>
+                                    <div class="task-time">
+                                        ${getDisplayTime(getMinutes(task.start))} - ${getDisplayTime(getMinutes(task.end))}
+                                    </div>
+                                    ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
+                                    <div class="task-meta">
+                                        ${task.room ? '📍 ' + task.room : ''} 
+                                        ${task.people?.length ? ' | 👥 ' + task.people.join(', ') : ''}
+                                    </div>
+                                </div>
+                            </td>`;
+                        } else {
+                            // Empty cell placeholder
+                            html += `<td style="background: white;"></td>`;
+                        }
+                    }
+                });
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+        }
+        document.getElementById('output').innerHTML = html;
+        // HIDE THROBBER
+        document.getElementById('throbber').style.display = 'none';
+    }
+</script>
+</body>
+</html>
