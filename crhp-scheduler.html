@@ -1111,33 +1111,81 @@
                         </div>`;
                 } else if (nodeHeight < 60) {
                     node.innerHTML = `
-                        <div class="status-header-row">
-                            <div class="task-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.name}</div>
+                        <div class="status-header-row" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 4px; width: 100%; overflow: hidden;">
+                            <div class="task-title" style="
+                                white-space: nowrap; 
+                                overflow: hidden; 
+                                text-overflow: ellipsis; 
+                                flex-grow: 1; 
+                                min-width: 0; 
+                                font-weight: bold;
+                            ">${t.name}</div>
                             ${statusHtml}
                         </div>
-                        <div class="task-meta" style="font-size: 0.75rem;">
-                            <div class="crew-list" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                                <span style="opacity:0.8">${timeRangeStr}</span> |
-                                ${roomLabel ? `<span class="room-label" style="color:var(--room); font-weight:bold;">${roomLabel}</span> | ` : ''}
-                                ${slimNames ? `<span style="opacity:0.4"> </span>${slimNames}` : ''}
+                        <div class="task-meta" style="font-size: 0.75rem; width: 100%; overflow: hidden;">
+                            <div class="crew-list" style="
+                                white-space: nowrap; 
+                                overflow: hidden; 
+                                text-overflow: ellipsis; 
+                                width: 100%;
+                            ">
+                                <span style="opacity:0.8; flex-shrink: 0;">${timeRangeStr}</span>
+                                ${roomLabel ? ` | <span class="room-label" style="color:var(--room); font-weight:bold;">${roomLabel}</span>` : ''}
+                                ${slimNames ? ` | <span style="opacity:0.6">${slimNames}</span>` : ''}
                             </div>
                         </div>`;
                 } else {
-                    // LARGE VIEW - Fixed t.name and added separator line
+                    // LARGE VIEW - All fields protected against horizontal squishing
                     const hasCrew = crewCount > 0;
                     const crewHtml = hasCrew 
                         ? (nodeHeight < 85 ? slimNames : `<span class="assigned-label">Assigned:</span> ${fullCrew}`)
                         : "";
+                    
+                    const separatorStyle = hasCrew ? `border-top: 1px solid rgba(0,0,0,0.08); margin-top: 4px; padding-top: 4px;` : '';
 
                     node.innerHTML = `
-                        <div class="status-header-row">
-                            <div class="task-title" style="margin-bottom:2px;">${t.name}</div>
+                        <div class="status-header-row" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 4px; width: 100%; overflow: hidden;">
+                            <div class="task-title" style="
+                                white-space: nowrap; 
+                                overflow: hidden; 
+                                text-overflow: ellipsis; 
+                                flex-grow: 1; 
+                                min-width: 0; 
+                                font-weight: bold;
+                            ">${t.name}</div>
                             ${statusHtml}
                         </div>
-                        <div class="task-meta">
-                            <div class="time-range" style="font-size: 0.85em; opacity: 0.8;">${timeRangeStr}</div>
-                            ${roomBlock} 
-                            <div class="crew-list">${crewHtml}</div>
+                        <div class="task-meta" style="width: 100%; overflow: hidden; display: flex; flex-direction: column;">
+                            <div class="time-range" style="
+                                font-size: 0.85em; 
+                                opacity: 0.8; 
+                                white-space: nowrap; 
+                                overflow: hidden; 
+                                text-overflow: ellipsis;
+                                width: 100%;
+                            ">${timeRangeStr}</div>
+                            
+                            ${roomLabel ? `
+                                <div class="room-label" style="
+                                    color: var(--room); 
+                                    font-weight: bold; 
+                                    white-space: nowrap; 
+                                    overflow: hidden; 
+                                    text-overflow: ellipsis;
+                                    width: 100%;
+                                ">${roomLabel}</div>
+                            ` : ""} 
+
+                            <div class="crew-list" style="
+                                ${separatorStyle} 
+                                overflow: hidden; 
+                                text-overflow: ellipsis; 
+                                display: -webkit-box; 
+                                -webkit-line-clamp: 2; 
+                                -webkit-box-orient: vertical; 
+                                white-space: normal;
+                                font-size: 0.85em;
+                            ">${crewHtml}</div>
                         </div>`;
                 }
                 nodes.appendChild(node);
