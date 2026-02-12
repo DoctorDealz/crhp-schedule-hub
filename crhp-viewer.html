@@ -1186,6 +1186,7 @@
                 // -----------------------------
 
                 if (nodeHeight < 40) {
+                    // ULTRA COMPACT - Adapted with absolute centering and overflow fix
                     node.innerHTML = `
                         <div class="ultra-compact-text" style="
                             font-size: 8px; 
@@ -1194,28 +1195,27 @@
                             display: flex; 
                             align-items: center; 
                             white-space: nowrap; 
-                            /* Change to visible so text can "bleed" slightly if needed rather than cut */
                             overflow: visible; 
                             gap: 3px;
                             padding: 0 2px;
-                            /* This ensures the flexbox ignores the parent's padding constraints */
                             width: 100%;
                             position: absolute;
                             top: 50%;
                             transform: translateY(-50%);
                             margin: 0;
+                            line-height: 1;
                         ">
                             <span style="flex-shrink: 1; overflow: hidden; text-overflow: ellipsis;">${t.name}</span>
                             <span style="opacity: 0.7; flex-shrink: 0;">(${timeRangeStr})</span>
                             
-                            ${roomLabel ? `
+                            ${t.room ? `
                                 <span class="uc-room" style="
                                     color: var(--room); 
                                     flex-shrink: 1; 
                                     overflow: hidden; 
                                     text-overflow: ellipsis; 
                                     max-width: 55px;
-                                ">[${roomLabel}]</span>
+                                ">[${t.room}]</span>
                             ` : ''}
                             
                             ${crewCount > 0 ? `
