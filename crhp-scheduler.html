@@ -753,49 +753,94 @@
             setEditMode(t.type || 'main');
         }
         renderEditRoster(t.people || []); document.getElementById('taskModal').style.display = 'block';
+		const pendingBox = document.getElementById('modalPendingEdit');
+	    const completeBox = document.getElementById('modalCompleteEdit');
+	
+	    pendingBox.onchange = () => {
+	        if (pendingBox.checked) completeBox.checked = false;
+	    };
+	
+	    completeBox.onchange = () => {
+	        if (completeBox.checked) pendingBox.checked = false;
+	    };
+	
+	    document.getElementById('taskModal').style.display = 'block';
     }
 
     function closeModal(save) {
-        if(save) {
-            const isEditingChecklist = document.getElementById('modalHeader').innerText.includes("Checklist");
-            const t = isEditingChecklist ? checklist[activeTaskIndex] : tasks[activeTaskIndex];
-            const name = document.getElementById('editTaskName').value;
-            const desc = document.getElementById('modalDescEdit').value;
-            const crew = Array.from(document.querySelectorAll('#modalRosterGrid input:checked')).map(c => c.value);
-            const pending = document.getElementById('modalPendingEdit').checked;
-            const complete = document.getElementById('modalCompleteEdit').checked;
-            const selectedRoom = document.getElementById('editTaskRoom') ? document.getElementById('editTaskRoom').value : "";
-
-            if(isEditingChecklist) {
-                t.name = name; t.desc = desc; t.people = crew; t.pending = pending; t.done = complete;
-            } else {
-                let s = document.getElementById('editStartTime').value, e = document.getElementById('editEndTime').value;
-                if (e === "00:00") { e = "23:59"; }
-                
-                if(getMins(e) < getMins(s)) {
-                    const originalDay = t.day;
-                    tasks.splice(activeTaskIndex, 1);
-                    tasks.push({ day: originalDay, start: s, end: "23:59", name, desc, people: crew, type: editMode, room: selectedRoom, pending, complete });
-                    if (originalDay === totalDays) { totalDays++; renderDays(); }
-                    tasks.push({ day: originalDay + 1, start: "00:00", end: e, name, desc, people: crew, type: editMode, room: selectedRoom, pending, complete });
-                } else {
-                    t.name = name; t.desc = desc; t.people = crew; t.pending = pending; t.complete = complete;
-                    t.start = s; t.end = e; t.type = editMode; t.room = selectedRoom;
-                }
-            }
-            saveAll(); 
-            isChecklistMode ? renderChecklist() : renderTasks();
-        }
-
-        document.body.classList.remove('modal-open'); 
-        document.getElementById('taskModal').style.display = 'none';
-        
-        if(document.getElementById('editTaskRoom')) {
-            document.getElementById('editTaskRoom').value = "";
-        }
-        
-        document.querySelectorAll('#modalRosterGrid input').forEach(cb => cb.checked = false);
-    }
+	    if(save) {
+	        const isEditingChecklist = document.getElementById('modalHeader').innerText.includes("Checklist");
+	        const t = isEditingChecklist ? checklist[activeTaskIndex] : tasks[activeTaskIndex];
+	        
+	        const name = document.getElementById('editTaskName').value;
+	        const desc = document.getElementById('modalDescEdit').value;
+	        const crew = Array.from(document.querySelectorAll('#modalRosterGrid input:checked')).map(c => c.value);
+	        
+	        // Capture the status states
+	        const pending = document.getElementById('modalPendingEdit').checked;
+	        const complete = document.getElementById('modalCompleteEdit').checked;
+	        
+	        const selectedRoom = document.getElementById('editTaskRoom') ? document.getElementById('editTaskRoom').value : "";
+	
+	        if(isEditingChecklist) {
+	            // Checklist items use .done for completion
+	            t.name = name; 
+	            t.desc = desc; 
+	            t.people = crew; 
+	            t.pending = pending; 
+	            t.done = complete;
+	        } else {
+	            let s = document.getElementById('editStartTime').value;
+	            let e = document.getElementById('editEndTime').value;
+	            if (e === "00:00") { e = "23:59"; }
+	            
+	            // Logic for handling midnight/next-day spans
+	            if(getMins(e) < getMins(s)) {
+	                const originalDay = t.day;
+	                tasks.splice(activeTaskIndex, 1);
+	                
+	                // Segment 1 (Ends at midnight)
+	                tasks.push({ 
+	                    day: originalDay, start: s, end: "23:59", 
+	                    name, desc, people: crew, type: editMode, room: selectedRoom, 
+	                    pending, complete 
+	                });
+	                
+	                if (originalDay === totalDays) { totalDays++; renderDays(); }
+	                
+	                // Segment 2 (Starts at midnight next day)
+	                tasks.push({ 
+	                    day: originalDay + 1, start: "00:00", end: e, 
+	                    name, desc, people: crew, type: editMode, room: selectedRoom, 
+	                    pending, complete 
+	                });
+	            } else {
+	                // Normal task update
+	                t.name = name; 
+	                t.desc = desc; 
+	                t.people = crew; 
+	                t.pending = pending; 
+	                t.complete = complete;
+	                t.start = s; 
+	                t.end = e; 
+	                t.type = editMode; 
+	                t.room = selectedRoom;
+	            }
+	        }
+	        saveAll(); 
+	        isChecklistMode ? renderChecklist() : renderTasks();
+	    }
+	
+	    // Modal Cleanup
+	    document.body.classList.remove('modal-open'); 
+	    document.getElementById('taskModal').style.display = 'none';
+	    
+	    if(document.getElementById('editTaskRoom')) {
+	        document.getElementById('editTaskRoom').value = "";
+	    }
+	    
+	    document.querySelectorAll('#modalRosterGrid input').forEach(cb => cb.checked = false);
+	}
 
     function addTask() {
 		const n = document.getElementById('taskName').value, d = document.getElementById('taskDesc').value;
