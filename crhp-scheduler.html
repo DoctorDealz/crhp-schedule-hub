@@ -1062,10 +1062,23 @@
     }
 
 	function addRoom() {
-        if (notify_if_readonly())
-            return;
-    	const n = document.getElementById('roomName').value;
-    	if(n) { rooms.push(n); saveAll(); renderRooms(); document.getElementById('roomName').value=''; }
+	    // 1. Get the input
+	    const input = document.getElementById('roomName');
+	    const n = input.value.trim();
+	
+	    if (n) {
+	        // 2. Update the array
+	        rooms.push(n);
+	
+	        // 3. Use your existing saveAll function
+	        saveAll(); 
+	
+	        // 4. Refresh the UI
+	        renderRooms(); 
+	
+	        // 5. Clear the input
+	        input.value = '';
+	    }
 	}
 
     function openQuickRoomEdit() {
