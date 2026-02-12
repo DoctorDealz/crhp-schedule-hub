@@ -1048,7 +1048,7 @@
                     </div>` : '';
 
                 if (nodeHeight < 40) {
-                    // ULTRA COMPACT - Enforced single line with smart truncation
+                    // ULTRA COMPACT - Removed padding and forced line-height to prevent clipping
                     node.innerHTML = `
                         <div class="ultra-compact-text" style="
                             font-size: 8px; 
@@ -1058,8 +1058,10 @@
                             align-items: center; 
                             white-space: nowrap; 
                             overflow: hidden; 
-                            gap: 4px;
+                            gap: 3px;
                             padding: 0 2px;
+                            line-height: 1; /* Prevents top/bottom clipping */
+                            margin: 0;
                         ">
                             <span style="flex-shrink: 1; overflow: hidden; text-overflow: ellipsis;">${t.name}</span>
                             <span style="opacity: 0.7; flex-shrink: 0;">(${timeRangeStr})</span>
@@ -1070,7 +1072,7 @@
                                     flex-shrink: 1; 
                                     overflow: hidden; 
                                     text-overflow: ellipsis; 
-                                    max-width: 60px;
+                                    max-width: 55px;
                                 ">[${roomLabel}]</span>
                             ` : ''}
                             
