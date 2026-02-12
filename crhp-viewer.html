@@ -1136,8 +1136,6 @@
             ltTasks.forEach(t => {
                 const s1 = getMins(t.start);
                 const e1 = Math.max(s1 + 5, getMins(t.end));
-                
-                // ... [Overlapping and Column Logic remains the same] ...
                 const overlapping = ltTasks.filter(ot => {
                     const os = getMins(ot.start);
                     const oe = Math.max(os + 5, getMins(ot.end));
@@ -1167,11 +1165,8 @@
                 
                 const timeRangeStr = `${formatTo12h(t.start)} - ${formatTo12h(t.end)}`;
                 const crewCount = t.people ? t.people.length : 0;
-                
-                // Clean names (remove empty role parens)
                 const slimNames = t.people ? t.people.map(p => p.split(' (')[0]).join(', ') : '';
                 
-                // NEW: Clean fullCrew logic to hide empty ()
                 const fullCrew = t.people ? t.people.map(p => {
                     const parts = p.split(' (');
                     const namePart = parts[0];
@@ -1179,7 +1174,16 @@
                     return rolePart ? `${namePart} <small>(${rolePart})</small>` : namePart;
                 }).join(', ') : '';
 
-                const roomBlock = t.room ? `<div class="room-label" style="margin-bottom:2px;">${t.room}</div>` : "";
+                const roomBlock = t.room ? `<div class="room-label" style="margin-bottom:2px; color:var(--room); font-weight:bold;">${t.room}</div>` : "";
+
+                // --- RESTORED STATUS LOGIC ---
+                const showButtons = maxSimultaneous < 3;
+                const statusHtml = showButtons ? `
+                    <div class="status-toggles">
+                        <div class="tiny-toggle ${t.pending ? 'active' : ''}" onclick="toggleStatus(${tasks.indexOf(t)}, 'P', event)">P</div>
+                        <div class="tiny-toggle ${t.complete ? 'active' : ''}" onclick="toggleStatus(${tasks.indexOf(t)}, 'C', event)">C</div>
+                    </div>` : '';
+                // -----------------------------
 
                 if (nodeHeight < 40) {
                     node.innerHTML = `
@@ -1193,6 +1197,7 @@
                     node.innerHTML = `
                         <div class="status-header-row">
                             <div class="task-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.name}</div>
+                            ${statusHtml}
                         </div>
                         <div class="task-meta" style="font-size: 0.75rem;">
                             <div class="crew-list" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
@@ -1202,14 +1207,15 @@
                             </div>
                         </div>`;
                 } else {
-                    // NEW: Logic to hide "Assigned:" if crewCount is 0
-                    const crewHtml = crewCount > 0 
+                    const hasCrew = crewCount > 0;
+                    const crewHtml = hasCrew 
                         ? (nodeHeight < 85 ? slimNames : `<span class="assigned-label">Assigned:</span> ${fullCrew}`)
                         : "";
 
                     node.innerHTML = `
                         <div class="status-header-row">
                             <div class="task-title" style="margin-bottom:2px;">${t.name}</div>
+                            ${statusHtml}
                         </div>
                         <div class="task-meta">
                             <div class="time-range">${timeRangeStr}</div>
@@ -1225,8 +1231,6 @@
         updateNowLine();
 
         if (currentFilter) {
-            const activePill = Array.from(document.querySelectorAll('.roster-pill'))
-                                    .find(p => p.getAttribute('data-unique-id') === currentFilter);
             applyFilterState(currentFilter);
         }
     }
@@ -1728,4 +1732,5 @@
 </script>
 </body>
 </html>
+
 
