@@ -1048,7 +1048,6 @@
                     </div>` : '';
 
                 if (nodeHeight < 40) {
-                    // ULTRA COMPACT - Removed padding and forced line-height to prevent clipping
                     node.innerHTML = `
                         <div class="ultra-compact-text" style="
                             font-size: 8px; 
@@ -1057,10 +1056,15 @@
                             display: flex; 
                             align-items: center; 
                             white-space: nowrap; 
-                            overflow: hidden; 
+                            /* Change to visible so text can "bleed" slightly if needed rather than cut */
+                            overflow: visible; 
                             gap: 3px;
                             padding: 0 2px;
-                            line-height: 1; /* Prevents top/bottom clipping */
+                            /* This ensures the flexbox ignores the parent's padding constraints */
+                            width: 100%;
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
                             margin: 0;
                         ">
                             <span style="flex-shrink: 1; overflow: hidden; text-overflow: ellipsis;">${t.name}</span>
