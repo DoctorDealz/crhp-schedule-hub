@@ -1,0 +1,2540 @@
+{
+  "tasks": [
+    {
+      "day": 1,
+      "start": "05:00",
+      "end": "05:30",
+      "name": "Team Arrives at Hall",
+      "desc": "Start coffee and prepare breakfast.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "room": "Help Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "05:30",
+      "end": "05:45",
+      "name": "Team goes to Chapel",
+      "desc": "",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "05:45",
+      "end": "06:15",
+      "name": "Adoration Service",
+      "desc": "All team members and Deacon attend adoration in Chapel.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "room": "Dining Room, Chapel",
+      "pending": false,
+      "complete": false,
+      "rooms": [
+        "Dining Room",
+        "Chapel"
+      ]
+    },
+    {
+      "day": 1,
+      "start": "06:15",
+      "end": "06:30",
+      "name": "Ensure Breakfast is Setup",
+      "desc": "All team members have coffee/water/snacks.\nInvitation/Help Leader has breakfast.",
+      "people": [
+        "INSERT NAME (Invitation/Help Leader)",
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "06:30",
+      "end": "07:00",
+      "name": "Guests Start Arriving",
+      "desc": "Guests will arrive, hand luggage to greeters, check in, and head to dining room.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room",
+        "Hall B Entrance"
+      ],
+      "room": "Dining Room, Main Room, Hall B Entrance",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "06:30",
+      "end": "06:35",
+      "name": "Team goes to Assigned Stations for Check-In",
+      "desc": "All team members will go to assigned stations for the check-in process.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Dining Room",
+        "Main Room",
+        "Hall B Entrance"
+      ],
+      "room": "Dining Room, Main Room, Hall B Entrance",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "06:35",
+      "end": "07:00",
+      "name": "Greet Guests at Curb",
+      "desc": "Greet guests, escort them to check-in table, carry their luggage, bag luggage, stay with guests and mingle.\nTake note of meds.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Dining Room",
+        "Main Room",
+        "Hall B Entrance"
+      ],
+      "room": "Dining Room, Main Room, Hall B Entrance",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "06:35",
+      "end": "07:00",
+      "name": "Check Guests In",
+      "desc": "Verify name is correct, update roster if needed, hand out name badge.",
+      "people": [],
+      "type": "bg",
+      "rooms": [
+        "Hall B Entrance"
+      ],
+      "room": "Hall B Entrance",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "07:00",
+      "end": "07:03",
+      "name": "Table Blessing",
+      "desc": "Say Grace before Breakfast.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "07:05",
+      "end": "07:30",
+      "name": "Breakfast",
+      "desc": "Guests are served by team and escorted to a dining table.\nTable leaders get with table members and introduce.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "07:00",
+      "end": "07:25",
+      "name": "Call No Shows and Waiting List",
+      "desc": "Invitation/Help leader calls no shows and anyone on waiting list.",
+      "people": [
+        "INSERT NAME (Invitation/Help Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Help Room"
+      ],
+      "room": "Help Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "07:25",
+      "end": "07:30",
+      "name": "Final Table Name Card Check",
+      "desc": "Check table name cards and remove any no shows and add any last minute additions.\nProvide updated table assignment list to table leaders",
+      "people": [
+        "INSERT NAME (Invitation/Help Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Help Room"
+      ],
+      "room": "Main Room, Help Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "07:30",
+      "end": "07:55",
+      "name": "Go to Main Room",
+      "desc": "All guests go to main room for introductions.\nEscort guests to table and team moves to stand next to leader table.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "07:55",
+      "end": "08:30",
+      "name": "Introductions",
+      "desc": "(Name, Time at MIC, Role)\nRetreat leader starts off introductions (Explain role)\nFormation leader (Explain role)\nFacilities leader (Explain role)\nEveryone else",
+      "people": [
+        "INSERT NAME (Retreat Leader)",
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "08:30",
+      "end": "08:35",
+      "name": "Opening Prayer",
+      "desc": "Formation leader explains intercessory prayer and invites everyone to ask the Lord for one special favor during the weekend.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "08:35",
+      "end": "08:45",
+      "name": "Explain Facility",
+      "desc": "Our Team is here to serve you\nRepeating a name once it is given,\nMaintain an inside voice and silence when near the Chapel\nWearing name tags\nNo watches, cell phones as we have now begun to be on God’s clock, guided by The Holy Spirit.\nEncourage full participation (No one is forced to participate/share.)\nSit at same table all weekend,\nRestroom – Location.  If they forgot toiletries items, we have a few available please let your Table Leader or any of us know.\nBreaks – please pay attention to bell and return promptly. We will have regularly scheduled breaks.\nIf guests need anything, please feel free to ask any one of us.\nFeel free to eat any of the snacks on the table (indicate the snack table)",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "08:35",
+      "end": "08:45",
+      "name": "Renewal Witness to Chapel",
+      "desc": "The Renewal witness is escorted to the chapel by formation leader.\nFormation leader prays over witness and returns to give bible enthronement.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "08:45",
+      "end": "08:55",
+      "name": "Bible Enthronement",
+      "desc": "Formation Leader explains the purpose of Bible Enthronement\n1st of 2 - Bible Enthronement: CRHP 8 Theme Song is Played while procession takes place\nAll Stand for Theme song and bible procession.\nSacristan and 2 others: Carry Crucifix, Candle & Bible, process around the Main Room, place the items in front of the podium: in order carried. Song's 1st Chorus ends just as items placed.\nSacristan reads the verse: 2 Timothy 3:16-17 - After reading all are seated",
+      "people": [
+        "INSERT NAME (Sacristan)",
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "08:55",
+      "end": "09:00",
+      "name": "Explain Witness",
+      "desc": "- Explain purpose of Confidentiality prayer (honor the gift of the witness by valuing their confidentiality)\n- Prayer for the Witnesser by the Formation Leader/Team\n- Explains affirmation afterwards, not required but all are welcome\n- SONG IS PART OF THE WITNESS, so the Witnesser will indicate when he is ready for affirmations\n- Remind guests to not eat or leave the room during the witness out of respect.\n- Etiquette for listening to a Witness\n    During the Witness time, the lights will be dimmed \n    You may move your chair so you can see comfortably\n      - Please refrain from eating during the talk\n      - Please refrain from leaving the room during the talk\n- Explain binders-turn to each witness’ topic during talk.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "08:55",
+      "end": "09:00",
+      "name": "Retrieve Renewal Witness",
+      "desc": "Escort renewal witness back to the main room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "09:00",
+      "end": "09:25",
+      "name": "Renewal Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium - Re-orient room\nRETREAT LEADER introduces Witness Topic - Renewal\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nRENEWAL WITNESS and Transformation Prayer\nSong and Affirmation (Sub-Music)",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "09:25",
+      "end": "09:30",
+      "name": "Renewal Witness Give Thanks",
+      "desc": "Renewal witness goes to chapel to give thanks",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "09:25",
+      "end": "09:35",
+      "name": "Renewal Table Discussion",
+      "desc": "Sharing of Witness. Retreat Leader invites all to participate in the sharing of theme.\nEncourages them to share their own experiences of renewal. (Sharing within tables)",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "09:33",
+      "end": "09:33",
+      "name": "2 MINUTE WARNING",
+      "desc": "",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "09:35",
+      "end": "09:55",
+      "name": "Renewal Table Assignments",
+      "desc": "Retreat Leader will explain procedure for preparing table presentations then assign tables as follows.\nTable 1: poem\nTable 2: poster\nTable 3: skit\nTable 4: scripture\nTable 5: cheer\nTable 6: song",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "09:53",
+      "end": "09:53",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "Renewal Witness comes back to main room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "09:55",
+      "end": "10:10",
+      "name": "Renewal Table Presentations",
+      "desc": "Retreat leader facilitates table presentations introducing each table.",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:10",
+      "end": "10:15",
+      "name": "Break",
+      "desc": "Snacks, drinks, bathroom",
+      "people": [],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:10",
+      "end": "10:15",
+      "name": "New Life in Christ Witness to Chapel",
+      "desc": "New Life in Christ Witness escorted to Chapel.",
+      "people": [],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:15",
+      "end": "10:25",
+      "name": "Table Names",
+      "desc": "Explain and suggest that they be Christian based, Spiritual, Scripture Inspired.\nIf you’re not creative let the Holy Spirit select and pray.\nTable Leaders: encourage guests to Come up with a table name\nAnnounce breaks – explain no food or drinks allowed while Witness is presenting \nThere will be lunch, Please keep quiet in halls",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:23",
+      "end": "10:23",
+      "name": "2 MINUTE WARNING",
+      "desc": "",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:25",
+      "end": "10:30",
+      "name": "Table Name Presentations",
+      "desc": "TABLE NAMES: Retreat Leader asks each table their name and have one person explain why the name was chosen. \nReminder: no eating or leaving during the witness",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:28",
+      "end": "10:30",
+      "name": "Retrieve New Life in Christ Witness",
+      "desc": "Escort New Life in Christ Witness back to main room.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:30",
+      "end": "10:55",
+      "name": "New Life in Christ Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic -  New Life in Christ\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nNEW LIFE IN CHRIST WITNESS and Transformation Prayer\nSong and Affirmation",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:55",
+      "end": "11:00",
+      "name": "New Life in Christ Witness Give Thanks",
+      "desc": "New Life in Christ Witness goes to Chapel to give thanks.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "10:55",
+      "end": "11:05",
+      "name": "New Life in Christ Table Discussion",
+      "desc": "Sharing of Witness. Retreat Leader invites all to participate in the sharing of theme.\nEncourages them to share their own experiences of renewal. (Sharing within tables)",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "11:03",
+      "end": "11:03",
+      "name": "2 MINUTE WARNING",
+      "desc": "",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "11:05",
+      "end": "11:25",
+      "name": "New Life in Christ Table Assignments",
+      "desc": "Retreat Leader will give table assignments.\nTable 1: song\nTable 2: skit\nTable 3: cheer\nTable 4: poem\nTable 5: scripture\nTable 6: poster",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "11:23",
+      "end": "11:23",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "Escort New Life in Christ Witness Back to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "11:25",
+      "end": "11:40",
+      "name": "New Life in Christ Table Presentations",
+      "desc": "Retreat leader facilitates table presentations introducing each table.",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "11:40",
+      "end": "12:00",
+      "name": "First CRHP Chapel Visit",
+      "desc": "First CRHP Chapel Visit: Non-CRHP Adoration slot 11-11:40 vs leave when music turned off\nTurn off sound for Gregorian Chants as we enter the Chapel - EP\n\"FORMATION LEADER explains Monstrance and etiquette that apply while in any Adoration Chapel where Christ is present.  \n - Participants can go to the chapel at any time during the weekend except during a witness\n - Feel free to ask any one of us to pray or be with them in the chapel. \"\nFORMATION LEADER - silently leads group to Chapel. Not required to stay in table groups\n\"FORMATION LEADER - Explains what Shared Prayer is and invites all to participate and how.\nIf not comfortable praying out loud, may do so silently. If we do Rosary/etc need explanation\nRetreat Leader Starts, Formation Leader ends.\"\nSetup Lunch Service: Meal is setup in dining area Kitchen Coordinator\nTurn ON low sound for Gregorian Chants as we leave the Chapel",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "12:00",
+      "end": "12:30",
+      "name": "Lunch",
+      "desc": "Spirituality Witness eats first, then goes to Chapel. (Don't wait for others or prayer.)\nFormation Leader leads prayer before lunch\nAlways let participants go through line first (unless witness needs to eat)\nCRSP/CRHP Team serves plates, and carries plates for guest to table to eat.\nFacilitator and Kitchen guide Meal Team to proper place at proper time\nMeal Team, after serving, lines up in mass area facing dining tables, they introduce themselves and sing their Team Song while guests finish eating.  After intro and song, Meal Team may serve themselves and join receiving team to eat.",
+      "people": [
+        "INSERT NAME (Formation Leader)",
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "12:30",
+      "end": "12:30",
+      "name": "Wrap up Lunch",
+      "desc": "Transition from Dining to Main Room",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room"
+      ],
+      "room": "Dining Room, Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "12:33",
+      "end": "12:35",
+      "name": "Retrieve Spirituality Witness",
+      "desc": "Spiritually Witness escorted to main room.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "12:10",
+      "end": "12:10",
+      "name": "Spirituality Witness to Chapel",
+      "desc": "Spirituality Witness escorted to Chapel",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "12:35",
+      "end": "13:00",
+      "name": "Spirituality Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic -  Spirituality\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nSPIRITUALITY WITNESS and Transformation Prayer\nSong & Affirmation",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:00",
+      "end": "13:05",
+      "name": "Spirituality Witness Give Thanks",
+      "desc": "Spirituality Witness goes to Chapel to give thanks.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:00",
+      "end": "13:10",
+      "name": "Spirituality Table Discussion",
+      "desc": "Sharing of Witness. Retreat Leader invites all to participate in the sharing of theme.\nEncourages them to share their own experiences of renewal. (Sharing within tables)",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:08",
+      "end": "13:08",
+      "name": "2 MINUTE WARNING",
+      "desc": "",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:10",
+      "end": "13:30",
+      "name": "Spirituality Table Assignements",
+      "desc": "Retreat Leader gives table assignments.\nTable 1: cheer\nTable 2: song\nTable 3: poem\nTable 4: poster\nTable 5: skit\nTable 6: scripture",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:28",
+      "end": "13:28",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "Christian Community Witness escorted to Chapel\nSpirituality Witness escorted back to Witness room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:30",
+      "end": "13:45",
+      "name": "Spirituality Table Presentations",
+      "desc": "Retreat leader facilitates table presentations introducing each table.",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:43",
+      "end": "13:43",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "Christian Community Witness escorted to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:45",
+      "end": "14:00",
+      "name": "Break",
+      "desc": "Snacks, drinks, bathroom",
+      "people": [],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "13:58",
+      "end": "13:58",
+      "name": "2 MINUTE WARNING",
+      "desc": "",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "14:00",
+      "end": "14:30",
+      "name": "Christian Community Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic - Christian Community Awareness\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nCHRISTIAN COMMUNITY WITNESS and Transformation Prayer\nSong & Affirmation",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "14:30",
+      "end": "14:33",
+      "name": "Christian Community Witness Give Thanks",
+      "desc": "After affirmations, escort Christian Community Witness back to the Chapel.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "14:30",
+      "end": "14:40",
+      "name": "Christian Community Table Discussion",
+      "desc": "Sharing of Witness. Retreat Leader invites all to participate in the sharing of theme.\nEncourages them to share their own experiences of renewal.  (Sharing within tables)",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "14:38",
+      "end": "14:38",
+      "name": "2 MINUTE WARNING",
+      "desc": "",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "14:40",
+      "end": "15:00",
+      "name": "Christian Community Table Assignments",
+      "desc": "Retreat Leader will give table assignments.\nTable 1: skit\nTable 2: poem\nTable 3: scripture\nTable 4: song\nTable 5: poster\nTable 6: cheer",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "14:58",
+      "end": "14:58",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "Escort Christian Community Witness back to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "15:00",
+      "end": "15:15",
+      "name": "Christian Community Table Presentations",
+      "desc": "Retreat leader facilitates table presentations introducing each table.",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "15:12",
+      "end": "15:12",
+      "name": "Christian Awareness Witness to Chapel",
+      "desc": "Christian Awareness Witness escorted to Chapel",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "15:15",
+      "end": "15:40",
+      "name": "One-on-One Sharing",
+      "desc": "One-on-One Sharing. Retreat Leader will explain procedure.\n\"Participants pair up with someone they do not know and leave Witness Room together. Share the answers to these questions (card in table leader packet): \n- Where am I right now spiritually? \n- What is my present relationship with Jesus?\n- What is holding me back from surrendering to Jesus right now?\"\nOne person shares for 10 minutes and the other listens without interrupting or commenting.\nAfter 10 minutes, the procedure is reversed. Each person will have 10 minutes to share.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "15:28",
+      "end": "15:28",
+      "name": "2 MINUTE WARNING - Switch",
+      "desc": "Switch sharing",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "15:38",
+      "end": "15:38",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "Escort Christian Awareness Witness to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "15:40",
+      "end": "16:10",
+      "name": "Christian Awareness Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic - Christian Awareness\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nCHRISTIAN AWARENESS WITNESS and Transformation Prayer\nSong and Affirmation",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "16:10",
+      "end": "16:10",
+      "name": "Christian Awareness Witness Give Thanks",
+      "desc": "After affirmations, escort Christian Awareness Witness back to the Chapel. ",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "16:10",
+      "end": "16:20",
+      "name": "Christian Awareness Table Discussion",
+      "desc": "Sharing of Witness. Retreat Leader invites all to participate in the sharing of theme.\nEncourages them to share their own experiences of renewal.  (Sharing within tables)",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "16:18",
+      "end": "16:18",
+      "name": "2 MINUTE WARNING",
+      "desc": "",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "16:20",
+      "end": "16:40",
+      "name": "Christian Awareness Table Assignments",
+      "desc": "Retreat Leader will give the table assignments.\nTable 1: scripture\nTable 2: cheer        \nTable 3: poster\nTable 4: skit           \nTable 5: song\nTable 6: poem",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "16:38",
+      "end": "16:38",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "Escort Christian Awareness Witness back to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "16:40",
+      "end": "16:55",
+      "name": "Christian Awareness Table Presentations",
+      "desc": "Retreat leader facilitates table presentations introducing each table.",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "16:55",
+      "end": "17:25",
+      "name": "Dinner",
+      "desc": "Reconciliation Witness eats first, then goes to Chapel. (Don't wait for others or prayer.)\nRETREAT LEADER: Leads Meal Prayer\nMusic: Play Theme Song as we process to Dinner\nFacilitator and Kitchen instruct Meal Team of serving and intro process and times\nAlways let participants go through line first (unless witness needs to eat)\nCRSP/CRHP Team serves plates, and carries plates for guest to table to eat.\nMeal Team, after serving, lines up in mass area facing dining tables, they introduce themselves and sing their Team Song while guests finish eating.  After intro and song, Meal Team may serve themselves and join receiving team to eat.",
+      "people": [
+        "INSERT NAME (Formation Leader)",
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "17:25",
+      "end": "17:30",
+      "name": "Wrap up Dinner",
+      "desc": "Transition from Dining to Main Room",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room"
+      ],
+      "room": "Dining Room, Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "17:10",
+      "end": "17:10",
+      "name": "Reconciliation Witness to Chapel",
+      "desc": "Reconciliation Witness eats first, then goes to Chapel. (Don't wait for others or prayer.)",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "17:28",
+      "end": "17:28",
+      "name": "Retrieve Reconciliation Witness",
+      "desc": "Escort Reconciliation Witness to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "17:30",
+      "end": "18:00",
+      "name": "Reconciliation Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFormation LEADER introduces Witness Topic - Reconciliation\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nRECONCILIATION WITNESS and Transformation Prayer\nSong and Affirmation. No table sharing/presentations.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "17:45",
+      "end": "18:00",
+      "name": "Sacristan Greets Priests",
+      "desc": "Sacristan (CA) greets priests, prepares them for Reconciliation Service",
+      "people": [
+        "INSERT NAME (Sacristan)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Hall B Entrance"
+      ],
+      "room": "Hall B Entrance",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "18:00",
+      "end": "18:00",
+      "name": "Reconciliation Witness Give Thanks",
+      "desc": "After Affirmation Witness escorted to Chapel to give thanks",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "18:00",
+      "end": "18:15",
+      "name": "Priest Talk on Reconciliation",
+      "desc": "Examination of Conscience pamphlets passed out to all guests (in table leader packet)\nTalk on Reconciliation by Priest",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "18:15",
+      "end": "18:30",
+      "name": "Reconciliation Service Explained",
+      "desc": "Sacristan greets priests and escorts them to the Main Room for Introductions\nSacristan explains Reconciliation process and locations.\nSacristan leads the guests and Priests to the Chapel to pray prior to Reconciliation\nKitchen Coordinator to close Kitchen Closet Door during Reconciliation.",
+      "people": [
+        "INSERT NAME (Sacristan)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "18:30",
+      "end": "19:45",
+      "name": "Reconciliation Service",
+      "desc": "SACRISTAN and others: Comfort guests going to reconciliation 2 Priests in Hall A area\nRetreat Leader: stationed inside Chapel, gives lit candle to guest as they return from reconciliation\nGuests gather in Chapel for penance and private prayer until all are done. \nTeam:  in Chapel Praying, or comforting guests with reconciliation process\nSacristan & Facilitator escort all guests and team back to Witness Room\nKitchen: Removes all snacks, except water, from Main Room",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Sacristan)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "19:15",
+      "end": "19:30",
+      "name": "Remove Snacks",
+      "desc": "Kitchen: Removes all snacks, except water, from Main Room",
+      "people": [
+        "INSERT NAME (Kitchen Coordinator)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Kitchen"
+      ],
+      "room": "Main Room, Kitchen",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "19:40",
+      "end": "19:40",
+      "name": "Eucharist Witness to Chapel",
+      "desc": "Eucharist Witness escorted to Chapel",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "19:45",
+      "end": "19:45",
+      "name": "Mass Setup - Quietly",
+      "desc": "SETUP for Mass. (QUIETLY)\nQuietly setup for mass after all guests are in Main Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "19:55",
+      "end": "19:55",
+      "name": "Retrieve Eucharist Witness",
+      "desc": "Escort Eucharist Witness to Main Room",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "20:00",
+      "end": "20:30",
+      "name": "Eucharist Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic -  Eucharist\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nEUCHARIST WITNESS and Transformation Prayer\nSong and Affirmation. No Table sharing/presentations.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "20:30",
+      "end": "20:30",
+      "name": "Eucharist Witness Give Thanks",
+      "desc": "After affirmation, escort Witness to Chapel to give thanks",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "20:35",
+      "end": "20:35",
+      "name": "Ensure Late Night Snacks are set",
+      "desc": "Check with Kitchen Coordinator to make sure Kitchen is set for late night snack.",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Kitchen Coordinator)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Kitchen"
+      ],
+      "room": "Kitchen",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "20:30",
+      "end": "20:45",
+      "name": "Break",
+      "desc": "BREAK - Bathroom NO Snacks",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "19:45",
+      "end": "20:00",
+      "name": "Buffer - Potential Break",
+      "desc": "Buffer time. If used, can be a short break.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "20:40",
+      "end": "20:45",
+      "name": "Former Teams Create Procession Line",
+      "desc": "Former CRSP/CRHP Teams with their Shirts and Candles Form a procession line to Mass\nGreeters for Former Teams: MIC CRHP/CRSP invited\n- weather permitting, outside former teams line up either side of sidewalk between Hall B and A\n-Alternate: indoors, former teams 2 lines from Hall B door to last row of Mass seating space",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "20:45",
+      "end": "20:45",
+      "name": "Retrieve Eucharist Witness",
+      "desc": "Escort Eucharist Witness to Main Room for Candle Light Walk",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "20:45",
+      "end": "21:00",
+      "name": "Candle Light Procession",
+      "desc": "Formation Leader:  Explains process for a \"Candle Light Walk\"\nTable Leaders: Have their table guests light their candles and guide them to line up for procession, Table Leaders walk behind all guests\nGuests form a procession line in Main Room, Table Leaders lead guests single file through candle line to Mass. (Single line if 25 or less / Double line if > 25)\nTheme Song is Played and sung by all, until all are seated in Mass.\nFacilitator: at entrance of Hall A to guide group to mass",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "21:00",
+      "end": "22:15",
+      "name": "Mass",
+      "desc": "Formation Leader and Sacristan: Explain the tradition of all other CRHP Teams that are present.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "22:10",
+      "end": "23:00",
+      "name": "Mass Cleanup",
+      "desc": "Escorts the participants and Giving team to main room\nFormer teams escorted out HALL A door.  Non-Table Leaders clean up mass setting and setup Dining Room tables for breakfast.  (Quietly)",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "22:15",
+      "end": "22:30",
+      "name": "Explain Overnight Process",
+      "desc": "Retreat Leader explains process Over night and wake up process.\nDraw tables out of hat for order.\n-Adoration as a team by table (Table Leaders have a nighttime alarm to wake up for adoration)\n-Sleeping arrangements (Giving Team brings own bedding)\n-How wake up works first thing\n-If questions during the night, who to contact and how.",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "22:30",
+      "end": "23:00",
+      "name": "Late Night Social",
+      "desc": "Late night Social with Snacks - Stay in Main room (till mass is cleaned up)",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 1,
+      "start": "23:00",
+      "end": "23:59",
+      "name": "1st Hour Table Adoration",
+      "desc": "1st table drawn goes to adoration for 1 hour.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "00:00",
+      "end": "01:00",
+      "name": "2nd Hour Table Adoration",
+      "desc": "2nd table drawn goes to adoration for 1 hour.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "01:00",
+      "end": "02:00",
+      "name": "3rd Hour Table Adoration",
+      "desc": "3rd table drawn goes to adoration for 1 hour.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "02:00",
+      "end": "03:00",
+      "name": "4th Hour Table Adoration",
+      "desc": "4th table drawn goes to adoration for 1 hour.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "03:00",
+      "end": "04:00",
+      "name": "5th Hour Table Adoration",
+      "desc": "5th table drawn goes to adoration for 1 hour.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "04:00",
+      "end": "05:00",
+      "name": "6th Hour Table Adoration",
+      "desc": "6th table drawn goes to adoration for 1 hour.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "05:30",
+      "end": "06:00",
+      "name": "Team Wake Up Call",
+      "desc": "Pack up sleeping area.\nRemind giving team to keep quiet.\nYou are on the HELP Team today.\nKitchen Start the Coffee.",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Kitchen Coordinator)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Kitchen",
+        "Sleeping Area"
+      ],
+      "room": "Kitchen, Sleeping Area",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "06:00",
+      "end": "06:15",
+      "name": "Team Adoration",
+      "desc": "Team attends adoration.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "06:15",
+      "end": "06:50",
+      "name": "Wake Up Call",
+      "desc": "Music and Team: Wake up participants with song and they get dressed\nSet up for breakfast/ all team put up participants sleeping area\nRepack all guest belongings, strip beds, stack air mattresses against Hall B wall.\nCheck with Kitchen Coordinator to make sure kitchen is set for breakfast.",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Kitchen Coordinator)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Dining Room",
+        "Kitchen",
+        "Sleeping Area"
+      ],
+      "room": "Dining Room, Kitchen, Sleeping Area",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "06:50",
+      "end": "07:10",
+      "name": "Morning Prayer",
+      "desc": "Everyone - Morning prayer – Everyone goes to the chapel for morning prayer\nFormation Leader leads a prayer in the Chapel. All will then go to Dining Room.",
+      "people": [
+        "INSERT NAME (Formation Leader)",
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "07:10",
+      "end": "07:50",
+      "name": "Breakfast",
+      "desc": "Team serves all participants, then serve ourselves and eat.  Best if mix up tables to meet others",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "07:45",
+      "end": "07:45",
+      "name": "Scripture Witness to Chapel",
+      "desc": "Scripture Witness escorted to Chapel.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "07:50",
+      "end": "07:55",
+      "name": "Wrap Up Breakfast",
+      "desc": "Moves all from dining to main room",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room"
+      ],
+      "room": "Dining Room, Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "07:55",
+      "end": "08:05",
+      "name": "Bible Enthronement",
+      "desc": "FINAL- Bible Enthronement: Team Song is Played while procession takes place\nAll Stand for Theme song and bible procession.\nSacristan and 2 others: Carry Crucifix, Candle & Bible, process around the Main Room, \nplace the items in front of the podium: in order carried. Song should end just as or after placed.\nSacristan reads the verse: 2 Timothy 3:16-17 - After reading all are seated",
+      "people": [
+        "INSERT NAME (Sacristan)",
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "08:00",
+      "end": "08:00",
+      "name": "Retrieve Scripture Witness",
+      "desc": "Scripture Witness escorted to Chapel.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "08:05",
+      "end": "08:30",
+      "name": "Scripture Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic -  Scripture\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nSCRIPTURE WITNESS and Transformation Prayer\nSong and Affirmation",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "08:30",
+      "end": "08:30",
+      "name": "Scripture Witness Give Thanks",
+      "desc": "After affirmations, escort Scripture Witness to the Chapel.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "08:30",
+      "end": "08:40",
+      "name": "Scripture Table Discussion",
+      "desc": "Sharing of Witness. Retreat Leader invites all to participate in the sharing of theme.\nEncourages them to share their own experiences of scripture.  (Sharing within tables)",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "08:38",
+      "end": "08:38",
+      "name": "2 MINUTE WARNING",
+      "desc": "Wrap up witness table discussions.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "08:40",
+      "end": "09:00",
+      "name": "Scripture Table Assignments",
+      "desc": "Retreat Leader will give table assignments.\nTable 1: poster\nTable 2: scripture\nTable 3: song\nTable 4: cheer\nTable 5: poem\nTable 6: skit",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "08:58",
+      "end": "08:58",
+      "name": "2 MINUTE WARNING - Witness",
+      "desc": "2 min. warning for table presentations.\nEscort Scripture Witness back to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "09:00",
+      "end": "09:15",
+      "name": "Scripture Table Presentations",
+      "desc": "Retreat leader facilitates table presentations introducing each table.",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "09:10",
+      "end": "09:10",
+      "name": "Father's Loving Care Witness to Chapel",
+      "desc": "Fathers Loving Care Witness escorted to Chapel ",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "09:15",
+      "end": "09:30",
+      "name": "Break",
+      "desc": "Snacks, drinks, bathroom.",
+      "people": [],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "09:26",
+      "end": "09:26",
+      "name": "Retrieve Father's Loving Care Witness/HELP Preperations",
+      "desc": "Father’s Loving Care Witness escorted to Witness Room.\nAll table leaders and team move from Main room to Conference Room to pray during witness\nRETREAT LEADER will lead team in prayer during witness in HELP Room\nFormation Leader and Music stay in Main room during witness and presentation of HELP\n",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Retreat Leader)",
+        "All Team Members (ALL)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel",
+        "Help Room"
+      ],
+      "room": "Main Room, Chapel, Help Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "09:30",
+      "end": "09:55",
+      "name": "Father's Loving Care Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic -  The Father's Loving Care\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nFATHERS LOVING CARE WITNESS and Transformation Prayer\nSong and Affirmation  -- Guests affirm the Witness",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "09:55",
+      "end": "09:55",
+      "name": "Father's Loving Care Witness Give Thanks",
+      "desc": "Father's Loving Care Witness escorted to Chapel to give thanks (optional)",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "09:55",
+      "end": "10:55",
+      "name": "HELP Letters",
+      "desc": "FORMATION LEADER explains HELP Letters possibly mini reflect on witness \nAll table leaders locate their table HELP bags and prepare to deliver HELP bags w/a helper\nPRESENTATION of HELP After Formation Leader explanation / reflection\nTable leaders – present HELP bags to attendees at their table. (TL may have 1 helper if needed)\nAttendees might read letters in main room, chapel or dining room.\nIf team members wish to pack their personal belongings they might do so at this time \nRestroom break as well.",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Formation Leader)",
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room",
+        "Chapel",
+        "Help Room"
+      ],
+      "room": "Dining Room, Main Room, Chapel, Help Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "10:50",
+      "end": "10:50",
+      "name": "5 MINUTE WARNING",
+      "desc": "5 min. warning to return to Main Room",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "10:55",
+      "end": "11:00",
+      "name": "HELP Conclusion",
+      "desc": "All attendees are gathered in Main Room for HELP Conclusion.\nFORMATION LEADER - Concludes letter reading with a prayer.\nTable leaders lead thanks for God’s HELP, then attendees share.",
+      "people": [
+        "INSERT NAME (Facilities Leader)",
+        "INSERT NAME (Formation Leader)",
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "11:00",
+      "end": "11:30",
+      "name": "Chapel Visit",
+      "desc": "Retreat Leader == Chapel Visit 3 - TBD\nTable leaders lead tables to Chapel for prayer and thanksgiving",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "11:28",
+      "end": "11:28",
+      "name": "2 MINUTE WARNING",
+      "desc": "Make sure Dining Room is ready for lunch",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "11:30",
+      "end": "12:05",
+      "name": "Lunch",
+      "desc": "MUSIC: Play Theme song as group processes to Lunch",
+      "people": [
+        "INSERT NAME (Formation Leader)",
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "11:35",
+      "end": "11:35",
+      "name": "Discipleship Witness to Chapel",
+      "desc": "Discipleship Witness First in line to eat\nDiscipleship Witness escorted to Chapel",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "12:05",
+      "end": "12:10",
+      "name": "Wrap Up Lunch",
+      "desc": "Finish up lunch and go back to main room.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room"
+      ],
+      "room": "Dining Room, Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "12:05",
+      "end": "12:05",
+      "name": "Retrieve Discipleship Witness",
+      "desc": "Discipleship Witness escorted back to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "12:10",
+      "end": "12:30",
+      "name": "Discipleship Witness",
+      "desc": "Lights dimmed as Formation Leader and Witness approach the podium\nFORMATION LEADER introduces Witness Topic -  Discipleship\nLeads Confidentiality Prayer, Introduces Witnesser, Prays for Witnesser\nDISCIPLESHIP WITNESS and Transformation Prayer\nSong and Affirmation",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "12:30",
+      "end": "12:30",
+      "name": "Discipleship Witness Give Thanks",
+      "desc": "After affirmations, escort Discipleship Witness to the Chapel.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "12:30",
+      "end": "12:40",
+      "name": "Discipleship Table Discussion",
+      "desc": "Sharing of Witness. Formation Leader invites all to participate in the sharing of theme.\nEncourages them to share their own experiences of renewal.  (Sharing within tables)",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "12:38",
+      "end": "12:38",
+      "name": "2 MINUTE WARNING/Retrieve Witness",
+      "desc": "Discipleship Witness back to Witness Room.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "12:40",
+      "end": "13:10",
+      "name": "Table Discussion",
+      "desc": "Formation Leader reflects on call to Evening of Discipleship, and then asks participants to share their response to the call of discipleship. \n-Requests Table Leaders to share their experience of team formation and ministry at their tables.\n-Provide time for participants to write their own Personal Commitment Prayer on inside of handout.",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "13:08",
+      "end": "13:08",
+      "name": "2 MINUTE WARNING",
+      "desc": "Conclude table discussions",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "13:13",
+      "end": "13:13",
+      "name": "Dinner/Discipleship Service Prep",
+      "desc": "Make sure Dining Room is set for Last Supper.\nMake sure Monstrance has been reposed and everything is set for Last Supper.\nPreparation for Discipleship Service.",
+      "people": [
+        "INSERT NAME (Facilities Leader)"
+      ],
+      "type": "bg",
+      "rooms": [
+        "Dining Room",
+        "Main Room",
+        "Chapel"
+      ],
+      "room": "Dining Room, Main Room, Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "13:10",
+      "end": "13:25",
+      "name": "Bathroom Break",
+      "desc": "Quick break for bathroom.",
+      "people": [],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "13:25",
+      "end": "13:40",
+      "name": "Discipleship Service Preperation",
+      "desc": "Formation Leader reflects on Last Supper and prepares participants for Discipleship Service ",
+      "people": [
+        "INSERT NAME (Formation Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Main Room"
+      ],
+      "room": "Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "14:00",
+      "end": "15:30",
+      "name": "Discipleship Service",
+      "desc": "Service recalling Last Supper and Foot Washing  ",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Chapel"
+      ],
+      "room": "Chapel",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "15:30",
+      "end": "16:15",
+      "name": "Last Supper",
+      "desc": "",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Dining Room"
+      ],
+      "room": "Dining Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "16:15",
+      "end": "16:20",
+      "name": "Closing Remarks",
+      "desc": "Retreat Leader will talk about Evening of discipleship and give closing remarks.\nDismissal process: gather all belongings, Exit via Hall B door, assistance is available",
+      "people": [
+        "INSERT NAME (Retreat Leader)"
+      ],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room"
+      ],
+      "room": "Dining Room, Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "16:20",
+      "end": "16:25",
+      "name": "Closing Prayer",
+      "desc": "Formation Leader will read the closing scripture and prayer.\nMeal Team, after serving, lines up in mass area facing dining tables, they introduce themselves and sing their Team Song while guests finish eating.  After intro and song, Meal Team may serve themselves and join receiving team to eat.",
+      "people": [],
+      "type": "main",
+      "rooms": [
+        "Dining Room",
+        "Main Room"
+      ],
+      "room": "Dining Room, Main Room",
+      "pending": false,
+      "complete": false
+    },
+    {
+      "day": 2,
+      "start": "16:25",
+      "end": "16:30",
+      "name": "Dismissal",
+      "desc": "Dismissal - Team members should help participants gather all their belongings.",
+      "people": [
+        "All Team Members (ALL)"
+      ],
+      "type": "main",
+      "rooms": [],
+      "room": "",
+      "pending": false,
+      "complete": false
+    }
+  ],
+  "checklist": [],
+  "roster": [
+    {
+      "name": "INSERT NAME",
+      "role": "Facilities Leader"
+    },
+    {
+      "name": "INSERT NAME",
+      "role": "Sacristan"
+    },
+    {
+      "name": "INSERT NAME",
+      "role": "Formation Leader"
+    },
+    {
+      "name": "INSERT NAME",
+      "role": "Retreat Leader"
+    },
+    {
+      "name": "INSERT NAME",
+      "role": "Invitation/Help Leader"
+    },
+    {
+      "name": "All Team Members",
+      "role": "ALL"
+    },
+    {
+      "name": "INSERT NAME",
+      "role": "Kitchen Coordinator"
+    }
+  ],
+  "rooms": [
+    "Dining Room",
+    "Main Room",
+    "Chapel",
+    "Kitchen",
+    "Sleeping Area",
+    "Hall B Entrance",
+    "Help Room"
+  ],
+  "totalDays": 2,
+  "exportedAt": "2/15/2026, 7:11:18 PM"
+}
