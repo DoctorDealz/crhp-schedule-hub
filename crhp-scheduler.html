@@ -1869,36 +1869,41 @@
         }
     }
 
-    function resetToMaster() {
+    async function resetToMaster() {
         const hasData = tasks.length > 0 || roster.length > 0;
         const isModified = typeof isModifiedFromMaster === 'function' ? isModifiedFromMaster() : true;
 
         // Inner Function: The final "point of no return" step
-        const proceedWithDelete = () => {
+        const proceedWithDelete = async () => {
             showModal(
                 "Wait! Final Warning", 
                 "This will delete all names and edits and revert to the CRHP master template. Proceed?",
-                () => {
+                async () => { // Made this callback async
                     try {
                         localStorage.removeItem('v50_is_blank');
-                        const data = JSON.parse(MASTER_TEMPLATE);
+                        
+                        // --- CHANGED: Fetch fresh data from the file instead of a string ---
+                        const response = await fetch('master_template.json');
+                        if (!response.ok) throw new Error("Could not find master_template.json");
+                        const data = await response.json();
                         
                         tasks = data.tasks || [];
                         checklist = data.checklist || [];
                         roster = data.roster || [];
                         rooms = data.rooms || [];
-                        totalDays = data.days || 1;
+                        totalDays = data.totalDays || 1; // Updated to match your initTemplateApp key
                         
                         saveAll();
                         location.reload(); 
                     } catch (e) {
-                        console.error("Error:", e);
+                        console.error("Reset Error:", e);
+                        alert("Failed to load master template file. Check if master_template.json exists.");
                     }
                 },
                 true,
                 "Yes, Reset Everything",
-                "danger",   // Type
-                "Keep My Data"    // False/Cancel label
+                "danger",
+                "Keep My Data"
             );
         };
 
@@ -1912,15 +1917,16 @@
                 },
                 true,
                 "Download & Continue",
-                "info",    // Type
-                "No"       // False/Cancel label
+                "info",
+                "No"
             );
             
             // Ensure clicking "No" still leads to the Reset warning
             const cancelBtn = document.getElementById('modal-cancel');
             if (cancelBtn) {
                 cancelBtn.onclick = () => {
-                    document.getElementById('custom-modal-overlay').remove();
+                    const modal = document.getElementById('custom-modal-overlay');
+                    if(modal) modal.remove();
                     proceedWithDelete();
                 };
             }
