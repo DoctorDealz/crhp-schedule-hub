@@ -1139,29 +1139,34 @@
                             </div>
                         </div>`;
                 } else {
-                    // LARGE VIEW - Protection & Dynamic Row Merging
+                    // LARGE VIEW - Adaptive wrapping for crew names
                     const hasCrew = crewCount > 0;
-                    const isMediumLarge = nodeHeight < 85; // The "In-Between" zone
+                    const isMediumLarge = nodeHeight < 85; 
                     
-                    // Determine Crew HTML
                     const crewHtml = hasCrew 
                         ? (isMediumLarge ? slimNames : `<span class="assigned-label">Assigned:</span> ${fullCrew}`)
                         : "";
                     
-                    // NEW: Logic to merge Room and Crew if space is tight
                     let metaContentHtml = '';
                     if (isMediumLarge && t.room && hasCrew) {
-                        // Combined line: Room | Names
+                        // Combined line: Room stays on top/left, Names wrap below/beside
                         metaContentHtml = `
-                            <div style="color: var(--room); font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-size: 0.85em;">
-                                ${t.room} <span style="color: var(--text); opacity: 0.4; font-weight: normal; margin: 0 4px;">|</span> 
-                                <span style="color: var(--text); opacity: 0.7; font-weight: normal;">${slimNames}</span>
+                            <div style="font-size: 0.85em; width: 100%;">
+                                <span style="color: var(--room); font-weight: bold; white-space: nowrap;">${t.room}</span>
+                                <span style="color: var(--text); opacity: 0.4; margin: 0 4px;">|</span> 
+                                <span style="color: var(--text); opacity: 0.7; white-space: normal; word-wrap: break-word;">${slimNames}</span>
                             </div>`;
                     } else {
-                        // Standard Stacked Layout
+                        // Standard Stacked Layout: Allowed to expand vertically
                         metaContentHtml = `
                             ${t.room ? `<div class="room-label" style="color: var(--room); font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">${t.room}</div>` : ""} 
-                            <div class="crew-list" style="${hasCrew ? 'border-top: 1px solid rgba(0,0,0,0.08); margin-top: 4px; padding-top: 4px;' : ''} overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; white-space: normal; font-size: 0.85em;">
+                            <div class="crew-list" style="
+                                ${hasCrew ? 'border-top: 1px solid rgba(0,0,0,0.08); margin-top: 4px; padding-top: 4px;' : ''} 
+                                font-size: 0.85em; 
+                                white-space: normal; 
+                                word-wrap: break-word;
+                                overflow: hidden;
+                            ">
                                 ${crewHtml}
                             </div>`;
                     }
