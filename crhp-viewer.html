@@ -1723,44 +1723,57 @@
     }
 
     async function resetToMaster() {
-        // 1. Show the first "Final Warning" modal
-        showModal(
-            "Wait! Final Warning", 
-            "This will delete all names and edits and revert to the master template. Proceed?",
-            async () => { 
-                // This inner function runs only if they click "Yes"
-                try {
-                    // 2. Fetch the fresh template file
-                    const response = await fetch('master_template.json');
-                    if (!response.ok) throw new Error("File not found");
-                    const data = await response.json();
-                    
-                    // 3. Unpack into local storage using your keys
-                    localStorage.setItem('v50_tasks', JSON.stringify(data.tasks || []));
-                    localStorage.setItem('v50_checklist', JSON.stringify(data.checklist || []));
-                    localStorage.setItem('v50_roster', JSON.stringify(data.roster || []));
-                    localStorage.setItem('v50_rooms', JSON.stringify(data.rooms || []));
-                    
-                    // Use totalDays or days depending on your JSON structure
-                    localStorage.setItem('v50_days', data.totalDays || data.days || 1); 
-                    
-                    // Clear any "is_blank" flags if you use them
-                    localStorage.removeItem('v50_is_blank');
+        console.log("Reset button clicked..."); // To verify the button is working
 
-                    console.log("Master template unpacked and saved successfully.");
-                    
-                    // 4. Reload to let the app grab the new data
-                    location.reload(); 
-                } catch (e) {
-                    console.error("Error with Master Template:", e);
-                    alert("Failed to reset: Ensure 'master_template.json' is in the folder.");
-                }
+        // Check if showModal exists, otherwise fallback to native confirm
+        if (typeof showModal !== 'function') {
+            if (!confirm("Wait! This will delete all edits and revert to the master template. Proceed?")) return;
+            executeReset();
+            return;
+        }
+
+        // Use your custom Modal
+        showModal(
+            "Final Warning",
+            "This will delete all names and edits and revert to the CRHP master template. Proceed?",
+            async () => {
+                await executeReset();
             },
-            true,           // isConfirm (shows two buttons)
-            "Yes, Reset",   // Confirm button text
-            "danger",       // Red styling
-            "Cancel"        // Cancel button text
+            true,
+            "Yes, Reset Everything",
+            "danger",
+            "Keep My Data"
         );
+    }
+
+    // Separate the logic to make it cleaner
+    async function executeReset() {
+        try {
+            console.log("Fetching template...");
+            const response = await fetch('master_template.json');
+            
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+            
+            const data = await response.json();
+
+            // Map the data to your LocalStorage keys
+            localStorage.setItem('v50_tasks', JSON.stringify(data.tasks || []));
+            localStorage.setItem('v50_checklist', JSON.stringify(data.checklist || []));
+            localStorage.setItem('v50_roster', JSON.stringify(data.roster || []));
+            localStorage.setItem('v50_rooms', JSON.stringify(data.rooms || []));
+            localStorage.setItem('v50_days', data.totalDays || data.days || 1);
+            
+            // Remove the 'is_blank' flag so the loader knows we have data now
+            localStorage.removeItem('v50_is_blank');
+
+            console.log("Reset successful. Reloading...");
+            location.reload();
+        } catch (e) {
+            console.error("Reset Error:", e);
+            alert("Critical Error: Could not load 'master_template.json'. \n\nDetails: " + e.message);
+        }
     }
 
     function openPrintService() {
