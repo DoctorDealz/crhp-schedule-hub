@@ -1681,48 +1681,62 @@
         const overlay = document.createElement('div');
         overlay.id = 'custom-modal-overlay';
         
+        // Add critical styles directly to ensure visibility
+        Object.assign(overlay.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: '9999'
+        });
+
         overlay.innerHTML = `
-            <div class="modal-box ${type === 'danger' ? 'warning' : ''}">
-                <h3>${title}</h3>
-                <p>${message}</p>
+            <div class="modal-box ${type === 'danger' ? 'warning' : ''}" style="background: #1e293b; color: white; padding: 24px; border-radius: 12px; max-width: 400px; width: 90%; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);">
+                <h3 style="margin-top: 0; color: ${type === 'danger' ? '#ef4444' : '#60a5fa'};">${title}</h3>
+                <p style="margin-bottom: 24px; line-height: 1.5; opacity: 0.9;">${message}</p>
                 ${includeInput ? `
                     <input type="text" id="modal-input-field" class="modal-input" 
                         style="width:100%; margin-bottom:20px; background: #0f172a; color: white; border: 1px solid #334155; padding: 10px; border-radius: 6px;" 
                         value="${defaultInputValue}">
                 ` : ''}
-                <div class="modal-actions">
-                    <button class="modal-btn btn-primary" id="modal-ok">${confirmText}</button>
-                    ${isConfirm ? `<button class="modal-btn btn-secondary" id="modal-cancel">${cancelText}</button>` : ''}
+                <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end;">
+                    ${isConfirm ? `<button class="modal-btn" id="modal-cancel" style="padding: 10px 16px; border-radius: 6px; border: 1px solid #334155; background: transparent; color: white; cursor: pointer;">${cancelText}</button>` : ''}
+                    <button class="modal-btn" id="modal-ok" style="padding: 10px 16px; border-radius: 6px; border: none; background: ${type === 'danger' ? '#ef4444' : '#3b82f6'}; color: white; cursor: pointer; font-weight: bold;">${confirmText}</button>
                 </div>
             </div>
         `;
 
         document.body.appendChild(overlay);
 
-        // Focus input if it exists
         if (includeInput) {
             const input = document.getElementById('modal-input-field');
             input.focus();
-            input.select(); // Highlight text for easy overwriting
+            input.select();
         }
 
         document.getElementById('modal-ok').onclick = () => {
-            let returnValue = true;
-            if (includeInput) {
-                returnValue = document.getElementById('modal-input-field').value;
-            }
-            overlay.remove();
-            if (onConfirm) onConfirm(returnValue);
+            let val = includeInput ? document.getElementById('modal-input-field').value : true;
+            overlay.remove(); // Remove first to prevent double clicks
+            if (onConfirm) onConfirm(val);
         };
 
         if (isConfirm && document.getElementById('modal-cancel')) {
             document.getElementById('modal-cancel').onclick = () => overlay.remove();
         }
 
-        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+        // Disable clicking the background to close during "Danger" operations
+        if (type !== 'danger') {
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+        }
     }
 
     async function resetToMaster() {
+        alert("Function triggered!");
         console.log("Reset button clicked..."); // To verify the button is working
 
         // Check if showModal exists, otherwise fallback to native confirm
