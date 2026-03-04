@@ -1681,47 +1681,65 @@
         const overlay = document.createElement('div');
         overlay.id = 'custom-modal-overlay';
         
-        // Add critical styles directly to ensure visibility
+        // 1. FIXED OVERLAY: Covers the whole screen and centers content
         Object.assign(overlay.style, {
             position: 'fixed',
             top: '0',
             left: '0',
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: '9999'
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            display: 'flex',            // Uses flexbox to center
+            alignItems: 'center',       // Vertical center
+            justifyContent: 'center',    // Horizontal center
+            zIndex: '10000',            // Top of everything
+            padding: '20px',
+            boxSizing: 'border-box'
         });
 
+        // 2. FIXED MODAL BOX: Centered and appropriately sized
         overlay.innerHTML = `
-            <div class="modal-box ${type === 'danger' ? 'warning' : ''}" style="background: #1e293b; color: white; padding: 24px; border-radius: 12px; max-width: 400px; width: 90%; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);">
-                <h3 style="margin-top: 0; color: ${type === 'danger' ? '#ef4444' : '#60a5fa'};">${title}</h3>
-                <p style="margin-bottom: 24px; line-height: 1.5; opacity: 0.9;">${message}</p>
+            <div class="modal-box" style="
+                background: #1e293b; 
+                color: white; 
+                padding: 30px; 
+                border-radius: 12px; 
+                max-width: 450px; 
+                width: 100%; 
+                border: 1px solid #334155; 
+                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+                font-family: -apple-system, system-ui, sans-serif;
+                position: relative;
+            ">
+                <h3 style="margin: 0 0 15px 0; font-size: 1.5rem; color: ${type === 'danger' ? '#ef4444' : '#60a5fa'};">
+                    ${title}
+                </h3>
+                <p style="margin: 0 0 25px 0; line-height: 1.6; opacity: 0.9; font-size: 1rem;">
+                    ${message}
+                </p>
                 ${includeInput ? `
-                    <input type="text" id="modal-input-field" class="modal-input" 
-                        style="width:100%; margin-bottom:20px; background: #0f172a; color: white; border: 1px solid #334155; padding: 10px; border-radius: 6px;" 
+                    <input type="text" id="modal-input-field" 
+                        style="width:100%; margin-bottom:20px; background: #0f172a; color: white; border: 1px solid #475569; padding: 12px; border-radius: 6px; box-sizing: border-box;" 
                         value="${defaultInputValue}">
                 ` : ''}
-                <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end;">
-                    ${isConfirm ? `<button class="modal-btn" id="modal-cancel" style="padding: 10px 16px; border-radius: 6px; border: 1px solid #334155; background: transparent; color: white; cursor: pointer;">${cancelText}</button>` : ''}
-                    <button class="modal-btn" id="modal-ok" style="padding: 10px 16px; border-radius: 6px; border: none; background: ${type === 'danger' ? '#ef4444' : '#3b82f6'}; color: white; cursor: pointer; font-weight: bold;">${confirmText}</button>
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    ${isConfirm ? `
+                        <button id="modal-cancel" style="padding: 10px 20px; border-radius: 6px; border: 1px solid #475569; background: transparent; color: white; cursor: pointer; font-weight: 500;">
+                            ${cancelText}
+                        </button>` : ''}
+                    <button id="modal-ok" style="padding: 10px 20px; border-radius: 6px; border: none; background: ${type === 'danger' ? '#ef4444' : '#3b82f6'}; color: white; cursor: pointer; font-weight: bold;">
+                        ${confirmText}
+                    </button>
                 </div>
             </div>
         `;
 
         document.body.appendChild(overlay);
 
-        if (includeInput) {
-            const input = document.getElementById('modal-input-field');
-            input.focus();
-            input.select();
-        }
-
+        // Event Listeners
         document.getElementById('modal-ok').onclick = () => {
             let val = includeInput ? document.getElementById('modal-input-field').value : true;
-            overlay.remove(); // Remove first to prevent double clicks
+            overlay.remove();
             if (onConfirm) onConfirm(val);
         };
 
@@ -1729,14 +1747,12 @@
             document.getElementById('modal-cancel').onclick = () => overlay.remove();
         }
 
-        // Disable clicking the background to close during "Danger" operations
         if (type !== 'danger') {
             overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
         }
     }
 
     async function resetToMaster() {
-        alert("Function triggered!");
         console.log("Reset button clicked..."); // To verify the button is working
 
         // Check if showModal exists, otherwise fallback to native confirm
