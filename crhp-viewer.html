@@ -1674,29 +1674,73 @@
         
     }
 
-    function resetToMaster() {
-        if (confirm("Wait! This will delete all names and edits and revert to the master template. Proceed?")) {
-            try {
-                // 1. Parse the master string into an object
-                const data = JSON.parse(MASTER_TEMPLATE);
-                
-                // 2. Unpack it into your specific v50 keys
-                localStorage.setItem('v50_tasks', JSON.stringify(data.tasks || []));
-                localStorage.setItem('v50_checklist', JSON.stringify(data.checklist || []));
-                localStorage.setItem('v50_roster', JSON.stringify(data.roster || []));
-                localStorage.setItem('v50_rooms', JSON.stringify(data.rooms || []));
-                localStorage.setItem('v50_days', data.days || 1); // Save total days count
-                
-                console.log("Master template unpacked and saved successfully.");
-                
-                // 3. Reload to let the app's existing load logic grab the new keys
-                location.reload(); 
-            } catch (e) {
-                console.error("Error with Master Template:", e);
-                alert("Failed to reset: The Master Template string is not formatted correctly.");
+    async function resetToMaster() {
+        const hasData = tasks.length > 0 || roster.length > 0;
+        const isModified = typeof isModifiedFromMaster === 'function' ? isModifiedFromMaster() : true;
+
+        // Inner Function: The final "point of no return" step
+        const proceedWithDelete = async () => {
+            showModal(
+                "Wait! Final Warning", 
+                "This will delete all names and edits and revert to the CRHP master template. Proceed?",
+                async () => { // Made this callback async
+                    try {
+                        localStorage.removeItem('v50_is_blank');
+                        
+                        // --- CHANGED: Fetch fresh data from the file instead of a string ---
+                        const response = await fetch('master_template.json');
+                        if (!response.ok) throw new Error("Could not find master_template.json");
+                        const data = await response.json();
+                        
+                        tasks = data.tasks || [];
+                        checklist = data.checklist || [];
+                        roster = data.roster || [];
+                        rooms = data.rooms || [];
+                        totalDays = data.totalDays || 1; // Updated to match your initTemplateApp key
+                        
+                        saveAll();
+                        location.reload(); 
+                    } catch (e) {
+                        console.error("Reset Error:", e);
+                        alert("Failed to load master template file. Check if master_template.json exists.");
+                    }
+                },
+                true,
+                "Yes, Reset Everything",
+                "danger",
+                "Keep My Data"
+            );
+        };
+
+        // Step 1: Check if we should offer a backup first
+        if (hasData && isModified) {
+            showModal(
+                "Backup Edits?", 
+                "Before resetting, would you like to download a backup of your current edits?",
+                () => { 
+                    exportData(() => proceedWithDelete());
+                },
+                true,
+                "Download & Continue",
+                "info",
+                "No"
+            );
+            
+            // Ensure clicking "No" still leads to the Reset warning
+            const cancelBtn = document.getElementById('modal-cancel');
+            if (cancelBtn) {
+                cancelBtn.onclick = () => {
+                    const modal = document.getElementById('custom-modal-overlay');
+                    if(modal) modal.remove();
+                    proceedWithDelete();
+                };
             }
+        } else {
+            // No edits worth backing up, go straight to reset warning
+            proceedWithDelete();
         }
     }
+
 
     function openPrintService() {
         const printData = {
