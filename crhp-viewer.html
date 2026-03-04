@@ -1722,108 +1722,46 @@
         overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
     }
 
-    // 1. Move this outside so it's globally accessible to your buttons
-    async function proceedWithDelete() {
+    async function resetToMaster() {
+        // 1. Show the first "Final Warning" modal
         showModal(
-            "Wait! Final Warning",
-            "This will delete all names and edits and revert to the CRHP master template. Proceed?",
-            async () => {
+            "Wait! Final Warning", 
+            "This will delete all names and edits and revert to the master template. Proceed?",
+            async () => { 
+                // This inner function runs only if they click "Yes"
                 try {
+                    // 2. Fetch the fresh template file
+                    const response = await fetch('master_template.json');
+                    if (!response.ok) throw new Error("File not found");
+                    const data = await response.json();
+                    
+                    // 3. Unpack into local storage using your keys
+                    localStorage.setItem('v50_tasks', JSON.stringify(data.tasks || []));
+                    localStorage.setItem('v50_checklist', JSON.stringify(data.checklist || []));
+                    localStorage.setItem('v50_roster', JSON.stringify(data.roster || []));
+                    localStorage.setItem('v50_rooms', JSON.stringify(data.rooms || []));
+                    
+                    // Use totalDays or days depending on your JSON structure
+                    localStorage.setItem('v50_days', data.totalDays || data.days || 1); 
+                    
+                    // Clear any "is_blank" flags if you use them
                     localStorage.removeItem('v50_is_blank');
 
-                    const response = await fetch('master_template.json');
-                    if (!response.ok) throw new Error("Could not find master_template.json");
-                    const data = await response.json();
-
-                    tasks = data.tasks || [];
-                    checklist = data.checklist || [];
-                    roster = data.roster || [];
-                    rooms = data.rooms || [];
-                    totalDays = data.totalDays || 1;
-
-                    saveAll();
-                    location.reload();
+                    console.log("Master template unpacked and saved successfully.");
+                    
+                    // 4. Reload to let the app grab the new data
+                    location.reload(); 
                 } catch (e) {
-                    console.error("Reset Error:", e);
-                    alert("Failed to load master template file.");
+                    console.error("Error with Master Template:", e);
+                    alert("Failed to reset: Ensure 'master_template.json' is in the folder.");
                 }
             },
-            true,
-            "Yes, Reset Everything",
-            "danger",
-            "Keep My Data"
+            true,           // isConfirm (shows two buttons)
+            "Yes, Reset",   // Confirm button text
+            "danger",       // Red styling
+            "Cancel"        // Cancel button text
         );
     }
-
-    async function resetToMaster() {
-        // 1. Check if we have anything to back up
-        const hasData = (tasks && tasks.length > 0) || (roster && roster.length > 0);
-        
-        // Internal helper to do the actual fetch and reset
-        const performReset = async () => {
-            showModal(
-                "Final Warning",
-                "This will delete all names and edits and revert to the master template. Proceed?",
-                async () => {
-                    try {
-                        const response = await fetch('master_template.json');
-                        if (!response.ok) throw new Error("File not found");
-                        const data = await response.json();
-
-                        // Apply data
-                        tasks = data.tasks || [];
-                        checklist = data.checklist || [];
-                        roster = data.roster || [];
-                        rooms = data.rooms || [];
-                        totalDays = data.totalDays || 1;
-
-                        saveAll();
-                        location.reload(); 
-                    } catch (e) {
-                        console.error("Fetch Error:", e);
-                        alert("Error: Could not find 'master_template.json'. Ensure the file is in the same folder as this HTML file.");
-                    }
-                },
-                true, // isConfirm
-                "Yes, Reset Everything",
-                "danger",
-                "Keep My Data"
-            );
-        };
-
-        // 2. Decide if we show the Backup prompt first
-        if (hasData) {
-            showModal(
-                "Backup Edits?",
-                "Would you like to download a backup of your current edits before resetting?",
-                (choice) => {
-                    // This callback fires when 'ok' is clicked
-                    exportData(() => performReset());
-                },
-                true, // isConfirm
-                "Download & Continue",
-                "info",
-                "No, Just Reset" // This is the 'cancel' button label
-            );
-
-            // MANUAL FIX: Force the "No" button to trigger the next step
-            // We use a small delay to make sure the modal exists in the DOM
-            setTimeout(() => {
-                const cancelBtn = document.getElementById('modal-cancel');
-                if (cancelBtn) {
-                    cancelBtn.onclick = (e) => {
-                        e.preventDefault();
-                        document.getElementById('custom-modal-overlay').remove();
-                        performReset();
-                    };
-                }
-            }, 50);
-        } else {
-            // No data to back up, go straight to the warning
-            performReset();
-        }
-    }
-
 
     function openPrintService() {
         const printData = {
