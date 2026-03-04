@@ -1722,69 +1722,74 @@
         overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
     }
 
+    // 1. Move this outside so it's globally accessible to your buttons
+    async function proceedWithDelete() {
+        showModal(
+            "Wait! Final Warning",
+            "This will delete all names and edits and revert to the CRHP master template. Proceed?",
+            async () => {
+                try {
+                    localStorage.removeItem('v50_is_blank');
+
+                    const response = await fetch('master_template.json');
+                    if (!response.ok) throw new Error("Could not find master_template.json");
+                    const data = await response.json();
+
+                    tasks = data.tasks || [];
+                    checklist = data.checklist || [];
+                    roster = data.roster || [];
+                    rooms = data.rooms || [];
+                    totalDays = data.totalDays || 1;
+
+                    saveAll();
+                    location.reload();
+                } catch (e) {
+                    console.error("Reset Error:", e);
+                    alert("Failed to load master template file.");
+                }
+            },
+            true,
+            "Yes, Reset Everything",
+            "danger",
+            "Keep My Data"
+        );
+    }
+
+    // 2. Updated resetToMaster
     async function resetToMaster() {
         const hasData = tasks.length > 0 || roster.length > 0;
+        // Check if isModifiedFromMaster exists, otherwise default to true
         const isModified = typeof isModifiedFromMaster === 'function' ? isModifiedFromMaster() : true;
 
-        // Inner Function: The final "point of no return" step
-        const proceedWithDelete = async () => {
-            showModal(
-                "Wait! Final Warning", 
-                "This will delete all names and edits and revert to the CRHP master template. Proceed?",
-                async () => { // Made this callback async
-                    try {
-                        localStorage.removeItem('v50_is_blank');
-                        
-                        // --- CHANGED: Fetch fresh data from the file instead of a string ---
-                        const response = await fetch('master_template.json');
-                        if (!response.ok) throw new Error("Could not find master_template.json");
-                        const data = await response.json();
-                        
-                        tasks = data.tasks || [];
-                        checklist = data.checklist || [];
-                        roster = data.roster || [];
-                        rooms = data.rooms || [];
-                        totalDays = data.totalDays || 1; // Updated to match your initTemplateApp key
-                        
-                        saveAll();
-                        location.reload(); 
-                    } catch (e) {
-                        console.error("Reset Error:", e);
-                        alert("Failed to load master template file. Check if master_template.json exists.");
-                    }
-                },
-                true,
-                "Yes, Reset Everything",
-                "danger",
-                "Keep My Data"
-            );
-        };
-
-        // Step 1: Check if we should offer a backup first
         if (hasData && isModified) {
             showModal(
-                "Backup Edits?", 
+                "Backup Edits?",
                 "Before resetting, would you like to download a backup of your current edits?",
-                () => { 
+                (confirmed) => {
+                    // If they clicked "Download & Continue"
                     exportData(() => proceedWithDelete());
                 },
                 true,
                 "Download & Continue",
                 "info",
-                "No"
+                "No" // This is the 'Cancel' button
             );
+
+            // We need to catch the "No" button click specifically to trigger the reset
+            // We use a timeout to ensure the modal is actually in the DOM
+            setTimeout(() => {
+                const cancelBtn = document.getElementById('modal-cancel');
+                if (cancelBtn) {
+                    cancelBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        const overlay = document.getElementById('custom-modal-overlay');
+                        if (overlay) overlay.remove();
+                        proceedWithDelete(); // Now it calls the global function
+                    };
+                }
+            }, 10);
             
-            // Ensure clicking "No" still leads to the Reset warning
-            const cancelBtn = document.getElementById('modal-cancel');
-            if (cancelBtn) {
-                cancelBtn.onclick = () => {
-                    const modal = document.getElementById('custom-modal-overlay');
-                    if(modal) modal.remove();
-                    proceedWithDelete();
-                };
-            }
         } else {
-            // No edits worth backing up, go straight to reset warning
             proceedWithDelete();
         }
     }
