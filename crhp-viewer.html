@@ -1755,42 +1755,72 @@
         );
     }
 
-    // 2. Updated resetToMaster
     async function resetToMaster() {
-        const hasData = tasks.length > 0 || roster.length > 0;
-        // Check if isModifiedFromMaster exists, otherwise default to true
-        const isModified = typeof isModifiedFromMaster === 'function' ? isModifiedFromMaster() : true;
+        // 1. Check if we have anything to back up
+        const hasData = (tasks && tasks.length > 0) || (roster && roster.length > 0);
+        
+        // Internal helper to do the actual fetch and reset
+        const performReset = async () => {
+            showModal(
+                "Final Warning",
+                "This will delete all names and edits and revert to the master template. Proceed?",
+                async () => {
+                    try {
+                        const response = await fetch('master_template.json');
+                        if (!response.ok) throw new Error("File not found");
+                        const data = await response.json();
 
-        if (hasData && isModified) {
+                        // Apply data
+                        tasks = data.tasks || [];
+                        checklist = data.checklist || [];
+                        roster = data.roster || [];
+                        rooms = data.rooms || [];
+                        totalDays = data.totalDays || 1;
+
+                        saveAll();
+                        location.reload(); 
+                    } catch (e) {
+                        console.error("Fetch Error:", e);
+                        alert("Error: Could not find 'master_template.json'. Ensure the file is in the same folder as this HTML file.");
+                    }
+                },
+                true, // isConfirm
+                "Yes, Reset Everything",
+                "danger",
+                "Keep My Data"
+            );
+        };
+
+        // 2. Decide if we show the Backup prompt first
+        if (hasData) {
             showModal(
                 "Backup Edits?",
-                "Before resetting, would you like to download a backup of your current edits?",
-                (confirmed) => {
-                    // If they clicked "Download & Continue"
-                    exportData(() => proceedWithDelete());
+                "Would you like to download a backup of your current edits before resetting?",
+                (choice) => {
+                    // This callback fires when 'ok' is clicked
+                    exportData(() => performReset());
                 },
-                true,
+                true, // isConfirm
                 "Download & Continue",
                 "info",
-                "No" // This is the 'Cancel' button
+                "No, Just Reset" // This is the 'cancel' button label
             );
 
-            // We need to catch the "No" button click specifically to trigger the reset
-            // We use a timeout to ensure the modal is actually in the DOM
+            // MANUAL FIX: Force the "No" button to trigger the next step
+            // We use a small delay to make sure the modal exists in the DOM
             setTimeout(() => {
                 const cancelBtn = document.getElementById('modal-cancel');
                 if (cancelBtn) {
                     cancelBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        const overlay = document.getElementById('custom-modal-overlay');
-                        if (overlay) overlay.remove();
-                        proceedWithDelete(); // Now it calls the global function
+                        e.preventDefault();
+                        document.getElementById('custom-modal-overlay').remove();
+                        performReset();
                     };
                 }
-            }, 10);
-            
+            }, 50);
         } else {
-            proceedWithDelete();
+            // No data to back up, go straight to the warning
+            performReset();
         }
     }
 
