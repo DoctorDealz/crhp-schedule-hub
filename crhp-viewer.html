@@ -1674,6 +1674,54 @@
         
     }
 
+    function showModal(title, message, onConfirm = null, isConfirm = false, confirmText = "Confirm", type = "info", cancelText = "Cancel", includeInput = false, defaultInputValue = "") {
+        const existing = document.getElementById('custom-modal-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'custom-modal-overlay';
+        
+        overlay.innerHTML = `
+            <div class="modal-box ${type === 'danger' ? 'warning' : ''}">
+                <h3>${title}</h3>
+                <p>${message}</p>
+                ${includeInput ? `
+                    <input type="text" id="modal-input-field" class="modal-input" 
+                        style="width:100%; margin-bottom:20px; background: #0f172a; color: white; border: 1px solid #334155; padding: 10px; border-radius: 6px;" 
+                        value="${defaultInputValue}">
+                ` : ''}
+                <div class="modal-actions">
+                    <button class="modal-btn btn-primary" id="modal-ok">${confirmText}</button>
+                    ${isConfirm ? `<button class="modal-btn btn-secondary" id="modal-cancel">${cancelText}</button>` : ''}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // Focus input if it exists
+        if (includeInput) {
+            const input = document.getElementById('modal-input-field');
+            input.focus();
+            input.select(); // Highlight text for easy overwriting
+        }
+
+        document.getElementById('modal-ok').onclick = () => {
+            let returnValue = true;
+            if (includeInput) {
+                returnValue = document.getElementById('modal-input-field').value;
+            }
+            overlay.remove();
+            if (onConfirm) onConfirm(returnValue);
+        };
+
+        if (isConfirm && document.getElementById('modal-cancel')) {
+            document.getElementById('modal-cancel').onclick = () => overlay.remove();
+        }
+
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+    }
+
     async function resetToMaster() {
         const hasData = tasks.length > 0 || roster.length > 0;
         const isModified = typeof isModifiedFromMaster === 'function' ? isModifiedFromMaster() : true;
