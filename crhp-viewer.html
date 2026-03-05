@@ -289,6 +289,16 @@
                 padding: 8px 15px !important;
             }
         }
+
+        .header-controls svg {
+            display: block;
+            transition: transform 0.1s ease;
+        }
+        .header-controls button:active svg, 
+        .header-controls a:active svg {
+            transform: scale(0.9); /* Gives a nice tactile "click" feel on touch screens */
+        }
+
         /* 1. Hide the "+" add buttons in Rooms and Roster headers */
         .card button, 
         #roomDisplay + button, 
