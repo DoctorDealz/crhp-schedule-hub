@@ -377,45 +377,42 @@
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
-                        // Find the task that occupies this specific slot and column
+                        // Find the task for this slot/column
                         const task = dayTasks.find(t => {
                             if ((t.type || t.lane) !== laneType) return false;
-                            // NEW: Ensure we only pick the task assigned to this exact column!
                             if (t._printCol !== col) return false; 
-                            
                             const tStart = getMinutes(t.start);
                             const tEnd = getMinutes(t.end);
                             return slotTime >= tStart && slotTime < tEnd;
                         });
 
                         if (task) {
-                            // A unique key for this specific task instance in this column
                             const taskKey = `${task.name}-${task.start}-${laneType}-${col}`;
                             const isFirstAppearance = !renderedTasks.has(taskKey);
-                            
-                            if (isFirstAppearance) {
-                                renderedTasks.add(taskKey);
-                            }
+                            if (isFirstAppearance) renderedTasks.add(taskKey);
 
                             const isEndOfTask = slotTime + 15 >= getMinutes(task.end);
-                            const isBg = (task.type || task.lane) === 'bg';
-                            const borderColor = isBg ? '#a855f7' : '#38bdf8';
-                            const bgColor = isBg ? '#fdf4ff' : '#f0f9ff';
+                            const borderColor = (task.type || task.lane) === 'bg' ? '#a855f7' : '#38bdf8';
+                            const bgColor = (task.type || task.lane) === 'bg' ? '#fdf4ff' : '#f0f9ff';
+
+                            // THE CSS LOGIC: 
+                            // 1. Vertical lines (left/right) are ALWAYS solid 1px black.
+                            // 2. Horizontal lines (top/bottom) ONLY appear at the start or end of the task.
+                            // 3. We use 'none' for internal segments to make the task look like one solid block.
+                            const borderTop = isFirstAppearance ? '1px solid #000' : 'none';
+                            const borderBottom = isEndOfTask ? '1px solid #000' : 'none';
 
                             const cleanPeople = task.people ? task.people.map(p => p.split(' (')[0].trim()).join(', ') : '';
                             const hasMeta = !!(task.room || cleanPeople);
                             const metaTopBorder = hasMeta ? `border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; padding-top: 6px;` : '';
 
-                            // Logic: Only remove the top border if it's NOT the first time we see the task
-                            const borderTop = isFirstAppearance ? '1px solid #000' : 'none';
-                            const borderBottom = isEndOfTask ? '1px solid #000' : 'none';
-
-                            // We only force extra height on the VERY first block of a task to keep it from being orphaned
-                            const minHeight = isFirstAppearance ? '70px' : '20px';
-
                             html += `
-                                <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; border-left: 1px solid #000 !important; border-right: 1px solid #000 !important; border-top: ${borderTop}; border-bottom: ${borderBottom};">
-                                    <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${minHeight}; break-inside: avoid;">
+                                <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; 
+                                        border-left: 1px solid #000 !important; 
+                                        border-right: 1px solid #000 !important; 
+                                        border-top: ${borderTop}; 
+                                        border-bottom: ${borderBottom};">
+                                    <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${isFirstAppearance ? '60px' : '20px'}; break-inside: avoid;">
                                         ${isFirstAppearance ? `
                                             <div class="task-title" style="font-size: 11pt; font-weight: bold; margin-bottom: 2px; color: #000;">${task.name}</div>
                                             <div class="task-time" style="font-size: 8.5pt; margin-bottom: 4px; font-weight: bold;">
@@ -428,13 +425,14 @@
                                                 ${cleanPeople ? `<span>👥 ${cleanPeople}</span>` : ''}
                                             </div>
                                         ` : `
-                                            <div style="font-size: 8pt; font-weight: bold; color: #444; opacity: 0.8;">${task.name} (cont...)</div>
+                                            <div style="font-size: 8pt; font-weight: bold; color: #64748b; opacity: 0.6;">(cont...)</div>
                                         `}
                                     </div>
                                 </td>`;
                         } else {
-                            // Ensure the empty cells have the same 1px solid black vertical lines
-                            html += `<td style="background: white; border-left: 1px solid #000 !important; border-right: 1px solid #000 !important; border-top: 1px solid #000; border-bottom: 1px solid #000; min-height: 20px;"></td>`;
+                            // WHITESPACE LOGIC:
+                            // Always show all 4 borders for empty 15-min blocks.
+                            html += `<td style="background: white; border: 1px solid #000 !important; height: 30px;"></td>`;
                         }
                     }
                 });
