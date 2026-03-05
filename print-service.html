@@ -58,38 +58,37 @@
             }
             body { padding: 0 !important; background: white !important; }
             
-            /* Aggressive hiding of UI elements */
             .no-print, #throbber, button, input { 
                 display: none !important; 
-                visibility: hidden !important; 
-                height: 0 !important; 
-                margin: 0 !important; 
-                padding: 0 !important;
             }
 
-            /* NEW: Force grid lines and handle page break continuity */
             .schedule-table, .schedule-table th, .schedule-table td {
                 border: 1px solid #000000 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            
             .schedule-table {
                 border: 2px solid #000000 !important;
-                border-collapse: collapse !important; /* Ensures clean grid lines */
+                border-collapse: collapse !important;
+            }
+
+            /* NEW: Apply 'avoid' to the table row to keep task chunks together */
+            tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
 
             .day-page { 
                 width: 100% !important; 
-                box-shadow: none !important; 
-                margin: 0 0 20px 0 !important; 
                 page-break-after: always; 
                 break-after: page;
             }
 
-            /* FIX: Allow cells to break across pages but keep borders intact */
+            /* Keep the internal container from being sliced */
             td, .task-container {
-                page-break-inside: auto !important;
-                break-inside: auto !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
                 -webkit-box-decoration-break: clone;
                 box-decoration-break: clone;
             }
@@ -344,24 +343,19 @@
                             const borderColor = isBg ? '#a855f7' : '#38bdf8';
                             const bgColor = isBg ? '#fdf4ff' : '#f0f9ff';
 
-                            // Process people names for the header cell
-                            const cleanPeople = task.people ? task.people.map(p => {
-                                const parts = p.split(' (');
-                                return parts[0].trim();
-                            }).join(', ') : '';
-
+                            const cleanPeople = task.people ? task.people.map(p => p.split(' (')[0].trim()).join(', ') : '';
                             const hasMeta = !!(task.room || cleanPeople);
                             const metaTopBorder = hasMeta ? `border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; padding-top: 6px;` : '';
 
-                            // CSS Trick: Remove top/bottom borders for "connecting" cells 
-                            // so they look like one continuous block on the screen, 
-                            // but print as individual cells to prevent bleeding.
                             const borderTop = isStartOfTask ? '1px solid #000' : 'none';
                             const borderBottom = isEndOfTask ? '1px solid #000' : 'none';
 
+                            // We use a larger min-height on the start cell to "bump" it to the next page if space is tight
+                            const minHeight = isStartOfTask ? '80px' : '20px';
+
                             html += `
                                 <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; border-left: 1px solid #000; border-right: 1px solid #000; border-top: ${borderTop}; border-bottom: ${borderBottom};">
-                                    <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: 20px;">
+                                    <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${minHeight}; break-inside: avoid;">
                                         ${isStartOfTask ? `
                                             <div class="task-title" style="font-size: 11pt; font-weight: bold; margin-bottom: 2px; color: #000;">${task.name}</div>
                                             <div class="task-time" style="font-size: 8.5pt; margin-bottom: 4px; font-weight: bold;">
@@ -379,8 +373,7 @@
                                     </div>
                                 </td>`;
                         } else {
-                            // Empty slot grid lines
-                            html += `<td style="background: white; border: 1px solid #000;"></td>`;
+                            html += `<td style="background: white; border: 1px solid #000; min-height: 20px;"></td>`;
                         }
                     }
                 });
