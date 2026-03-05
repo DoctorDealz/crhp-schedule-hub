@@ -257,36 +257,18 @@
 
         @media screen and (max-width: 600px) {
             .header-controls {
-                /* Keep the two rows horizontal internally, but stacked as groups */
-                flex-direction: column !important; 
-                align-items: center !important;
-                gap: 12px !important;
+                flex-direction: column !important;
             }
-
-            /* Target the container holding IMPORT and RESET */
-            .header-controls > div:first-of-type {
+            /* The container for Import/Reset */
+            .header-controls > div:first-child {
                 display: flex !important;
-                flex-direction: row !important; /* Forces side-by-side */
-                width: 100% !important;
-                gap: 8px !important;
+                flex-direction: row !important; /* Keep them side-by-side */
             }
-
-            .header-controls label, 
+            /* Prevent them from growing to full width and stacking */
             .header-controls .btn-ctrl {
-                flex: 1 !important; /* Each takes exactly 50% */
-                width: auto !important;
-                max-width: none !important;
-                padding: 12px 5px !important;
-                font-size: 11px !important;
-            }
-
-            /* Ensure the icon row stays a compact horizontal line */
-            .header-controls > div:last-of-type {
-                display: flex !important;
-                flex-direction: row !important;
-                justify-content: center !important;
-                width: auto !important;
-                padding: 8px 15px !important;
+                width: auto !important; 
+                flex: 1 !important;
+                margin: 0 !important;
             }
         }
 
@@ -649,37 +631,50 @@
             background: rgba(56, 189, 248, 0.1);
         }
 
+        label.btn-ctrl {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
     </style>
 </head>
 <body>
 <div class="fixed-top">
-    <div class="header-controls" style="display:flex; flex-direction: column; gap:12px; margin-bottom:15px; padding:0 15px; align-items: center; width: 100%; box-sizing: border-box;">
+    <div class="header-controls" style="display:flex; flex-direction: column; gap:10px; margin-bottom:15px; align-items: center; width: 100%;">
         
-        <div style="display:flex; width: 100%; max-width: 500px; gap: 8px;">
-            <label id="importBtn" for="importFile" style="flex:1; display:flex; align-items:center; justify-content:center; background:var(--accent); color:#0f172a; padding:12px 20px; border-radius:8px; font-weight:bold; cursor:pointer; font-family: inherit; font-size: 14px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                IMPORT
+        <div style="display:flex; width: 100%; max-width: 500px; gap: 8px; padding: 0 15px; box-sizing: border-box;">
+            <label class="btn-ctrl" id="importBtn" for="importFile" style="flex:1; display:flex; align-items:center; justify-content:center; cursor:pointer; margin:0;">
+                📂 IMPORT
             </label>
             <input type="file" id="importFile" style="display:none" onchange="importSchedule(event)">
 
-            <button class="btn-ctrl" style="flex:1; display:flex; align-items:center; justify-content:center; background:var(--danger); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-family: inherit; padding:12px 20px; font-size: 14px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onclick="resetToMaster()">
-                RESET TO MASTER
+            <button class="btn-ctrl" style="flex:1; background:var(--danger); border-color:var(--danger);" onclick="resetToMaster()">
+                ⚠️ RESET MASTER
             </button>
         </div>
 
-        <div style="display:flex; gap:20px; justify-content: center; align-items: center; background: rgba(255,255,255,0.6); padding: 10px 25px; border-radius: 30px; border: 1px solid rgba(0,0,0,0.05);">
-            <button class="btn-home" onclick="window.open('index.html', '_blank')" title="Hub" style="background:none; border:none; color: #64748b; padding:0; cursor:pointer;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <div class="btn-row" style="display:flex; gap:10px; justify-content: center; align-items: center; border:none; background:none; padding:0; box-shadow:none;">
+            <button class="btn-home" onclick="window.open('index.html', '_blank')" title="CRHP Schedule Hub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
             </button>
 
-            <button class="btn-print" onclick="openPrintService()" title="Print" style="background:none; border:none; color: #64748b; padding:0; cursor:pointer;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <button class="btn-print" onclick="openPrintService()" title="Print / Save PDF">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
             </button>
 
-            <a href="crhp-scheduler.html" class="btn-link" target="_blank" title="Scheduler" style="color: #64748b; display: flex; text-decoration: none;">
-                <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>
+            <a href="crhp-scheduler.html" class="btn-link" target="_blank" title="Open Scheduler">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>
             </a>
 
-            <button class="btn-help" onclick="toggleHelp()" style="background:#cbd5e1; border:none; width:26px; height:26px; border-radius:50%; font-weight:bold; font-size:15px; cursor:pointer; color:#475569; display:flex; align-items:center; justify-content:center;">?</button>
+            <button class="btn-help" onclick="toggleHelp()">?</button>
         </div>
     </div>
     <div class="section-title">1. Team Roster</div>
