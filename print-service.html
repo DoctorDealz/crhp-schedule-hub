@@ -202,8 +202,12 @@
 
     window.onload = function() {
         const stored = localStorage.getItem('crhp_print_exchange');
-        if (stored) forceRender(JSON.parse(stored));
-        else showWaitingState();
+        if (stored) {
+            // Use forceRender but ensure it doesn't conflict with incoming messages
+            forceRender(JSON.parse(stored));
+        } else {
+            showWaitingState();
+        }
     };
 
     window.addEventListener('message', function(event) {
@@ -289,6 +293,7 @@
     }
 
     function render(data) {
+        document.getElementById('output').innerHTML = "";
         const renderedTasks = new Set(); // Track tasks already displayed with full titles
         let html = "";
         const totalDays = data.totalDays || data.days || 1;
@@ -389,7 +394,8 @@
                                     </div>
                                 </td>`;
                         } else {
-                            html += `<td style="background: white; border: 1px solid #000; min-height: 20px;"></td>`;
+                            // Ensure the empty cells have the same 1px solid black vertical lines
+                            html += `<td style="background: white; border-left: 1px solid #000 !important; border-right: 1px solid #000 !important; border-top: 1px solid #000; border-bottom: 1px solid #000; min-height: 20px;"></td>`;
                         }
                     }
                 });
