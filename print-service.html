@@ -67,12 +67,15 @@
                 padding: 0 !important;
             }
 
-            /* NEW: Force grid lines to be solid black on paper */
+            /* NEW: Force grid lines and handle page break continuity */
             .schedule-table, .schedule-table th, .schedule-table td {
                 border: 1px solid #000000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .schedule-table {
-                border: 2px solid #000000 !important; /* Thicker outer border */
+                border: 2px solid #000000 !important;
+                border-collapse: collapse !important; /* Ensures clean grid lines */
             }
 
             .day-page { 
@@ -83,15 +86,23 @@
                 break-after: page;
             }
 
-            /* PREVENTS TASKS FROM CUTTING OFF */
-            td {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
+            /* FIX: Allow cells to break across pages but keep borders intact */
+            td, .task-container {
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+                -webkit-box-decoration-break: clone;
+                box-decoration-break: clone;
             }
-            .task-container {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
+        }
+
+        .task-container {
+            padding: 8px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            /* Ensures background colors wrap correctly if split */
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
         }
 
         .no-print { 
@@ -158,12 +169,6 @@
             border: 1.5px solid #000000 !important;
         }
 
-        .task-container {
-            padding: 8px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-        }
     </style>
 </head>
 <body>
@@ -321,60 +326,60 @@
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
-                        const cellKey = `${laneType}-${col}-${slotTime}`;
-                        if (occupied.has(cellKey)) continue; 
-
+                        // Find the task that occupies this specific slot and column
                         const task = dayTasks.find(t => {
-                            if (t._assigned || (t.type||t.lane) !== laneType) return false;
+                            if ((t.type || t.lane) !== laneType) return false;
                             const tStart = getMinutes(t.start);
-                            if (slotTime <= tStart && tStart < slotTime + 15) {
-                                const dur = Math.max(1, Math.ceil((getMinutes(t.end) - tStart) / 15));
-                                for (let i = 0; i < dur; i++) {
-                                    if (occupied.has(`${laneType}-${col}-${slotTime + (i * 15)}`)) return false;
-                                }
-                                return true;
-                            }
-                            return false;
+                            const tEnd = getMinutes(t.end);
+                            // We need to know which column the task was assigned to originally
+                            // Since we aren't using a complex layout engine, we rely on the 
+                            // fact that find() will consistently pick the same task for this slot/col.
+                            return slotTime >= tStart && slotTime < tEnd;
                         });
 
                         if (task) {
-                            task._assigned = true;
-                            const duration = Math.max(1, Math.ceil((getMinutes(task.end) - getMinutes(task.start)) / 15));
-                            for (let i = 0; i < duration; i++) {
-                                occupied.add(`${laneType}-${col}-${slotTime + (i * 15)}`);
-                            }
-
-                            const isBg = (task.type||task.lane) === 'bg';
+                            const isStartOfTask = slotTime === getMinutes(task.start);
+                            const isEndOfTask = slotTime + 15 >= getMinutes(task.end);
+                            const isBg = (task.type || task.lane) === 'bg';
                             const borderColor = isBg ? '#a855f7' : '#38bdf8';
                             const bgColor = isBg ? '#fdf4ff' : '#f0f9ff';
 
+                            // Process people names for the header cell
                             const cleanPeople = task.people ? task.people.map(p => {
                                 const parts = p.split(' (');
-                                const namePart = parts[0].trim();
-                                const rolePart = parts[1] ? parts[1].replace(')', '').trim() : null;
-                                return rolePart ? `${namePart} <span style="font-size: 0.9em; font-weight: 500; opacity: 0.8;">(${rolePart})</span>` : namePart;
+                                return parts[0].trim();
                             }).join(', ') : '';
 
                             const hasMeta = !!(task.room || cleanPeople);
-                            const metaTopBorder = hasMeta ? `border-top: 1px solid rgba(0,0,0,0.2); margin-top: 8px; padding-top: 6px;` : '';
+                            const metaTopBorder = hasMeta ? `border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; padding-top: 6px;` : '';
 
-                            html += `<td rowspan="${duration}" style="background: ${bgColor}; vertical-align: top; padding: 4px; border: 1px solid #000;">
-                                <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px;">
-                                    <div class="task-title" style="font-size: 11pt; font-weight: bold; margin-bottom: 2px; color: #000;">${task.name}</div>
-                                    <div class="task-time" style="font-size: 9pt; margin-bottom: 4px; font-weight: bold;">
-                                        ${getDisplayTime(getMinutes(task.start))} - ${getDisplayTime(getMinutes(task.end))}
+                            // CSS Trick: Remove top/bottom borders for "connecting" cells 
+                            // so they look like one continuous block on the screen, 
+                            // but print as individual cells to prevent bleeding.
+                            const borderTop = isStartOfTask ? '1px solid #000' : 'none';
+                            const borderBottom = isEndOfTask ? '1px solid #000' : 'none';
+
+                            html += `
+                                <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; border-left: 1px solid #000; border-right: 1px solid #000; border-top: ${borderTop}; border-bottom: ${borderBottom};">
+                                    <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: 20px;">
+                                        ${isStartOfTask ? `
+                                            <div class="task-title" style="font-size: 11pt; font-weight: bold; margin-bottom: 2px; color: #000;">${task.name}</div>
+                                            <div class="task-time" style="font-size: 8.5pt; margin-bottom: 4px; font-weight: bold;">
+                                                ${getDisplayTime(getMinutes(task.start))} - ${getDisplayTime(getMinutes(task.end))}
+                                            </div>
+                                            ${task.desc ? `<div class="task-desc" style="font-size: 9.5pt; margin-bottom: 6px; font-style: italic; line-height: 1.1;">${task.desc}</div>` : ''}
+                                            <div class="task-meta" style="font-size: 12px; line-height: 1.3; color: #000; ${metaTopBorder}">
+                                                ${task.room ? `<span style="font-weight: bold;">📍 ${task.room}</span>` : ''} 
+                                                ${(task.room && cleanPeople) ? ' | ' : ''} 
+                                                ${cleanPeople ? `<span>👥 ${cleanPeople}</span>` : ''}
+                                            </div>
+                                        ` : `
+                                            <div style="font-size: 8pt; font-weight: bold; color: #444; opacity: 0.8;">${task.name} (cont...)</div>
+                                        `}
                                     </div>
-                                    ${task.desc ? `<div class="task-desc" style="font-size: 10pt; margin-bottom: 6px; font-style: italic; line-height: 1.2;">${task.desc}</div>` : ''}
-                                    
-                                    <div class="task-meta" style="font-size: 13px; line-height: 1.3; color: #000; ${metaTopBorder}">
-                                        ${task.room ? `<span style="font-weight: bold;">📍 ${task.room}</span>` : ''} 
-                                        ${(task.room && cleanPeople) ? '<span style="margin: 0 4px; opacity: 0.8;">|</span>' : ''} 
-                                        ${cleanPeople ? `<span style="display: inline-block;">👥 ${cleanPeople}</span>` : ''}
-                                    </div>
-                                </div>
-                            </td>`;
+                                </td>`;
                         } else {
-                            // Also add the border to empty cells so the grid doesn't "disappear" in blank spots
+                            // Empty slot grid lines
                             html += `<td style="background: white; border: 1px solid #000;"></td>`;
                         }
                     }
