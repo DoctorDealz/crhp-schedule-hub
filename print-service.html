@@ -62,6 +62,7 @@
                 display: none !important; 
             }
 
+            /* FORCE BLACK BORDERS FOR ALL SIDES */
             .schedule-table, .schedule-table th, .schedule-table td {
                 border: 1px solid #000000 !important;
                 -webkit-print-color-adjust: exact;
@@ -69,16 +70,17 @@
             }
             
             .schedule-table {
-                border: 2px solid #000000 !important;
+                border: 2.5px solid #000000 !important;
                 border-collapse: collapse !important;
-                /* Allow the table to split across pages */
+                border-spacing: 0; /* Ensures no tiny gaps in gridlines */
                 page-break-inside: auto !important; 
             }
 
             tr {
-                /* Prevents a 15-min slot from being sliced in half */
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
+                /* Ensures the bottom line exists if the page cuts here */
+                border-bottom: 1px solid #000000 !important;
             }
 
             .day-page { 
@@ -87,14 +89,13 @@
                 break-after: page;
             }
 
-            td {
-                /* Forces the TD to respect the task-container's min-height */
-                height: 1px; 
-            }
+            td { height: 1px; }
 
             td, .task-container {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
+                /* Crucial: 'clone' tells the browser to redraw borders/padding 
+                   on every fragment if it splits */
                 -webkit-box-decoration-break: clone;
                 box-decoration-break: clone;
             }
@@ -369,7 +370,7 @@
                             const minHeight = isFirstAppearance ? '70px' : '20px';
 
                             html += `
-                                <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; border-left: 1px solid #000; border-right: 1px solid #000; border-top: ${borderTop}; border-bottom: ${borderBottom};">
+                                <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; border-left: 1px solid #000 !important; border-right: 1px solid #000 !important; border-top: ${borderTop}; border-bottom: ${borderBottom};">
                                     <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${minHeight}; break-inside: avoid;">
                                         ${isFirstAppearance ? `
                                             <div class="task-title" style="font-size: 11pt; font-weight: bold; margin-bottom: 2px; color: #000;">${task.name}</div>
