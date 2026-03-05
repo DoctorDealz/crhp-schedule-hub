@@ -257,12 +257,36 @@
 
         @media screen and (max-width: 600px) {
             .header-controls {
-                flex-direction: column; /* Stack vertically on phones */
-                align-items: stretch !important;
+                /* Keep the two rows horizontal internally, but stacked as groups */
+                flex-direction: column !important; 
+                align-items: center !important;
+                gap: 12px !important;
             }
-            .header-controls label, .header-controls .btn-ctrl {
-                max-width: none !important; /* Let buttons take full width on mobile */
-                width: 100%;
+
+            /* Target the container holding IMPORT and RESET */
+            .header-controls > div:first-of-type {
+                display: flex !important;
+                flex-direction: row !important; /* Forces side-by-side */
+                width: 100% !important;
+                gap: 8px !important;
+            }
+
+            .header-controls label, 
+            .header-controls .btn-ctrl {
+                flex: 1 !important; /* Each takes exactly 50% */
+                width: auto !important;
+                max-width: none !important;
+                padding: 12px 5px !important;
+                font-size: 11px !important;
+            }
+
+            /* Ensure the icon row stays a compact horizontal line */
+            .header-controls > div:last-of-type {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: center !important;
+                width: auto !important;
+                padding: 8px 15px !important;
             }
         }
         /* 1. Hide the "+" add buttons in Rooms and Roster headers */
