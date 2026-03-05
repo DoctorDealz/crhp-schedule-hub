@@ -254,6 +254,17 @@
 			max-width: 1000px; /* Wider headers for desktop */
 			}
 		}
+
+        @media screen and (max-width: 600px) {
+            .header-controls {
+                flex-direction: column; /* Stack vertically on phones */
+                align-items: stretch !important;
+            }
+            .header-controls label, .header-controls .btn-ctrl {
+                max-width: none !important; /* Let buttons take full width on mobile */
+                width: 100%;
+            }
+        }
         /* 1. Hide the "+" add buttons in Rooms and Roster headers */
         .card button, 
         #roomDisplay + button, 
@@ -617,35 +628,41 @@
 </head>
 <body>
 <div class="fixed-top">
-    <div style="display:flex; gap:10px; margin-bottom:15px; padding:0 15px;">
-        <button class="btn-home" onclick="window.open('index.html', '_blank')" title="CRHP Schedule Hub">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-        </button>
-        <label id="importBtn" for="importFile" style="flex:1; display:flex; align-items:center; justify-content:center; background:var(--accent); color:#0f172a; padding:12px; border-radius:6px; font-weight:bold; cursor:pointer; font-family: -apple-system, sans-serif; font-size: 13px; line-height: 1;">
+    <div class="header-controls" style="display:flex; flex-wrap: wrap; gap:10px; margin-bottom:15px; padding:0 15px; justify-content: center; align-items: center;">
+        
+        <div style="display:flex; gap:10px; justify-content: center;">
+            <button class="btn-home" onclick="window.open('index.html', '_blank')" title="CRHP Schedule Hub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <label id="importBtn" for="importFile" style="min-width: 140px; flex:1; max-width: 200px; display:flex; align-items:center; justify-content:center; background:var(--accent); color:#0f172a; padding:12px; border-radius:6px; font-weight:bold; cursor:pointer; font-family: -apple-system, sans-serif; font-size: 13px; line-height: 1; text-align: center;">
             IMPORT SCHEDULE
         </label>
         <input type="file" id="importFile" style="display:none" onchange="importSchedule(event)">
 
-        <button class="btn-ctrl" style="flex:1; display:flex; align-items:center; justify-content:center; background:var(--danger); color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-family: -apple-system, sans-serif; font-size: 13px; line-height: 1;" onclick="resetToMaster()">
+        <button class="btn-ctrl" style="min-width: 140px; flex:1; max-width: 250px; display:flex; align-items:center; justify-content:center; background:var(--danger); color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-family: -apple-system, sans-serif; padding: 12px; font-size: 11px; line-height: 1.2; text-align: center;" onclick="resetToMaster()">
             RESET TO MASTER TEMPLATE
         </button>
 
-        <button class="btn-print" onclick="openPrintService()" title="Print / Save PDF">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-        </button>
+        <div style="display:flex; gap:10px; justify-content: center;">
+            <button class="btn-print" onclick="openPrintService()" title="Print / Save PDF">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+            </button>
 
-        <a href="crhp-scheduler.html" class="btn-link" target="_blank" title="Open Scheduler">
-            <svg viewBox="0 0 24 24"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>
-        </a>
+            <a href="crhp-scheduler.html" class="btn-link" target="_blank" title="Open Scheduler">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>
+            </a>
 
-        <button class="btn-help" onclick="toggleHelp()">?</button>
+            <button class="btn-help" onclick="toggleHelp()">?</button>
+        </div>
     </div>
     <div class="section-title">1. Team Roster</div>
     <div class="card">
