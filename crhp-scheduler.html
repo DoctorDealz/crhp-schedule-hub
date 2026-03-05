@@ -530,10 +530,20 @@
     </div>
     <div id="creatorTitle" class="section-title">3. Task Creator</div>
     <div class="card">
-        <div id="timeInputs" style="display:flex; gap:5px;"><div style="flex:1"><input type="time" id="startTime" value="09:00"></div><div style="flex:1"><input type="time" id="endTime" value="10:00"></div></div>
+        <div id="timeInputs" style="display:flex; gap:5px;">
+            <div style="flex:1"><input type="time" id="startTime" value="09:00"></div>
+            <div style="flex:1"><input type="time" id="endTime" value="10:00"></div>
+        </div>
+        
         <input type="text" id="taskName" placeholder="Task Name">
-        <textarea id="taskDesc" placeholder="Description" style="height: auto; min-height:50px; min-width: 910px; max-width: 910px"></textarea>
-        <div id="laneToggle" class="toggle-group" style="display:flex; gap:5px; margin-bottom:10px;"><button id="tMain" class="toggle-btn" onclick="setMode('main')">Main</button><button id="tBg" class="toggle-btn" onclick="setMode('bg')">Background</button></div>
+        
+        <textarea id="taskDesc" placeholder="Description" 
+            style="width: 100%; min-height: 80px; resize: vertical; box-sizing: border-box; margin-bottom: 10px;"></textarea>
+
+        <div id="laneToggle" class="toggle-group" style="display:flex; gap:5px; margin-bottom:10px;">
+            <button id="tMain" class="toggle-btn" onclick="setMode('main')">Main</button>
+            <button id="tBg" class="toggle-btn" onclick="setMode('bg')">Background</button>
+        </div>
         
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
             <div class="section-title" style="font-size: 0.7rem; opacity: 0.8; margin:0;">Assign Rooms</div>
