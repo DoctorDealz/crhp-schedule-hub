@@ -71,10 +71,12 @@
             .schedule-table {
                 border: 2px solid #000000 !important;
                 border-collapse: collapse !important;
+                /* Allow the table to split across pages */
+                page-break-inside: auto !important; 
             }
 
-            /* NEW: Apply 'avoid' to the table row to keep task chunks together */
             tr {
+                /* Prevents a 15-min slot from being sliced in half */
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
@@ -85,7 +87,11 @@
                 break-after: page;
             }
 
-            /* Keep the internal container from being sliced */
+            td {
+                /* Forces the TD to respect the task-container's min-height */
+                height: 1px; 
+            }
+
             td, .task-container {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
@@ -282,6 +288,7 @@
     }
 
     function render(data) {
+        const renderedTasks = new Set(); // Track tasks already displayed with full titles
         let html = "";
         const totalDays = data.totalDays || data.days || 1;
         const allTasks = data.tasks || [];
@@ -337,7 +344,14 @@
                         });
 
                         if (task) {
-                            const isStartOfTask = slotTime === getMinutes(task.start);
+                            // A unique key for this specific task instance in this column
+                            const taskKey = `${task.name}-${task.start}-${laneType}-${col}`;
+                            const isFirstAppearance = !renderedTasks.has(taskKey);
+                            
+                            if (isFirstAppearance) {
+                                renderedTasks.add(taskKey);
+                            }
+
                             const isEndOfTask = slotTime + 15 >= getMinutes(task.end);
                             const isBg = (task.type || task.lane) === 'bg';
                             const borderColor = isBg ? '#a855f7' : '#38bdf8';
@@ -347,16 +361,17 @@
                             const hasMeta = !!(task.room || cleanPeople);
                             const metaTopBorder = hasMeta ? `border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; padding-top: 6px;` : '';
 
-                            const borderTop = isStartOfTask ? '1px solid #000' : 'none';
+                            // Logic: Only remove the top border if it's NOT the first time we see the task
+                            const borderTop = isFirstAppearance ? '1px solid #000' : 'none';
                             const borderBottom = isEndOfTask ? '1px solid #000' : 'none';
 
-                            // We use a larger min-height on the start cell to "bump" it to the next page if space is tight
-                            const minHeight = isStartOfTask ? '80px' : '20px';
+                            // We only force extra height on the VERY first block of a task to keep it from being orphaned
+                            const minHeight = isFirstAppearance ? '70px' : '20px';
 
                             html += `
                                 <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; border-left: 1px solid #000; border-right: 1px solid #000; border-top: ${borderTop}; border-bottom: ${borderBottom};">
                                     <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${minHeight}; break-inside: avoid;">
-                                        ${isStartOfTask ? `
+                                        ${isFirstAppearance ? `
                                             <div class="task-title" style="font-size: 11pt; font-weight: bold; margin-bottom: 2px; color: #000;">${task.name}</div>
                                             <div class="task-time" style="font-size: 8.5pt; margin-bottom: 4px; font-weight: bold;">
                                                 ${getDisplayTime(getMinutes(task.start))} - ${getDisplayTime(getMinutes(task.end))}
