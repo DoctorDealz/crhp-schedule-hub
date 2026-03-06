@@ -62,12 +62,6 @@
                 display: none !important; 
             }
 
-            /* FORCE BLACK BORDERS FOR ALL SIDES */
-            .schedule-table, .schedule-table th, .schedule-table td {
-                border: 1px solid #000000 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
             
             .schedule-table {
                 border: 2.5px solid #000000 !important;
@@ -307,7 +301,7 @@
 
     function render(data) {
         document.getElementById('output').innerHTML = "";
-        const renderedTasks = new Set(); // Track tasks already displayed with full titles
+        const renderedTasks = new Set();
         let html = "";
         const totalDays = data.totalDays || data.days || 1;
         const allTasks = data.tasks || [];
@@ -316,41 +310,34 @@
             const dayTasks = allTasks.filter(t => t.day == d);
             if (dayTasks.length === 0) continue;
 
-            dayTasks.forEach(t => t._assigned = false);
-
             const startMins = Math.min(...dayTasks.map(t => getMinutes(t.start)));
             const endMins = Math.max(...dayTasks.map(t => getMinutes(t.end)));
             const timeSlots = [];
             for (let i = startMins; i < endMins; i += 15) { timeSlots.push(i); }
 
-            // Assigns tasks to specific columns to prevent duplication
             function assignColumns(tasks) {
                 tasks.sort((a, b) => getMinutes(a.start) - getMinutes(b.start));
-                const colEnds = []; // Tracks when the current task in each column ends
+                const colEnds = [];
                 tasks.forEach(task => {
                     let placed = false;
                     for (let i = 0; i < colEnds.length; i++) {
-                        // If the column is free (the last task ended before this one starts)
                         if (getMinutes(task.start) >= colEnds[i]) {
-                            task._printCol = i; // Assign column ID
+                            task._printCol = i;
                             colEnds[i] = getMinutes(task.end);
                             placed = true;
                             break;
                         }
                     }
                     if (!placed) {
-                        // Create a new column if all existing ones are occupied
                         task._printCol = colEnds.length;
                         colEnds.push(getMinutes(task.end));
                     }
                 });
-                return Math.max(1, colEnds.length); // Ensure at least 1 column renders
+                return Math.max(1, colEnds.length);
             }
 
             const maxMain = assignColumns(dayTasks.filter(t => (t.type||t.lane)==='main'));
             const maxBg = assignColumns(dayTasks.filter(t => (t.type||t.lane)==='bg'));
-
-            const occupied = new Set();
 
             html += `<div class="day-page">
                 <h1>CRHP Retreat Schedule</h1>
@@ -358,69 +345,54 @@
                 <table class="schedule-table">
                     <thead>
                         <tr>
-                            <th style="width: 90px;">TIME</th>
-                            <th colspan="${maxMain}">MAIN LANE</th>
-                            <th colspan="${maxBg}">BACKGROUND LANE</th>
+                            <th style="width: 90px; border: 1.5px solid #000;">TIME</th>
+                            <th colspan="${maxMain}" style="border: 1.5px solid #000;">MAIN LANE</th>
+                            <th colspan="${maxBg}" style="border: 1.5px solid #000;">BACKGROUND LANE</th>
                         </tr>
                     </thead>
-                    
-                    <tfoot class="print-footer">
-                        <tr>
-                            <td colspan="${1 + maxMain + maxBg}"></td>
-                        </tr>
-                    </tfoot>
-
                     <tbody>`;
 
             timeSlots.forEach(slotTime => {
-                html += `<tr><td class="time-cell">${getDisplayTime(slotTime)}</td>`;
+                html += `<tr><td class="time-cell" style="border: 1px solid #000;">${getDisplayTime(slotTime)}</td>`;
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
-                        // Find the task for this slot/column
                         const task = dayTasks.find(t => {
                             if ((t.type || t.lane) !== laneType) return false;
                             if (t._printCol !== col) return false; 
-                            const tStart = getMinutes(t.start);
-                            const tEnd = getMinutes(t.end);
-                            return slotTime >= tStart && slotTime < tEnd;
+                            return slotTime >= getMinutes(t.start) && slotTime < getMinutes(t.end);
                         });
 
                         if (task) {
                             const taskKey = `${task.name}-${task.start}-${laneType}-${col}`;
-                            const isFirstAppearance = !renderedTasks.has(taskKey);
-                            if (isFirstAppearance) renderedTasks.add(taskKey);
+                            const isFirst = !renderedTasks.has(taskKey);
+                            if (isFirst) renderedTasks.add(taskKey);
 
-                            const isEndOfTask = slotTime + 15 >= getMinutes(task.end);
+                            const isEnd = slotTime + 15 >= getMinutes(task.end);
                             const borderColor = (task.type || task.lane) === 'bg' ? '#a855f7' : '#38bdf8';
                             const bgColor = (task.type || task.lane) === 'bg' ? '#fdf4ff' : '#f0f9ff';
 
-                            // THE CSS LOGIC: 
-                            // 1. Vertical lines (left/right) are ALWAYS solid 1px black.
-                            // 2. Horizontal lines (top/bottom) ONLY appear at the start or end of the task.
-                            // 3. We use 'none' for internal segments to make the task look like one solid block.
-                            const borderTop = isFirstAppearance ? '1px solid #000' : 'none';
-                            const borderBottom = isEndOfTask ? '1px solid #000' : 'none';
+                            // Logic: Vertical lines are always drawn. Horizontal only at start/end.
+                            const bTop = isFirst ? '1px solid #000' : '0px none';
+                            const bBottom = isEnd ? '1px solid #000' : '0px none';
 
                             const cleanPeople = task.people ? task.people.map(p => p.split(' (')[0].trim()).join(', ') : '';
-                            const hasMeta = !!(task.room || cleanPeople);
-                            const metaTopBorder = hasMeta ? `border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; padding-top: 6px;` : '';
+                            const metaTopBorder = (task.room || cleanPeople) ? `border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; padding-top: 6px;` : '';
 
                             html += `
-                                <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; 
+                                <td style="background: ${bgColor} !important; vertical-align: top; padding: 2px 4px; 
                                         border-left: 1px solid #000 !important; 
                                         border-right: 1px solid #000 !important; 
-                                        border-top: ${borderTop}; 
-                                        border-bottom: ${borderBottom};">
-                                    <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${isFirstAppearance ? '60px' : '20px'}; break-inside: avoid;">
-                                        ${isFirstAppearance ? `
-                                            <div class="task-title" style="font-size: 11pt; font-weight: bold; margin-bottom: 2px; color: #000;">${task.name}</div>
-                                            <div class="task-time" style="font-size: 8.5pt; margin-bottom: 4px; font-weight: bold;">
-                                                ${getDisplayTime(getMinutes(task.start))} - ${getDisplayTime(getMinutes(task.end))}
-                                            </div>
-                                            ${task.desc ? `<div class="task-desc" style="font-size: 9.5pt; margin-bottom: 6px; font-style: italic; line-height: 1.1;">${task.desc}</div>` : ''}
-                                            <div class="task-meta" style="font-size: 12px; line-height: 1.3; color: #000; ${metaTopBorder}">
-                                                ${task.room ? `<span style="font-weight: bold;">📍 ${task.room}</span>` : ''} 
+                                        border-top: ${bTop} !important; 
+                                        border-bottom: ${bBottom} !important;
+                                        -webkit-print-color-adjust: exact;">
+                                    <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${isFirst ? '60px' : '20px'};">
+                                        ${isFirst ? `
+                                            <div style="font-size: 11pt; font-weight: bold; color: #000;">${task.name}</div>
+                                            <div style="font-size: 8.5pt; font-weight: bold; margin-bottom: 4px;">${getDisplayTime(getMinutes(task.start))} - ${getDisplayTime(getMinutes(task.end))}</div>
+                                            ${task.desc ? `<div style="font-size: 9.5pt; font-style: italic; line-height: 1.1; margin-bottom: 6px;">${task.desc}</div>` : ''}
+                                            <div style="font-size: 12px; line-height: 1.3; color: #000; ${metaTopBorder}">
+                                                ${task.room ? `<strong>📍 ${task.room}</strong>` : ''} 
                                                 ${(task.room && cleanPeople) ? ' | ' : ''} 
                                                 ${cleanPeople ? `<span>👥 ${cleanPeople}</span>` : ''}
                                             </div>
@@ -430,15 +402,13 @@
                                     </div>
                                 </td>`;
                         } else {
-                            // WHITESPACE LOGIC:
-                            // Always show all 4 borders for empty 15-min blocks.
-                            html += `<td style="background: white; border: 1px solid #000 !important; height: 30px;"></td>`;
+                            // Empty space keeps all 4 borders to create the "grid"
+                            html += `<td style="background: white !important; border: 1px solid #000 !important; height: 35px;"></td>`;
                         }
                     }
                 });
                 html += `</tr>`;
             });
-
             html += `</tbody></table></div>`;
         }
         document.getElementById('output').innerHTML = html;
