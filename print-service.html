@@ -325,49 +325,46 @@
 
     function render(data) {
         document.getElementById('output').innerHTML = "";
-        const renderedTasks = new Set();
-        let html = "";
+        const htmlParts = [];
         const totalDays = data.totalDays || data.days || 1;
         const allTasks = data.tasks || [];
         const getLane = t => (t.type || t.lane || '').toLowerCase().trim();
-
-        // BLOCK SIZE - Changed to 5 for better resolution
         const step = 5;
 
         for (let d = 1; d <= totalDays; d++) {
             const dayTasks = allTasks.filter(t => t.day == d);
             if (dayTasks.length === 0) continue;
 
+            // Step 1: Assignment Logic (Stays the same, works well)
             function assignColumns(tasks) {
                 tasks.sort((a, b) => getMinutes(a.start) - getMinutes(b.start));
                 const colEnds = []; 
                 tasks.forEach(task => {
                     let placed = false;
-                    const startMins = getMinutes(task.start);
-                    const endMins = getMinutes(task.end);
-
+                    const s = getMinutes(task.start);
+                    const e = getMinutes(task.end);
                     for (let i = 0; i < colEnds.length; i++) {
-                        // Use >= to allow snapping. 
-                        // If Task A ends at 8:40 and Task B starts at 8:40, they share a column.
-                        if (startMins >= colEnds[i]) {
+                        if (s >= colEnds[i]) {
                             task._printCol = i;
-                            colEnds[i] = endMins;
+                            colEnds[i] = e;
                             placed = true;
                             break;
                         }
                     }
                     if (!placed) {
                         task._printCol = colEnds.length;
-                        colEnds.push(endMins);
+                        colEnds.push(e);
                     }
                 });
                 return Math.max(1, colEnds.length); 
             }
 
-            const maxMain = assignColumns(dayTasks.filter(t => getLane(t) === 'main'));
-            const maxBg = assignColumns(dayTasks.filter(t => getLane(t) === 'bg'));
+            const mainTasks = dayTasks.filter(t => getLane(t) === 'main');
+            const bgTasks = dayTasks.filter(t => getLane(t) === 'bg');
+            const maxMain = assignColumns(mainTasks);
+            const maxBg = assignColumns(bgTasks);
 
-            html += `<div class="day-page">
+            let dayHtml = `<div class="day-page">
                 <h1>CRHP Retreat Schedule</h1>
                 <div class="day-num">Day ${d}</div>
                 <table class="schedule-table">
@@ -382,49 +379,65 @@
 
             const startMins = Math.min(...dayTasks.map(t => getMinutes(t.start)));
             const endMins = Math.max(...dayTasks.map(t => getMinutes(t.end)));
-            
-            // Loop in 5-minute increments
+
+            // Track which cells are covered by a rowspan so we don't draw them twice
+            const skipCell = {}; 
+
             for (let slotTime = startMins; slotTime < endMins; slotTime += step) {
-                html += `<tr><td class="time-cell" style="font-size: 8pt; height: 20px;">${getDisplayTime(slotTime)}</td>`;
+                dayHtml += `<tr><td class="time-cell" style="font-size: 8pt; height: 20px; border: 1pt solid #000;">${getDisplayTime(slotTime)}</td>`;
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
+                        const cellKey = `${laneType}-${col}-${slotTime}`;
+                        if (skipCell[cellKey]) return; // Skip because a previous rowspan covers this
+
+                        // Find task that OVERLAPS this 5-minute window
                         const task = dayTasks.find(t => 
                             getLane(t) === laneType && 
                             t._printCol === col && 
                             getMinutes(t.start) < slotTime + step && 
-                            slotTime < getMinutes(t.end)
+                            getMinutes(t.end) > slotTime
                         );
 
                         if (task) {
-                            const taskKey = `Day${d}-${task.name}-${task.start}-${laneType}-${col}`;
-                            const isFirst = !renderedTasks.has(taskKey);
-                            if (isFirst) renderedTasks.add(taskKey);
+                            const tStart = getMinutes(task.start);
+                            const tEnd = getMinutes(task.end);
+                            
+                            // Calculate how many 5-min rows this task should span
+                            // We start from current slotTime to find the remaining height
+                            const remainingTaskMins = tEnd - slotTime;
+                            const rowsToSpan = Math.ceil(remainingTaskMins / step);
+                            
+                            // Mark future cells as skipped
+                            for (let r = 1; r < rowsToSpan; r++) {
+                                skipCell[`${laneType}-${col}-${slotTime + (r * step)}`] = true;
+                            }
 
-                            const isEnd = slotTime + step >= getMinutes(task.end);
                             const borderColor = getLane(task) === 'bg' ? '#a855f7' : '#38bdf8';
                             const bgColor = getLane(task) === 'bg' ? '#fdf4ff' : '#f0f9ff';
 
-                            html += `
-                                <td style="background: ${bgColor}; border-left: 1pt solid #000 !important; border-right: 1pt solid #000 !important; border-top: ${isFirst ? '1pt solid #000 !important' : '0'}; border-bottom: ${isEnd ? '1pt solid #000 !important' : '0'}; padding: 0px 4px; vertical-align: top;">
-                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px; min-height: ${isFirst ? '40px' : '15px'}; overflow: hidden;">
-                                        ${isFirst ? `
-                                            <div style="font-size: 10pt; font-weight: bold; color: #000; line-height: 1.1; margin-top: 2px;">${task.name}</div>
-                                            <div style="font-size: 8pt; font-weight: bold;">${getDisplayTime(getMinutes(task.start))} - ${getDisplayTime(getMinutes(task.end))}</div>
-                                            ${task.desc ? `<div style="font-size: 8.5pt; font-style: italic; line-height: 1;">${task.desc}</div>` : ''}
-                                        ` : ``}
+                            dayHtml += `
+                                <td rowspan="${rowsToSpan}" style="background: ${bgColor}; border: 1pt solid #000 !important; padding: 4px; vertical-align: top;">
+                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px;">
+                                        <div style="font-size: 10pt; font-weight: bold; color: #000; line-height: 1.1;">${task.name}</div>
+                                        <div style="font-size: 8pt; font-weight: bold; margin-bottom: 2px;">
+                                            ${getDisplayTime(tStart)} - ${getDisplayTime(tEnd)}
+                                        </div>
+                                        ${task.desc ? `<div style="font-size: 8.5pt; font-style: italic; line-height: 1.1;">${task.desc}</div>` : ''}
+                                        ${task.room ? `<div style="font-size: 8pt; margin-top: 2px;">📍 ${task.room}</div>` : ''}
                                     </div>
                                 </td>`;
                         } else {
-                            html += `<td style="background: white; border: 1pt solid #000 !important; height: 20px;"></td>`;
+                            dayHtml += `<td style="background: white; border: 1pt solid #000 !important; height: 20px;"></td>`;
                         }
                     }
                 });
-                html += `</tr>`;
+                dayHtml += `</tr>`;
             }
-            html += `</tbody></table></div>`;
+            dayHtml += `</tbody></table></div>`;
+            htmlParts.push(dayHtml);
         }
-        document.getElementById('output').innerHTML = html;
+        document.getElementById('output').innerHTML = htmlParts.join("");
         document.getElementById('throbber').style.display = 'none';
     }
 </script>
