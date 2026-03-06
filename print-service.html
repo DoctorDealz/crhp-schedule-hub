@@ -331,7 +331,7 @@
         const getLane = t => (t.type || t.lane || '').toLowerCase().trim();
         const step = 5;
         // Adjust this number to control how often a long task "breaks" to allow a page split
-        const MAX_ROWS_PER_BLOCK = 20; 
+        const MAX_ROWS_PER_BLOCK = 12; 
 
         for (let d = 1; d <= totalDays; d++) {
             const dayTasks = allTasks.filter(t => t.day == d);
