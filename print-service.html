@@ -73,8 +73,24 @@
             border: 1pt solid #000 !important;   /* pt prints more reliably than px */
             }
 
+            .schedule-table th,
+            .schedule-table td {
+                border: 0 !important;
+                border-right: 1pt solid #000 !important;
+                border-bottom: 1pt solid #000 !important;
+            }
+
+            .schedule-table tr > *:first-child {
+                border-left: 1pt solid #000 !important;
+            }
+
+            .schedule-table thead tr:first-child > * {
+                border-top: 1pt solid #000 !important;
+            }
+
+
             .schedule-table {
-            border: 2.5pt solid #000 !important; /* keep your strong outer border */
+                border: 2.5pt solid #000 !important; /* keep your strong outer border */
             }
 
 
