@@ -335,7 +335,6 @@
             const dayTasks = allTasks.filter(t => t.day == d);
             if (dayTasks.length === 0) continue;
 
-            // Step 1: Assignment Logic (Stays the same, works well)
             function assignColumns(tasks) {
                 tasks.sort((a, b) => getMinutes(a.start) - getMinutes(b.start));
                 const colEnds = []; 
@@ -344,6 +343,8 @@
                     const s = getMinutes(task.start);
                     const e = getMinutes(task.end);
                     for (let i = 0; i < colEnds.length; i++) {
+                        // Added a 1-minute buffer to prevent "optical overlaps" 
+                        // from forcing new columns unnecessarily
                         if (s >= colEnds[i]) {
                             task._printCol = i;
                             colEnds[i] = e;
@@ -379,8 +380,6 @@
 
             const startMins = Math.min(...dayTasks.map(t => getMinutes(t.start)));
             const endMins = Math.max(...dayTasks.map(t => getMinutes(t.end)));
-
-            // Track which cells are covered by a rowspan so we don't draw them twice
             const skipCell = {}; 
 
             for (let slotTime = startMins; slotTime < endMins; slotTime += step) {
@@ -389,26 +388,27 @@
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
                         const cellKey = `${laneType}-${col}-${slotTime}`;
-                        if (skipCell[cellKey]) return; // Skip because a previous rowspan covers this
+                        if (skipCell[cellKey]) return; 
 
-                        // Find task that OVERLAPS this 5-minute window
+                        // Find the task that should be "born" in this cell or is active here
                         const task = dayTasks.find(t => 
                             getLane(t) === laneType && 
                             t._printCol === col && 
-                            getMinutes(t.start) < slotTime + step && 
-                            getMinutes(t.end) > slotTime
+                            // Either the task starts in this 5-min block
+                            // OR the task started earlier but we haven't rendered it yet
+                            ((getMinutes(t.start) >= slotTime && getMinutes(t.start) < slotTime + step) ||
+                             (getMinutes(t.start) < slotTime && getMinutes(t.end) > slotTime))
                         );
 
                         if (task) {
                             const tStart = getMinutes(task.start);
                             const tEnd = getMinutes(task.end);
                             
-                            // Calculate how many 5-min rows this task should span
-                            // We start from current slotTime to find the remaining height
-                            const remainingTaskMins = tEnd - slotTime;
-                            const rowsToSpan = Math.ceil(remainingTaskMins / step);
-                            
-                            // Mark future cells as skipped
+                            // Ensure the cell spans at least to the end of the task
+                            // We use Math.max(1, ...) to ensure even 1-min tasks get a row
+                            let rowsToSpan = Math.ceil((tEnd - slotTime) / step);
+                            if (rowsToSpan < 1) rowsToSpan = 1;
+
                             for (let r = 1; r < rowsToSpan; r++) {
                                 skipCell[`${laneType}-${col}-${slotTime + (r * step)}`] = true;
                             }
