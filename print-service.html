@@ -358,15 +358,13 @@
                 return Math.max(1, colEnds.length); 
             }
 
-            const mainTasks = dayTasks.filter(t => getLane(t) === 'main');
-            const bgTasks = dayTasks.filter(t => getLane(t) === 'bg');
-            const maxMain = assignColumns(mainTasks);
-            const maxBg = assignColumns(bgTasks);
+            const maxMain = assignColumns(dayTasks.filter(t => getLane(t) === 'main'));
+            const maxBg = assignColumns(dayTasks.filter(t => getLane(t) === 'bg'));
 
-            let dayHtml = `<div class="day-page" style="page-break-after: always;">
-                <h1 style="margin-bottom: 5px;">CRHP Retreat Schedule</h1>
-                <div class="day-num" style="font-weight: bold; margin-bottom: 10px;">Day ${d}</div>
-                <table class="schedule-table" style="border-collapse: collapse; width: 100%;">
+            let dayHtml = `<div class="day-page">
+                <h1>CRHP Retreat Schedule</h1>
+                <div class="day-num">Day ${d}</div>
+                <table class="schedule-table" style="border-collapse: collapse; width: 100%; table-layout: fixed;">
                     <thead>
                         <tr>
                             <th style="width: 80px; border: 1pt solid #000;">TIME</th>
@@ -378,56 +376,62 @@
 
             const startMins = Math.min(...dayTasks.map(t => getMinutes(t.start)));
             const endMins = Math.max(...dayTasks.map(t => getMinutes(t.end)));
-            const skipCell = {}; 
+
+            // Tracker to see if we already showed the "Full Header" for a task
+            const taskHeaderRendered = new Set();
 
             for (let slotTime = startMins; slotTime < endMins; slotTime += step) {
-                dayHtml += `<tr><td class="time-cell" style="font-size: 8pt; height: 20px; border: 1pt solid #000; text-align: center;">${getDisplayTime(slotTime)}</td>`;
+                dayHtml += `<tr style="page-break-inside: avoid;">
+                    <td class="time-cell" style="font-size: 8pt; height: 22px; border: 1pt solid #000; text-align: center;">${getDisplayTime(slotTime)}</td>`;
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
-                        const cellKey = `${laneType}-${col}-${slotTime}`;
-                        if (skipCell[cellKey]) return; 
-
+                        
                         const task = dayTasks.find(t => 
                             getLane(t) === laneType && 
                             t._printCol === col && 
-                            ((getMinutes(t.start) >= slotTime && getMinutes(t.start) < slotTime + step) ||
-                            (getMinutes(t.start) < slotTime && getMinutes(t.end) > slotTime))
+                            getMinutes(t.start) < slotTime + step && 
+                            getMinutes(t.end) > slotTime
                         );
 
                         if (task) {
                             const tStart = getMinutes(task.start);
                             const tEnd = getMinutes(task.end);
-                            let rowsToSpan = Math.ceil((tEnd - slotTime) / step);
-                            if (rowsToSpan < 1) rowsToSpan = 1;
-
-                            for (let r = 1; r < rowsToSpan; r++) {
-                                skipCell[`${laneType}-${col}-${slotTime + (r * step)}`] = true;
-                            }
-
+                            const taskID = `${laneType}-${col}-${task.name}-${task.start}`;
+                            
+                            const isFirstEntry = !taskHeaderRendered.has(taskID);
+                            const isLastCell = (slotTime + step >= tEnd);
+                            
                             const borderColor = getLane(task) === 'bg' ? '#a855f7' : '#38bdf8';
                             const bgColor = getLane(task) === 'bg' ? '#fdf4ff' : '#f0f9ff';
-                            
-                            // Check if task started before this slot (meaning it's a continuation)
-                            const isContinuation = tStart < slotTime;
+
+                            // CSS: No bottom border if the task continues to the next 5-min block
+                            // This creates the "visual" long cell while allowing physical page breaks
+                            const borderBottom = isLastCell ? '1pt solid #000' : 'none';
+                            const borderTop = isFirstEntry ? '1pt solid #000' : 'none';
 
                             dayHtml += `
-                                <td rowspan="${rowsToSpan}" style="background: ${bgColor}; border: 1pt solid #000 !important; padding: 4px; vertical-align: top; page-break-inside: avoid;">
-                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px; break-inside: avoid;">
-                                        <div style="font-size: 10pt; font-weight: bold; color: #000; line-height: 1.1;">
-                                            ${task.name} ${isContinuation ? '<span style="font-size: 8pt; color: #666; font-weight: normal;">(cont...)</span>' : ''}
-                                        </div>
-                                        ${!isContinuation ? `
-                                            <div style="font-size: 8pt; font-weight: bold; margin-bottom: 2px;">
-                                                ${getDisplayTime(tStart)} - ${getDisplayTime(tEnd)}
-                                            </div>
+                                <td style="background: ${bgColor}; 
+                                        border-left: 1pt solid #000; 
+                                        border-right: 1pt solid #000; 
+                                        border-top: ${borderTop}; 
+                                        border-bottom: ${borderBottom}; 
+                                        padding: 0 4px; vertical-align: top;">
+                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px; min-height: 20px;">
+                                        ${isFirstEntry ? `
+                                            <div style="font-size: 10pt; font-weight: bold; color: #000; line-height: 1.1; margin-top: 2px;">${task.name}</div>
+                                            <div style="font-size: 8pt; font-weight: bold;">${getDisplayTime(tStart)} - ${getDisplayTime(tEnd)}</div>
                                             ${task.desc ? `<div style="font-size: 8.5pt; font-style: italic; line-height: 1.1;">${task.desc}</div>` : ''}
-                                            ${task.room ? `<div style="font-size: 8pt; margin-top: 2px;">📍 ${task.room}</div>` : ''}
-                                        ` : ''}
+                                        ` : `
+                                            <div style="font-size: 8pt; color: #666; font-style: italic; padding-top: 2px;">${task.name} (cont...)</div>
+                                        `}
                                     </div>
                                 </td>`;
+                            
+                            // Mark that we've rendered the main info once
+                            taskHeaderRendered.add(taskID);
                         } else {
-                            dayHtml += `<td style="background: white; border: 1pt solid #000 !important; height: 20px;"></td>`;
+                            dayHtml += `<td style="background: white; border: 1pt solid #000; height: 22px;"></td>`;
                         }
                     }
                 });
