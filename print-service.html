@@ -323,12 +323,15 @@
         return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
     }
 
-    function render(data) {
+        function render(data) {
         document.getElementById('output').innerHTML = "";
-        const renderedTasks = new Set(); // Track tasks already displayed with full titles
+        const renderedTasks = new Set(); // Track tasks already displayed
         let html = "";
         const totalDays = data.totalDays || data.days || 1;
         const allTasks = data.tasks || [];
+
+        // Helper to safely get the lane name, ignoring case and accidental spaces
+        const getLane = t => (t.type || t.lane || '').toLowerCase().trim();
 
         for (let d = 1; d <= totalDays; d++) {
             const dayTasks = allTasks.filter(t => t.day == d);
@@ -344,31 +347,28 @@
             // Assigns tasks to specific columns to prevent duplication
             function assignColumns(tasks) {
                 tasks.sort((a, b) => getMinutes(a.start) - getMinutes(b.start));
-                const colEnds = []; // Tracks when the current task in each column ends
+                const colEnds = []; 
                 tasks.forEach(task => {
                     let placed = false;
                     for (let i = 0; i < colEnds.length; i++) {
-                        // If the column is free (the last task ended before this one starts)
                         if (getMinutes(task.start) >= colEnds[i]) {
-                            task._printCol = i; // Assign column ID
+                            task._printCol = i;
                             colEnds[i] = getMinutes(task.end);
                             placed = true;
                             break;
                         }
                     }
                     if (!placed) {
-                        // Create a new column if all existing ones are occupied
                         task._printCol = colEnds.length;
                         colEnds.push(getMinutes(task.end));
                     }
                 });
-                return Math.max(1, colEnds.length); // Ensure at least 1 column renders
+                return Math.max(1, colEnds.length); 
             }
 
-            const maxMain = assignColumns(dayTasks.filter(t => (t.type||t.lane)==='main'));
-            const maxBg = assignColumns(dayTasks.filter(t => (t.type||t.lane)==='bg'));
-
-            const occupied = new Set();
+            // Using the new getLane helper
+            const maxMain = assignColumns(dayTasks.filter(t => getLane(t) === 'main'));
+            const maxBg = assignColumns(dayTasks.filter(t => getLane(t) === 'bg'));
 
             html += `<div class="day-page">
                 <h1>CRHP Retreat Schedule</h1>
@@ -395,31 +395,30 @@
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
-                        // Find the task for this slot/column
+                        
                         const task = dayTasks.find(t => {
-                            if ((t.type || t.lane) !== laneType) return false;
+                            if (getLane(t) !== laneType) return false;
                             if (t._printCol !== col) return false; 
+                            
                             const tStart = getMinutes(t.start);
                             const tEnd = getMinutes(t.end);
-                            return slotTime >= tStart && slotTime < tEnd;
+                            
+                            // FIX: Interval Overlap Logic - Catches tasks that start at odd times like 8:05
+                            return tStart < slotTime + 15 && slotTime < tEnd;
                         });
 
                         if (task) {
-                            const taskKey = `${task.name}-${task.start}-${laneType}-${col}`;
+                            // FIX: Added 'Day${d}' to the key so identically named tasks on different days don't break
+                            const taskKey = `Day${d}-${task.name}-${task.start}-${laneType}-${col}`;
                             const isFirstAppearance = !renderedTasks.has(taskKey);
                             if (isFirstAppearance) renderedTasks.add(taskKey);
 
                             const isEndOfTask = slotTime + 15 >= getMinutes(task.end);
-                            const borderColor = (task.type || task.lane) === 'bg' ? '#a855f7' : '#38bdf8';
-                            const bgColor = (task.type || task.lane) === 'bg' ? '#fdf4ff' : '#f0f9ff';
+                            const borderColor = getLane(task) === 'bg' ? '#a855f7' : '#38bdf8';
+                            const bgColor = getLane(task) === 'bg' ? '#fdf4ff' : '#f0f9ff';
 
-                            // THE CSS LOGIC: 
-                            // 1. Vertical lines (left/right) are ALWAYS solid 1px black.
-                            // 2. Horizontal lines (top/bottom) ONLY appear at the start or end of the task.
-                            // 3. We use 'none' for internal segments to make the task look like one solid block.
                             const borderTop = isFirstAppearance ? '1pt solid #000 !important' : '0 !important';
                             const borderBottom = isEndOfTask ? '1pt solid #000 !important' : '0 !important';
-
 
                             const cleanPeople = task.people ? task.people.map(p => p.split(' (')[0].trim()).join(', ') : '';
                             const hasMeta = !!(task.room || cleanPeople);
@@ -444,14 +443,12 @@
                                                 ${cleanPeople ? `<span>👥 ${cleanPeople}</span>` : ''}
                                             </div>
                                         ` : `
-
-                                            <div style="font-size: 10pt; font-weight: bold; color: #000; opacity: 1;">${task.name}</div>                                             <div style="font-size: 8pt; font-weight: bold; color: #64748b; opacity: 0.6;"> (cont...)</div>
+                                            <div style="font-size: 10pt; font-weight: bold; color: #000; opacity: 1;">${task.name}</div>
+                                            <div style="font-size: 8pt; font-weight: bold; color: #64748b; opacity: 0.6;"> (cont...)</div>
                                         `}
                                     </div>
                                 </td>`;
                         } else {
-                            // WHITESPACE LOGIC:
-                            // Always show all 4 borders for empty 15-min blocks.
                             html += `<td style="background: white; border: 1pt solid #000 !important; height: 30px;"></td>`;
                         }
                     }
@@ -465,6 +462,7 @@
         document.getElementById('throbber').style.display = 'none';
         document.body.classList.add('data-ready');
     }
+
 </script>
 </body>
 </html>
