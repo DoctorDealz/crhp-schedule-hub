@@ -323,7 +323,7 @@
         return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
     }
 
-        function render(data) {
+            function render(data) {
         document.getElementById('output').innerHTML = "";
         const renderedTasks = new Set(); // Track tasks already displayed
         let html = "";
@@ -350,17 +350,24 @@
                 const colEnds = []; 
                 tasks.forEach(task => {
                     let placed = false;
+                    
+                    // FIX: Round task times to the nearest 15-minute grid boundaries.
+                    // This forces short tasks occurring in the same 15-min window into separate columns.
+                    const gridStart = Math.floor(getMinutes(task.start) / 15) * 15;
+                    const gridEnd = Math.ceil(getMinutes(task.end) / 15) * 15;
+
                     for (let i = 0; i < colEnds.length; i++) {
-                        if (getMinutes(task.start) >= colEnds[i]) {
+                        // Check against the 15-minute grid boundaries, not the raw minute marks
+                        if (gridStart >= colEnds[i]) {
                             task._printCol = i;
-                            colEnds[i] = getMinutes(task.end);
+                            colEnds[i] = gridEnd; // Lock this column until the end of this task's 15-min block
                             placed = true;
                             break;
                         }
                     }
                     if (!placed) {
                         task._printCol = colEnds.length;
-                        colEnds.push(getMinutes(task.end));
+                        colEnds.push(gridEnd);
                     }
                 });
                 return Math.max(1, colEnds.length); 
@@ -395,20 +402,19 @@
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
-                        
+
                         const task = dayTasks.find(t => {
                             if (getLane(t) !== laneType) return false;
                             if (t._printCol !== col) return false; 
-                            
+
                             const tStart = getMinutes(t.start);
                             const tEnd = getMinutes(t.end);
-                            
-                            // FIX: Interval Overlap Logic - Catches tasks that start at odd times like 8:05
+
+                            // Interval Overlap Logic
                             return tStart < slotTime + 15 && slotTime < tEnd;
                         });
 
                         if (task) {
-                            // FIX: Added 'Day${d}' to the key so identically named tasks on different days don't break
                             const taskKey = `Day${d}-${task.name}-${task.start}-${laneType}-${col}`;
                             const isFirstAppearance = !renderedTasks.has(taskKey);
                             if (isFirstAppearance) renderedTasks.add(taskKey);
@@ -462,6 +468,7 @@
         document.getElementById('throbber').style.display = 'none';
         document.body.classList.add('data-ready');
     }
+
 
 </script>
 </body>
