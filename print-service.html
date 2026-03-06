@@ -399,11 +399,7 @@
                             const tStart = getMinutes(task.start);
                             const tEnd = getMinutes(task.end);
                             
-                            // Calculate logical rows remaining for the task
                             let totalRemainingRows = Math.ceil((tEnd - slotTime) / step);
-                            
-                            // FORCE A SPLIT: If rows exceed MAX_ROWS_PER_BLOCK, we only span the max
-                            // This allows the table to "break" physically at that row.
                             let rowsToSpan = Math.min(totalRemainingRows, MAX_ROWS_PER_BLOCK);
                             if (rowsToSpan < 1) rowsToSpan = 1;
 
@@ -426,7 +422,11 @@
                                                 ${getDisplayTime(tStart)} - ${getDisplayTime(tEnd)}
                                             </div>
                                             ${task.desc ? `<div style="font-size: 8.5pt; font-style: italic; line-height: 1.1;">${task.desc}</div>` : ''}
-                                            ${task.room ? `<div style="font-size: 8pt; margin-top: 2px;">📍 ${task.room}</div>` : ''}
+                                            <div style="font-size: 8pt; margin-top: 2px;">
+                                                ${task.room ? `📍 ${task.room}` : ''}
+                                                ${task.room && task.roster ? ' | ' : ''}
+                                                ${task.roster ? `👥 ${task.roster}` : ''}
+                                            </div>
                                         ` : ''}
                                     </div>
                                 </td>`;
