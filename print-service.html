@@ -330,6 +330,8 @@
         const allTasks = data.tasks || [];
         const getLane = t => (t.type || t.lane || '').toLowerCase().trim();
         const step = 5;
+        // Adjust this number to control how often a long task "breaks" to allow a page split
+        const MAX_ROWS_PER_BLOCK = 20; 
 
         for (let d = 1; d <= totalDays; d++) {
             const dayTasks = allTasks.filter(t => t.day == d);
@@ -358,15 +360,13 @@
                 return Math.max(1, colEnds.length); 
             }
 
-            const mainTasks = dayTasks.filter(t => getLane(t) === 'main');
-            const bgTasks = dayTasks.filter(t => getLane(t) === 'bg');
-            const maxMain = assignColumns(mainTasks);
-            const maxBg = assignColumns(bgTasks);
+            const maxMain = assignColumns(dayTasks.filter(t => getLane(t) === 'main'));
+            const maxBg = assignColumns(dayTasks.filter(t => getLane(t) === 'bg'));
 
             let dayHtml = `<div class="day-page" style="page-break-after: always;">
                 <h1 style="margin-bottom: 5px;">CRHP Retreat Schedule</h1>
                 <div class="day-num" style="font-weight: bold; margin-bottom: 10px;">Day ${d}</div>
-                <table class="schedule-table" style="border-collapse: collapse; width: 100%;">
+                <table class="schedule-table" style="border-collapse: collapse; width: 100%; table-layout: fixed;">
                     <thead>
                         <tr>
                             <th style="width: 80px; border: 1pt solid #000;">TIME</th>
@@ -391,14 +391,20 @@
                         const task = dayTasks.find(t => 
                             getLane(t) === laneType && 
                             t._printCol === col && 
-                            ((getMinutes(t.start) >= slotTime && getMinutes(t.start) < slotTime + step) ||
-                            (getMinutes(t.start) < slotTime && getMinutes(t.end) > slotTime))
+                            getMinutes(t.start) < slotTime + step && 
+                            getMinutes(t.end) > slotTime
                         );
 
                         if (task) {
                             const tStart = getMinutes(task.start);
                             const tEnd = getMinutes(task.end);
-                            let rowsToSpan = Math.ceil((tEnd - slotTime) / step);
+                            
+                            // Calculate logical rows remaining for the task
+                            let totalRemainingRows = Math.ceil((tEnd - slotTime) / step);
+                            
+                            // FORCE A SPLIT: If rows exceed MAX_ROWS_PER_BLOCK, we only span the max
+                            // This allows the table to "break" physically at that row.
+                            let rowsToSpan = Math.min(totalRemainingRows, MAX_ROWS_PER_BLOCK);
                             if (rowsToSpan < 1) rowsToSpan = 1;
 
                             for (let r = 1; r < rowsToSpan; r++) {
@@ -407,13 +413,11 @@
 
                             const borderColor = getLane(task) === 'bg' ? '#a855f7' : '#38bdf8';
                             const bgColor = getLane(task) === 'bg' ? '#fdf4ff' : '#f0f9ff';
-                            
-                            // Check if task started before this slot (meaning it's a continuation)
                             const isContinuation = tStart < slotTime;
 
                             dayHtml += `
-                                <td rowspan="${rowsToSpan}" style="background: ${bgColor}; border: 1pt solid #000 !important; padding: 4px; vertical-align: top; page-break-inside: avoid;">
-                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px; break-inside: avoid;">
+                                <td rowspan="${rowsToSpan}" style="background: ${bgColor}; border: 1pt solid #000 !important; padding: 4px; vertical-align: top;">
+                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px;">
                                         <div style="font-size: 10pt; font-weight: bold; color: #000; line-height: 1.1;">
                                             ${task.name} ${isContinuation ? '<span style="font-size: 8pt; color: #666; font-weight: normal;">(cont...)</span>' : ''}
                                         </div>
