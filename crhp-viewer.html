@@ -964,33 +964,41 @@
         activeTaskIndex = index; 
         document.body.classList.add('modal-open');
         const t = fromChecklist ? checklist[index] : tasks[index];
-        
+
         // 1. Header & Text Fields
         document.getElementById('modalHeader').innerText = fromChecklist ? "Checklist Detail" : "Task Detail";
-        
+
         const nameInp = document.getElementById('editTaskName');
         nameInp.value = t.name;
         nameInp.readOnly = true;
 
-        // Hide Description section if empty
+        // --- DESCRIPTION AUTO-RESIZE LOGIC ---
         const descInp = document.getElementById('modalDescEdit');
-        const descSection = document.getElementById('modalDescSection'); // Ensure this ID exists around your desc field
+        const descSection = document.getElementById('modalDescSection');
+        
         if (t.desc && t.desc.trim() !== "") {
             if (descSection) descSection.style.display = 'block';
             descInp.value = t.desc;
             descInp.readOnly = true;
+
+            // Force the height to match content
+            descInp.style.height = 'auto'; // Reset first
+            descInp.style.overflowY = 'hidden'; // Hide scrollbar
+            // Use a small timeout or requestAnimationFrame to ensure the DOM has updated the value
+            setTimeout(() => {
+                descInp.style.height = descInp.scrollHeight + 'px';
+            }, 0);
         } else {
             if (descSection) descSection.style.display = 'none';
         }
 
         // 2. Status Tracking & Checkbox Logic
+        // ... (Keep your existing status logic)
         const pBox = document.getElementById('modalPendingEdit');
         const cBox = document.getElementById('modalCompleteEdit');
         const saveBtn = document.getElementById('saveStatusBtn');
-
         const initialPending = t.pending || false;
         const initialComplete = (fromChecklist ? t.done : t.complete) || false;
-        
         pBox.checked = initialPending;
         cBox.checked = initialComplete;
         saveBtn.style.display = 'none'; 
@@ -1004,6 +1012,7 @@
         cBox.onchange = () => { if (cBox.checked) pBox.checked = false; checkStatusChange(); };
 
         // 3. Lane, Time, and Rooms
+        // ... (Keep your existing lane/time/room logic)
         const laneSection = document.getElementById('modalLaneSection');
         const timeSection = document.getElementById('modalTimeSection');
         const roomSection = document.getElementById('modalRoomSection');
@@ -1013,7 +1022,6 @@
             if (timeSection) timeSection.style.display = 'none';
             if (roomSection) roomSection.style.display = 'none';
         } else {
-            // Lane Badge
             if (laneSection) {
                 laneSection.style.display = 'block';
                 const isMain = (t.type !== 'bg');
@@ -1027,7 +1035,6 @@
                     </div>`;
             }
 
-            // Time
             if (timeSection) {
                 timeSection.style.display = 'flex';
                 document.getElementById('editStartTime').value = t.start;
@@ -1036,7 +1043,6 @@
                 document.getElementById('editEndTime').readOnly = true;
             }
 
-            // Rooms (Hide if empty)
             const rooms = t.rooms || (t.room ? t.room.split(', ') : []);
             if (rooms.length > 0 && rooms[0] !== "") {
                 if (roomSection) roomSection.style.display = 'block';
@@ -1045,8 +1051,8 @@
                 if (roomSection) roomSection.style.display = 'none';
             }
         }
-        
-        // 4. Roster Section (Hide if empty)
+
+        // 4. Roster Section
         const rosterSection = document.getElementById('modalRosterSection');
         if (t.people && t.people.length > 0) {
             if (rosterSection) rosterSection.style.display = 'block';
@@ -1057,6 +1063,7 @@
 
         document.getElementById('taskModal').style.display = 'block';
     }
+
 
     function closeModal(save) {
         if (save) {
