@@ -52,6 +52,13 @@
 
         /* PRINT SPECIFIC FIXES */
         @media print {
+
+            html, body, * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
             @page {
                 size: letter landscape;
                 margin: 0.3in;
@@ -62,19 +69,14 @@
                 display: none !important; 
             }
 
-            /* FORCE BLACK BORDERS FOR ALL SIDES */
             .schedule-table, .schedule-table th, .schedule-table td {
-                border: 1px solid #000000 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+            border: 1pt solid #000 !important;   /* pt prints more reliably than px */
             }
-            
+
             .schedule-table {
-                border: 2.5px solid #000000 !important;
-                border-collapse: collapse !important;
-                border-spacing: 0; /* Ensures no tiny gaps in gridlines */
-                page-break-inside: auto !important; 
+            border: 2.5pt solid #000 !important; /* keep your strong outer border */
             }
+
 
             tr {
                 page-break-inside: avoid !important;
@@ -399,8 +401,9 @@
                             // 1. Vertical lines (left/right) are ALWAYS solid 1px black.
                             // 2. Horizontal lines (top/bottom) ONLY appear at the start or end of the task.
                             // 3. We use 'none' for internal segments to make the task look like one solid block.
-                            const borderTop = isFirstAppearance ? '1px solid #000' : 'none';
-                            const borderBottom = isEndOfTask ? '1px solid #000' : 'none';
+                            const borderTop = isFirstAppearance ? '1pt solid #000 !important' : '0 !important';
+                            const borderBottom = isEndOfTask ? '1pt solid #000 !important' : '0 !important';
+
 
                             const cleanPeople = task.people ? task.people.map(p => p.split(' (')[0].trim()).join(', ') : '';
                             const hasMeta = !!(task.room || cleanPeople);
@@ -408,8 +411,8 @@
 
                             html += `
                                 <td style="background: ${bgColor}; vertical-align: top; padding: 2px 4px; 
-                                        border-left: 1px solid #000 !important; 
-                                        border-right: 1px solid #000 !important; 
+                                        border-left: 1pt solid #000 !important;
+                                        border-right: 1pt solid #000 !important;
                                         border-top: ${borderTop}; 
                                         border-bottom: ${borderBottom};">
                                     <div class="task-container" style="border-left: 8px solid ${borderColor}; padding-left: 10px; min-height: ${isFirstAppearance ? '60px' : '20px'}; break-inside: avoid;">
@@ -432,7 +435,7 @@
                         } else {
                             // WHITESPACE LOGIC:
                             // Always show all 4 borders for empty 15-min blocks.
-                            html += `<td style="background: white; border: 1px solid #000 !important; height: 30px;"></td>`;
+                            html += `<td style="background: white; border: 1pt solid #000 !important; height: 30px;"></td>`;
                         }
                     }
                 });
