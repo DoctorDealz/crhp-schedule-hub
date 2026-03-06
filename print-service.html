@@ -343,8 +343,6 @@
                     const s = getMinutes(task.start);
                     const e = getMinutes(task.end);
                     for (let i = 0; i < colEnds.length; i++) {
-                        // Added a 1-minute buffer to prevent "optical overlaps" 
-                        // from forcing new columns unnecessarily
                         if (s >= colEnds[i]) {
                             task._printCol = i;
                             colEnds[i] = e;
@@ -365,15 +363,15 @@
             const maxMain = assignColumns(mainTasks);
             const maxBg = assignColumns(bgTasks);
 
-            let dayHtml = `<div class="day-page">
-                <h1>CRHP Retreat Schedule</h1>
-                <div class="day-num">Day ${d}</div>
-                <table class="schedule-table">
+            let dayHtml = `<div class="day-page" style="page-break-after: always;">
+                <h1 style="margin-bottom: 5px;">CRHP Retreat Schedule</h1>
+                <div class="day-num" style="font-weight: bold; margin-bottom: 10px;">Day ${d}</div>
+                <table class="schedule-table" style="border-collapse: collapse; width: 100%;">
                     <thead>
                         <tr>
-                            <th style="width: 80px;">TIME</th>
-                            <th colspan="${maxMain}">MAIN LANE</th>
-                            <th colspan="${maxBg}">BACKGROUND LANE</th>
+                            <th style="width: 80px; border: 1pt solid #000;">TIME</th>
+                            <th colspan="${maxMain}" style="border: 1pt solid #000;">MAIN LANE</th>
+                            <th colspan="${maxBg}" style="border: 1pt solid #000;">BACKGROUND LANE</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -383,19 +381,16 @@
             const skipCell = {}; 
 
             for (let slotTime = startMins; slotTime < endMins; slotTime += step) {
-                dayHtml += `<tr><td class="time-cell" style="font-size: 8pt; height: 20px; border: 1pt solid #000;">${getDisplayTime(slotTime)}</td>`;
+                dayHtml += `<tr><td class="time-cell" style="font-size: 8pt; height: 20px; border: 1pt solid #000; text-align: center;">${getDisplayTime(slotTime)}</td>`;
 
                 [['main', maxMain], ['bg', maxBg]].forEach(([laneType, totalCols]) => {
                     for (let col = 0; col < totalCols; col++) {
                         const cellKey = `${laneType}-${col}-${slotTime}`;
                         if (skipCell[cellKey]) return; 
 
-                        // Find the task that should be "born" in this cell or is active here
                         const task = dayTasks.find(t => 
                             getLane(t) === laneType && 
                             t._printCol === col && 
-                            // Either the task starts in this 5-min block
-                            // OR the task started earlier but we haven't rendered it yet
                             ((getMinutes(t.start) >= slotTime && getMinutes(t.start) < slotTime + step) ||
                             (getMinutes(t.start) < slotTime && getMinutes(t.end) > slotTime))
                         );
@@ -403,9 +398,6 @@
                         if (task) {
                             const tStart = getMinutes(task.start);
                             const tEnd = getMinutes(task.end);
-                            
-                            // Ensure the cell spans at least to the end of the task
-                            // We use Math.max(1, ...) to ensure even 1-min tasks get a row
                             let rowsToSpan = Math.ceil((tEnd - slotTime) / step);
                             if (rowsToSpan < 1) rowsToSpan = 1;
 
@@ -415,16 +407,23 @@
 
                             const borderColor = getLane(task) === 'bg' ? '#a855f7' : '#38bdf8';
                             const bgColor = getLane(task) === 'bg' ? '#fdf4ff' : '#f0f9ff';
+                            
+                            // Check if task started before this slot (meaning it's a continuation)
+                            const isContinuation = tStart < slotTime;
 
                             dayHtml += `
-                                <td rowspan="${rowsToSpan}" style="background: ${bgColor}; border: 1pt solid #000 !important; padding: 4px; vertical-align: top;">
-                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px;">
-                                        <div style="font-size: 10pt; font-weight: bold; color: #000; line-height: 1.1;">${task.name}</div>
-                                        <div style="font-size: 8pt; font-weight: bold; margin-bottom: 2px;">
-                                            ${getDisplayTime(tStart)} - ${getDisplayTime(tEnd)}
+                                <td rowspan="${rowsToSpan}" style="background: ${bgColor}; border: 1pt solid #000 !important; padding: 4px; vertical-align: top; page-break-inside: avoid;">
+                                    <div class="task-container" style="border-left: 6px solid ${borderColor}; padding-left: 8px; break-inside: avoid;">
+                                        <div style="font-size: 10pt; font-weight: bold; color: #000; line-height: 1.1;">
+                                            ${task.name} ${isContinuation ? '<span style="font-size: 8pt; color: #666; font-weight: normal;">(cont...)</span>' : ''}
                                         </div>
-                                        ${task.desc ? `<div style="font-size: 8.5pt; font-style: italic; line-height: 1.1;">${task.desc}</div>` : ''}
-                                        ${task.room ? `<div style="font-size: 8pt; margin-top: 2px;">📍 ${task.room}</div>` : ''}
+                                        ${!isContinuation ? `
+                                            <div style="font-size: 8pt; font-weight: bold; margin-bottom: 2px;">
+                                                ${getDisplayTime(tStart)} - ${getDisplayTime(tEnd)}
+                                            </div>
+                                            ${task.desc ? `<div style="font-size: 8.5pt; font-style: italic; line-height: 1.1;">${task.desc}</div>` : ''}
+                                            ${task.room ? `<div style="font-size: 8pt; margin-top: 2px;">📍 ${task.room}</div>` : ''}
+                                        ` : ''}
                                     </div>
                                 </td>`;
                         } else {
@@ -440,6 +439,7 @@
         document.getElementById('output').innerHTML = htmlParts.join("");
         document.getElementById('throbber').style.display = 'none';
     }
+    
 </script>
 </body>
 </html>
