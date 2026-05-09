@@ -74,9 +74,9 @@
       "rooms": [
         "Dining Room",
         "Main Room",
-        "Hall B Entrance"
+        "Hall A Entrance"
       ],
-      "room": "Dining Room, Main Room, Hall B Entrance",
+      "room": "Dining Room, Main Room, Hall A Entrance",
       "pending": false,
       "complete": false
     },
@@ -93,9 +93,9 @@
       "rooms": [
         "Dining Room",
         "Main Room",
-        "Hall B Entrance"
+        "Hall A Entrance"
       ],
-      "room": "Dining Room, Main Room, Hall B Entrance",
+      "room": "Dining Room, Main Room, Hall A Entrance",
       "pending": false,
       "complete": false
     },
@@ -112,9 +112,9 @@
       "rooms": [
         "Dining Room",
         "Main Room",
-        "Hall B Entrance"
+        "Hall A Entrance"
       ],
-      "room": "Dining Room, Main Room, Hall B Entrance",
+      "room": "Dining Room, Main Room, Hall A Entrance",
       "pending": false,
       "complete": false
     },
@@ -127,9 +127,9 @@
       "people": [],
       "type": "bg",
       "rooms": [
-        "Hall B Entrance"
+        "Hall A Entrance"
       ],
-      "room": "Hall B Entrance",
+      "room": "Hall A Entrance",
       "pending": false,
       "complete": false
     },
@@ -1317,9 +1317,9 @@
       ],
       "type": "bg",
       "rooms": [
-        "Hall B Entrance"
+        "Hall A Entrance"
       ],
-      "room": "Hall B Entrance",
+      "room": "Hall A Entrance",
       "pending": false,
       "complete": false
     },
@@ -2532,7 +2532,7 @@
     "Chapel",
     "Kitchen",
     "Sleeping Area",
-    "Hall B Entrance",
+    "Hall A Entrance",
     "Help Room"
   ],
   "totalDays": 2,
