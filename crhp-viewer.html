@@ -1286,10 +1286,10 @@
                             ${statusHtml}
                         </div>
                         <div class="task-meta" style="font-size: 0.75rem; width: 100%; overflow: hidden;">
-                            <div class="crew-list" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">
+                            <div class="crew-list" style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center; overflow: hidden; width: 100%;">
                                 <span style="opacity:0.8; flex-shrink: 0;">${timeRangeStr}</span>
-                                ${t.room ? ` | <span class="room-label" style="color:var(--room); font-weight:bold;">${t.room}</span>` : ''}
-                                ${slimNames ? ` | <span style="opacity:0.6">${slimNames}</span>` : ''}
+                                ${t.room ? ` | <span class="room-label" style="color:var(--room); font-weight:bold; flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;">${t.room}</span>` : ''}
+                                ${slimNames ? ` | <span style="opacity:0.6; flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;">${slimNames}</span>` : ''}
                             </div>
                         </div>`;
                 } else {
