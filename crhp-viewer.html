@@ -896,7 +896,7 @@
         const line = document.getElementById('nowLine');
         const now = new Date();
         const nowMins = (now.getHours() * 60) + now.getMinutes();
-        const pos = (nowMins - cachedDStart) * 3 + 35;
+        const pos = (nowMins - cachedDStart) * 12 + 35;
         
         document.querySelectorAll('.now-time-indicator').forEach(el => el.remove());
 
@@ -1193,12 +1193,12 @@
         const dayTasks = tasks.filter(t => t.day === currentDay).sort((a,b) => getMins(a.start) - getMins(b.start));
         if(!dayTasks.length) { area.style.height = '400px'; cachedDStart = 540; updateNowLine(); return; }
         
-        const dStart = Math.floor(Math.min(...dayTasks.map(t => getMins(t.start))) / 15) * 15;
-        const dEnd = Math.ceil(Math.max(...dayTasks.map(t => Math.max(getMins(t.start) + 5, getMins(t.end)))) / 15) * 15;
+        const dStart = Math.floor(Math.min(...dayTasks.map(t => getMins(t.start))) / 5) * 5;
+        const dEnd = Math.ceil(Math.max(...dayTasks.map(t => Math.max(getMins(t.start) + 5, getMins(t.end)))) / 5) * 5;
         cachedDStart = dStart;
 
-        for(let m=dStart; m<=dEnd; m+=15){
-            const pos = (m-dStart)*3 + 35, mins=m%60;
+        for(let m=dStart; m<=dEnd; m+=5){
+            const pos = (m-dStart)*12 + 35, mins=m%60;
             const hourStr = Math.floor(m/60)+':'+mins.toString().padStart(2,'0');
             const lbl = `<div class="hour-mark" style="top:${pos}px; left: 50%; transform: translate(-50%, -50%); right: auto;">${formatTo12h(hourStr)}</div>`;
             document.getElementById('leftGutter').innerHTML += lbl; document.getElementById('centerGutter').innerHTML += lbl;
@@ -1234,9 +1234,9 @@
                 node.className = `task-node ${lt === 'main'?'main-node':'bg-node'} ${t.pending ? 'is-pending' : ''} ${t.complete ? 'is-complete' : ''}`;
                 node.dataset.taskId = tasks.indexOf(t);
                 
-                const nodeHeight = Math.max(15, (getMins(t.end) - s1) * 3);
+                const nodeHeight = Math.max(60, (getMins(t.end) - s1) * 12);
                 const laneWidth = 340 / maxSimultaneous;
-                node.style.cssText = `top:${(s1-dStart)*3+35}px; height:${nodeHeight}px; width:${laneWidth-1}px; left:${(lt==='main' ? 65 : 495) + (colIndex * laneWidth)}px;`;
+                node.style.cssText = `top:${(s1-dStart)*12+35}px; height:${nodeHeight}px; width:${laneWidth-1}px; left:${(lt==='main' ? 65 : 495) + (colIndex * laneWidth)}px;`;
                 node.onclick = () => openModal(tasks.indexOf(t), false);
                 
                 const timeRangeStr = `${formatTo12h(t.start)} - ${formatTo12h(t.end)}`;
