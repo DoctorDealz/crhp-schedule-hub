@@ -1039,9 +1039,11 @@
         
         const dStart = Math.floor(Math.min(...dayTasks.map(t => getMins(t.start))) / 5) * 5;
         const dEnd = Math.ceil(Math.max(...dayTasks.map(t => Math.max(getMins(t.start) + 5, getMins(t.end)))) / 5) * 5;
+        const extendedDEnd = Math.max(dEnd, 1440);
         cachedDStart = dStart;
+        area.style.height = `${(extendedDEnd - dStart) * 12 + 70}px`;
 
-        for(let m=dStart; m<=dEnd; m+=5){
+        for(let m=dStart; m<=extendedDEnd; m+=5){
             const pos = (m-dStart)*12 + 35, mins=m%60;
             const hourStr = Math.floor(m/60)+':'+mins.toString().padStart(2,'0');
             const lbl = `<div class="hour-mark" style="top:${pos}px">${formatTo12h(hourStr)}</div>`;
