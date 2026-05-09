@@ -388,12 +388,18 @@
                         const cellKey = `${laneType}-${col}-${slotTime}`;
                         if (skipCell[cellKey]) return; 
 
-                        const task = dayTasks.find(t => 
-                            getLane(t) === laneType && 
-                            t._printCol === col && 
-                            getMinutes(t.start) < slotTime + step && 
-                            getMinutes(t.end) > slotTime
-                        );
+                        const task = dayTasks.find(t => {
+                            const tStart = getMinutes(t.start);
+                            const tEnd = getMinutes(t.end);
+                            const isZeroLength = tEnd === tStart;
+                            return getLane(t) === laneType &&
+                                t._printCol === col &&
+                                (
+                                    isZeroLength
+                                        ? tStart >= slotTime && tStart < slotTime + step
+                                        : tStart < slotTime + step && tEnd > slotTime
+                                );
+                        });
 
                         if (task) {
                             const tStart = getMinutes(task.start);
