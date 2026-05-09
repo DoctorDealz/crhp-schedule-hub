@@ -1214,7 +1214,8 @@
                 nodes.appendChild(node);
             });
         });
-        area.style.height = (dEnd-dStart)*3 + 250 + 'px'; updateNowLine();
+        area.style.height = `${(extendedDEnd - dStart) * 12 + 70}px`;
+        updateNowLine();
     }
 
     function removePersonFromTasks(personKey) {
