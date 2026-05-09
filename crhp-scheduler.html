@@ -41,12 +41,13 @@
         .scroll-wrapper { 
             width: 100%; 
             overflow-x: auto; 
+            overflow-y: auto; 
             border-top: 1px solid var(--border); 
         }
 
         .timeline-container { 
             position: relative; 
-            width: 890px;      /* Your chosen "sweet spot" width */
+            width: 860px;      /* Your chosen "sweet spot" width */
             margin: 0 auto;    
             padding-right: 0; 
             box-sizing: border-box;
@@ -73,12 +74,12 @@
         .v-line { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border); z-index: 40; pointer-events: none; }
         .l-80 { left: 60px; }
         .l-430 { left: 410px; }
-        .l-510 { left: 490px; }
-        .l-860 { left: 840px; }
+        .l-510 { left: 510px; }
+        .l-860 { left: 860px; }
 
         .lane-header { position: absolute; top: 0; display: flex; z-index: 30; background: var(--bg); height: 35px; align-items: center; border-bottom: 1px solid var(--border); font-size: 0.75rem; font-weight: bold; }
         .header-main { left: 60px; width: 350px; justify-content: center; color: var(--accent); }
-        .header-bg { left: 490px; width: 350px; justify-content: center; color: var(--bg-task); }
+        .header-bg { left: 510px; width: 350px; justify-content: center; color: var(--bg-task); }
 
         .time-gutter { 
             position: absolute; 
@@ -91,7 +92,7 @@
         .left-gutter { left: 0; }
         .center-gutter { 
             left: 410px; /* (60 gutter + 350 main) */
-            width: 80px; 
+            width: 100px; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1077,7 +1078,7 @@
                 node.className = `task-node ${lt === 'main'?'main-node':'bg-node'} ${t.pending ? 'is-pending' : ''} ${t.complete ? 'is-complete' : ''}`;
                 const nodeHeight = Math.max(60, (getMins(t.end) - s1) * 12);
                 const laneWidth = 340 / maxSimultaneous;
-                node.style.cssText = `top:${(s1-dStart)*12+35}px; height:${nodeHeight}px; width:${laneWidth-1}px; left:${(lt==='main'?65:495)+(colIndex*laneWidth)}px;`;
+                node.style.cssText = `top:${(s1-dStart)*12+35}px; height:${nodeHeight}px; width:${laneWidth-1}px; left:${(lt==='main'?65:515)+(colIndex*laneWidth)}px;`;
                 node.onclick = () => openModal(tasks.indexOf(t), false);
                 
                 const timeRangeStr = `${formatTo12h(t.start)} - ${formatTo12h(t.end)}`;
