@@ -13,29 +13,66 @@ This tool helps your team:
 
 No install or build step is required. Open the files in a browser and use the buttons.
 
-## Simple start guide (non-technical)
-
-### Step 1: Open the tool
+## Quick start (non-technical)
 
 1. Open `index.html` in your web browser.
-2. You will see three main buttons:
-   - **Open Schedule Editor**
-   - **View a Schedule**
-   - **Print a Schedule**
+2. Choose one of the three main actions:
+   - **Open Schedule Editor** (`crhp-scheduler.html`) to create or update data
+   - **View a Schedule** (`crhp-viewer.html`) for read-focused timeline use
+   - **Print a Schedule** (`print-service.html`) for print/PDF output
+3. If this is your first time, start in **Open Schedule Editor** and load `master_template.json`.
 
-### Step 2: Create or update a schedule
+## Most common workflows
 
-1. Click **Open Schedule Editor**.
-2. Load `master_template.json` to start from the default retreat plan.
-3. Update task times, notes, rooms, and assigned people.
-4. Add or adjust checklist items as needed.
-5. Save/export your updated schedule JSON file.
+### A) Build or update a retreat plan
 
-### Step 3: Use the schedule during retreat
+1. Open **Schedule Editor**.
+2. Import the master template or a previously saved JSON file.
+3. Update tasks, times, rooms, people, and checklist entries.
+4. Export your schedule JSON as a backup and sharing file.
 
-1. Click **View a Schedule** and open your saved JSON file.
-2. Use the read-only view to follow the retreat timeline.
-3. Click **Print a Schedule** to generate print-friendly schedule pages.
+### B) Follow the plan during the retreat
+
+1. Open **View a Schedule**.
+2. Import the same JSON you exported from the editor.
+3. Use the viewer for a cleaner read-only experience while the retreat is running.
+
+### C) Print or save PDF handouts
+
+1. Open **Print a Schedule** directly, or launch print from editor/viewer.
+2. Import the exported schedule JSON when prompted.
+3. Use browser print and select **landscape/horizontal orientation** for best layout.
+
+## Saving, sharing, and backups
+
+- This app stores active edits in browser local storage.
+- Export JSON often (especially before clearing cache/resetting data).
+- Share schedules by sending the exported JSON file.
+- Import that JSON on another device/browser to continue editing or viewing.
+
+## Troubleshooting
+
+### I opened the app and my schedule is missing
+
+- Check if you are using a different browser/profile/device.
+- Local storage is browser-specific.
+- Import your latest exported JSON backup to restore data.
+
+### Import says the file is invalid
+
+- Confirm the file is valid JSON and came from this scheduler/viewer export.
+- Re-export from the source browser if possible and try again.
+
+### Print page is empty or stale
+
+- Upload JSON manually in the print page.
+- Refresh the print page after updating data in another tab.
+- Re-open print from editor/viewer to send fresh data.
+
+### Buttons that open new pages do not work
+
+- Allow popups/new tabs for your browser session.
+- Or open files directly (`crhp-scheduler.html`, `crhp-viewer.html`, `print-service.html`).
 
 ## Default role names
 
