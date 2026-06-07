@@ -1,6 +1,6 @@
 # welcome-schedule
 
-Welcome Schedule Hub is a browser-based planning tool for **Welcome retreat weekends** (formerly referred to as CRHP).
+Welcome Schedule is a browser-based planning tool for **Welcome retreat weekends** (formerly referred to as CRHP).
 
 ## Project overview
 
@@ -27,7 +27,7 @@ This repository contains a lightweight static web app used to create, review, an
 ## Repository name and program naming
 
 - Repository/project name: **welcome-schedule**
-- Product context name: **Welcome Schedule Hub**
+- Product context name: **Welcome Schedule**
 - Program naming has been updated from “CRHP (Christ Renews His Parish)” to **Welcome**.
 - Existing file names currently retain the original `crhp-` prefix for compatibility with current links and saved workflows.
 
