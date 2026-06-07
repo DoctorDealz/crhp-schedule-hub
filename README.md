@@ -29,13 +29,14 @@ This repository contains a lightweight static web app used to create, review, an
 - Repository/project name: **welcome-schedule**
 - Product context name: **Welcome Schedule Hub**
 - Program naming has been updated from “CRHP (Christ Renews His Parish)” to **Welcome**.
+- Existing file names currently retain the original `crhp-` prefix for compatibility with current links and saved workflows.
 
 ## Getting started
 
 Because this is a static HTML/JS project, no build step is required.
 
 1. Clone the repository.
-2. Open `/tmp/workspace/DoctorDealz/crhp-schedule-hub/index.html` in a browser.
+2. Open `index.html` in a browser.
 3. Choose one of the three workflows:
    - Open Schedule Editor
    - View a Schedule
