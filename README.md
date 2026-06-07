@@ -1,120 +1,86 @@
-# CRHP Schedule Hub
+# welcome-schedule
 
-## Project Description
+Welcome Schedule is a browser-based planning tool for **Welcome retreat weekends**.
 
-The CRHP Schedule Hub is a web-based schedule and agenda-management tool for retreat weekends, specifically focused on CRHP (Christ Renews His Parish) retreats. It allows event organizers to build, edit, print, and share detailed schedules for each day, specify rooms and team roles, upload/download agenda JSON files, and manage checklists and tasks to keep the event on time.
+## What this tool does
 
-The hub consists of three tools accessible from the home page (`index.html`):
+This tool helps your team:
 
-| Tool | File | Purpose |
-|---|---|---|
-| 📝 Schedule Editor | `crhp-scheduler.html` | Build and manage the full retreat schedule |
-| 👁️ Schedule Viewer | `crhp-viewer.html` | View and track tasks in real time during the retreat |
-| 🖨️ Print Service | `print-service.html` | Generate a printable version of the schedule |
+- Build a full weekend timeline
+- Assign roles and people
+- Track rooms and checklist items
+- View and print a clean retreat schedule
 
----
+No install or build step is required. Open the files in a browser and use the buttons.
 
-## Getting Started
+## Simple start guide (non-technical)
 
-Because this is a static web app, no installation or build step is required. Simply open `index.html` in any modern browser to get started.
+### Step 1: Open the tool
 
-> **Data storage:** All schedule data is saved to your browser's `localStorage`. No server or account is needed. Use **Export** regularly to back up your data as a JSON file.
+1. Open `index.html` in your web browser.
+2. You will see three main buttons:
+   - **Open Schedule Editor**
+   - **View a Schedule**
+   - **Print a Schedule**
 
----
+### Step 2: Create or update a schedule
 
-## How to Use
+1. Click **Open Schedule Editor**.
+2. Load `master_template.json` to start from the default retreat plan.
+3. Update task times, notes, rooms, and assigned people.
+4. Add or adjust checklist items as needed.
+5. Save/export your updated schedule JSON file.
 
-### 1. Schedule Editor (`crhp-scheduler.html`)
+### Step 3: Use the schedule during retreat
 
-The editor is where you build the retreat schedule. It is divided into four sections in the left-hand panel:
+1. Click **View a Schedule** and open your saved JSON file.
+2. Use the read-only view to follow the retreat timeline.
+3. Click **Print a Schedule** to generate print-friendly schedule pages.
 
-#### Team Roster
-- Enter a **Name** and **Role** (e.g., *Lead*, *Support*) and tap **+** to add a person to the roster.
-- Tap any roster entry to edit or delete it.
-- Roster members can be assigned to tasks in the Task Creator.
+## Default role names
 
-#### Room List
-- Enter a room name and tap **+** to add it to the list.
-- Tap any room entry to edit or delete it.
-- Rooms can be assigned to tasks in the Task Creator.
+The default template includes these role names:
 
-#### Task Creator
-Use this panel to add new schedule tasks:
-- **Lane** – Choose *Main* (blue, primary tasks) or *Background* (purple, support tasks).
-- **Day** – Select which retreat day the task belongs to (the total number of days is configurable in the header).
-- **Start / End Time** – Set the task's time window.
-- **Task Name** – A short label displayed on the timeline.
-- **Assign Rooms / Roster** – Optionally attach rooms and crew members to the task.
-- Click **+** to add the task to the schedule.
+- Retreat Leader
+- Formation Leader
+- Facilities Leader
+- Sacristan
+- Invitation/Help Leader
+- Kitchen Coordinator
+- All Team Members (`ALL`)
 
-#### Editing a Task
-Tap any task on the timeline to open the edit modal where you can:
-- Change the lane, description, status (*Pending* / *Complete*), assigned rooms, and crew.
-- **Save Changes** to apply edits.
-- **Delete** to remove the task entirely.
+You can rename roles in the editor if your parish uses different titles.
 
-#### Timeline Controls (header bar)
-- **Day selector** – Swipe or tap arrows to move between retreat days.
-- **Lane toggle** (Main / Background) – Filter the timeline to show only one lane.
-- **Checklist mode** – Toggle to view all tasks for the day as a flat, checkable list instead of a timeline.
-- **Now Line** – A dashed red line automatically moves to show the current time of day.
-- **Export (💾)** – Downloads the full schedule as a `.json` file.
-- **Import (📂)** – Loads a previously exported `.json` file.
-- **Link (↗)** – Opens the Schedule Viewer in a new tab.
-- **? (Help)** – Opens the User Guide overlay.
+## Default witness sessions (ten witness topics)
 
-#### Admin Tools (inside the Help menu)
-- **Reset to CRHP Master Template** – Restores the default CRHP retreat schedule from the bundled `master_template.json`.
-- **Clear All (Fresh Start)** – Wipes all local data so you can start from scratch. Export first!
+The default retreat plan includes witness sessions for:
 
----
+1. Renewal
+2. New Life in Christ
+3. Spirituality
+4. Christian Community
+5. Christian Awareness
+6. Reconciliation
+7. Eucharist
+8. Scripture
+9. Father's Loving Care
+10. Discipleship
 
-### 2. Schedule Viewer (`crhp-viewer.html`)
+## Files included
 
-The viewer is a **read-friendly** version of the schedule intended for use during the retreat itself. Organizers and team leads can follow along, mark tasks, and monitor progress without accidentally editing the master schedule.
+- **Schedule Editor** (`crhp-scheduler.html`) — create and edit schedules
+- **Schedule Viewer** (`crhp-viewer.html`) — open schedules in read mode
+- **Print Service** (`print-service.html`) — print-friendly schedule output
+- **Landing page** (`index.html`) — opens the three workflows
+- **Master template** (`master_template.json`) — default retreat structure and data
 
-Key differences from the editor:
-- Task detail fields are shown as **read-only** by default; only the *Status* field (Pending / Complete) can be updated by team members.
-- The **Import (📂)** button loads a schedule JSON that was previously exported from the editor.
-- The **Reset** button restores the CRHP master template.
-- All other controls (lanes, day navigation, checklist mode, Now Line, Help) work identically to the editor.
+## Naming
 
-**Typical workflow:**
-1. Build the schedule in the **Editor** and export it as a JSON file.
-2. Open the **Viewer**, import the JSON file.
-3. Share the Viewer URL with team members so everyone can follow the live timeline.
+- Repository/project name: **welcome-schedule**
+- Product context name: **Welcome Schedule**
+- Existing file names keep the `crhp-` prefix for compatibility with current links/workflows.
 
----
+## Notes
 
-### 3. Print Service (`print-service.html`)
-
-The print service generates a clean, paginated printout of the schedule.
-
-1. Open the Print Service page.
-2. Click **Choose File** (or drag and drop) to load a schedule JSON exported from the editor.
-3. The schedule renders on screen grouped by day and lane.
-4. Use your browser's **Print** function (`Ctrl+P` / `Cmd+P`) to print or save as PDF.
-
----
-
-## Data Management
-
-### Exporting
-Click **💾 EXPORT** in the editor (or viewer) to download a snapshot of the current schedule as a `.json` file. You will be prompted to name the file before downloading.
-
-### Importing
-Click **📂 IMPORT** and select a previously exported `.json` file. You will be asked to confirm before the current data is overwritten.
-
-### Master Template
-The repository includes `master_template.json` — a pre-built CRHP retreat schedule that can be loaded at any time via **Reset to CRHP Master Template** in the Help menu.
-
-> ⚠️ **Always export your data before resetting or clearing**, as these actions cannot be undone.
-
----
-
-## Technical Notes
-
-- **No build step required** – this is a pure HTML/CSS/JavaScript application.
-- **Browser compatibility** – Works in any modern browser (Chrome, Firefox, Edge, Safari).
-- **localStorage** – Data persists in the browser tab/profile it was created in. Clearing browser data will erase the schedule unless it has been exported.
-- **Responsive design** – The UI is optimized for mobile screens and automatically zooms to 170% on desktop displays for easier readability.
+- Data is handled in the browser through local storage and JSON import/export.
+- No package scripts, test runner, or build pipeline are configured in this repository.
