@@ -40,7 +40,7 @@ No install or build step is required. Open the files in a browser and use the bu
 ### C) Print or save PDF handouts
 
 1. Open **Print a Schedule** directly, or launch print from editor/viewer.
-2. Upload/exported schedule JSON when prompted.
+2. Upload the exported schedule JSON when prompted.
 3. Use browser print and select **landscape/horizontal orientation** for best layout.
 
 ## Saving, sharing, and backups
