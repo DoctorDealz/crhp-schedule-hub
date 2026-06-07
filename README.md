@@ -1,55 +1,86 @@
 # welcome-schedule
 
-Welcome Schedule is a browser-based planning tool for **Welcome retreat weekends** (formerly referred to as CRHP).
+Welcome Schedule is a browser-based planning tool for **Welcome retreat weekends**.
 
-## Project overview
+## What this tool does
 
-This repository contains a lightweight static web app used to create, review, and print retreat schedules. The app is designed for coordinators who need to manage agenda timing, roles, rooms, team assignments, and checklist completion throughout a retreat.
+This tool helps your team:
 
-## What's included
+- Build a full weekend timeline
+- Assign roles and people
+- Track rooms and checklist items
+- View and print a clean retreat schedule
 
-- **Schedule Editor** (`crhp-scheduler.html`)
-  - Build or modify retreat timelines by day
-  - Edit task details, assignments, notes, and room information
-  - Manage checklist items and completion states
-  - Save and load schedules as JSON files
-- **Schedule Viewer** (`crhp-viewer.html`)
-  - Open schedules in a read-friendly view
-  - Follow timeline and checklist progress during the event
-- **Print Service** (`print-service.html`)
-  - Generate print-ready landscape schedule pages
-  - Supports exported schedule data for hard-copy distribution
-- **Landing page** (`index.html`)
-  - Quick access to editor, viewer, and print tools
-- **Master template** (`master_template.json`)
-  - Baseline schedule data used as the default retreat template
+No install or build step is required. Open the files in a browser and use the buttons.
 
-## Repository name and program naming
+## Simple start guide (non-technical)
+
+### Step 1: Open the tool
+
+1. Open `index.html` in your web browser.
+2. You will see three main buttons:
+   - **Open Schedule Editor**
+   - **View a Schedule**
+   - **Print a Schedule**
+
+### Step 2: Create or update a schedule
+
+1. Click **Open Schedule Editor**.
+2. Load `master_template.json` to start from the default retreat plan.
+3. Update task times, notes, rooms, and assigned people.
+4. Add or adjust checklist items as needed.
+5. Save/export your updated schedule JSON file.
+
+### Step 3: Use the schedule during retreat
+
+1. Click **View a Schedule** and open your saved JSON file.
+2. Use the read-only view to follow the retreat timeline.
+3. Click **Print a Schedule** to generate print-friendly schedule pages.
+
+## Default role names
+
+The default template includes these role names:
+
+- Retreat Leader
+- Formation Leader
+- Facilities Leader
+- Sacristan
+- Invitation/Help Leader
+- Kitchen Coordinator
+- All Team Members (`ALL`)
+
+You can rename roles in the editor if your parish uses different titles.
+
+## Default witness sessions (ten witness topics)
+
+The default retreat plan includes witness sessions for:
+
+1. Renewal
+2. New Life in Christ
+3. Spirituality
+4. Christian Community
+5. Christian Awareness
+6. Reconciliation
+7. Eucharist
+8. Scripture
+9. Father's Loving Care
+10. Discipleship
+
+## Files included
+
+- **Schedule Editor** (`crhp-scheduler.html`) — create and edit schedules
+- **Schedule Viewer** (`crhp-viewer.html`) — open schedules in read mode
+- **Print Service** (`print-service.html`) — print-friendly schedule output
+- **Landing page** (`index.html`) — opens the three workflows
+- **Master template** (`master_template.json`) — default retreat structure and data
+
+## Naming
 
 - Repository/project name: **welcome-schedule**
 - Product context name: **Welcome Schedule**
-- Program naming has been updated from “CRHP (Christ Renews His Parish)” to **Welcome**.
-- Existing file names currently retain the original `crhp-` prefix for compatibility with current links and saved workflows.
-
-## Getting started
-
-Because this is a static HTML/JS project, no build step is required.
-
-1. Clone the repository.
-2. Open `index.html` in a browser.
-3. Choose one of the three workflows:
-   - Open Schedule Editor
-   - View a Schedule
-   - Print a Schedule
-
-## Data workflow
-
-1. Start from the bundled `master_template.json` or an existing exported schedule file.
-2. Make edits in the editor.
-3. Export/share the resulting JSON.
-4. Open the same data in the viewer or print service as needed.
+- Existing file names keep the `crhp-` prefix for compatibility with current links/workflows.
 
 ## Notes
 
-- Data exchange and session behaviors rely on browser-side storage and file import/export.
-- No dedicated package manager scripts, test runner, or build pipeline are currently configured in this repository.
+- Data is handled in the browser through local storage and JSON import/export.
+- No package scripts, test runner, or build pipeline are configured in this repository.
